@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Papyrus.Core
 {
@@ -132,6 +131,37 @@ namespace Papyrus.Core
 			return recordList.Records.Remove(key);
 
 		}
+
+		/// <summary>
+		/// Get all the records of a given type
+		/// </summary>
+		/// <returns></returns>
+		public ICollection<T> GetRecords<T>() where T : Record
+		{
+
+			var type = typeof (T);
+
+			if (!_recordLists.ContainsKey(type))
+				return new T[0];
+
+			return _recordLists[type].Records.Values.Cast<T>().ToArray();
+
+		} 
+
+		/// <summary>
+		/// Get all the records of a given type
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public ICollection<Record> GetRecords(Type type)
+		{
+
+			if(!_recordLists.ContainsKey(type))
+				return new Record[0];
+
+			return _recordLists[type].Records.Values;
+
+		} 
 
 		/// <summary>
 		/// Merge the other collection into this. Overwrites any overlapping records with the other collection's copy.

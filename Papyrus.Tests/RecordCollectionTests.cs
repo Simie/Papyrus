@@ -69,6 +69,12 @@ namespace Papyrus.Tests
 			// Ensure that the record is reported removed
 			Assert.IsTrue(recordCollection.RemoveRecord<TestRecordOne>(testKey1));
 
+			Record testFetch;
+
+			// Ensure the record can no longer be fetched
+			Assert.IsFalse(recordCollection.TryGetRecord(typeof(TestRecordOne), testKey1, out testFetch));
+			Assert.IsNull(testFetch);
+
 			Record testRecord2Ret;
 
 			// Ensure the record with the same key but different type still exists
@@ -139,6 +145,36 @@ namespace Papyrus.Tests
 
 			// Test that the record list that didn't exist in the original collection was correctly copied over
 			Assert.AreSame(collection1.GetRecord<TestRecord>(testNewKey2), testNewRecord2);
+
+		}
+
+		[TestMethod]
+		public void TestGetRecords()
+		{
+
+			var collection = new RecordCollection();
+
+			var record1 = new TestRecordOne();
+			var record2 = new TestRecordOne();
+			var record3 = new TestRecordTwo();
+			var record4 = new TestRecordTwo();
+
+			collection.AddRecord(new RecordKey(0), record1);
+			collection.AddRecord(new RecordKey(1), record2);
+			collection.AddRecord(new RecordKey(0), record3);
+			collection.AddRecord(new RecordKey(1), record4);
+
+			// Check that the generic and non-generic methods work the same (they have slightly different implementation)
+			var recordsOneOne = collection.GetRecords<TestRecordOne>().ToList(); // Cast to list for CollectionAssert
+			var recordsOneTwo = collection.GetRecords(typeof(TestRecordOne)).ToList();
+
+			CollectionAssert.AreEquivalent(recordsOneOne.ToList(), recordsOneTwo.ToList(), "Record collections differ");
+
+			CollectionAssert.Contains(recordsOneOne, record1);
+			CollectionAssert.Contains(recordsOneOne, record2);
+			
+			CollectionAssert.AllItemsAreInstancesOfType(recordsOneOne, typeof(TestRecordOne));
+			Assert.AreEqual(recordsOneOne.Count, 2);
 
 		}
 

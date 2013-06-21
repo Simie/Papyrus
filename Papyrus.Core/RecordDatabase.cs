@@ -32,33 +32,36 @@ namespace Papyrus.Core
 		public RecordDatabase(IList<Plugin> plugins, bool sort = true) : this()
 		{
 			
+
+
 		}
 
 		public void LoadPlugin(Plugin plugin)
 		{
 			
-			
+			// Merge plugin records into internal collection
+			_internalCollection.Merge(plugin.Records);
 
 		}
 
 		public T GetRecord<T>(RecordKey key) where T : Record
 		{
-			throw new NotImplementedException();
+			return _internalCollection.GetRecord<T>(key);
 		}
 
 		public Record GetRecord(Type type, RecordKey key)
 		{
-			throw new NotImplementedException();
+			return _internalCollection.GetRecord(type, key);
 		}
 
 		public ICollection<T> GetRecords<T>() where T : Record
 		{
-			throw new NotImplementedException();
+			return _internalCollection.GetRecords<T>();
 		}
 
 		public ICollection<Record> GetRecords(Type type)
 		{
-			throw new NotImplementedException();
+			return _internalCollection.GetRecords(type);
 		} 
 
 	}
