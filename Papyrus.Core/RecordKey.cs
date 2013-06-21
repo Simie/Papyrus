@@ -31,6 +31,11 @@ namespace Papyrus.Core
 			Plugin = plugin;
 		}
 
+		public RecordKey(string str)
+		{
+			this = FromString(str);
+		}
+
 		public bool Equals(RecordKey other)
 		{
 			return string.Equals(Plugin, other.Plugin) && Index == other.Index;
@@ -67,7 +72,9 @@ namespace Papyrus.Core
 
 		public override string ToString()
 		{
-			return string.Format("{0}{2}{1:X6}", Plugin, Index, Seperator);
+			if(Plugin != null)
+				return string.Format("{0}{2}{1:X6}", Plugin, Index, Seperator);
+			return string.Format("{0:X6}", Index);
 		}
 
 		public override bool Equals(object obj)

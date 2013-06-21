@@ -33,6 +33,12 @@ namespace Papyrus.Tests
 			Assert.IsNull(key3.Plugin);
 			Assert.AreEqual(key3.Index, 14680063);
 
+			// check that constructor yields the same result as FromString
+			var tKey1 = RecordKey.FromString(testKey2);
+			var tKey2 = new RecordKey(testKey2);
+
+			Assert.AreEqual(tKey1, tKey2);
+
 		}
 
 		[TestMethod]
