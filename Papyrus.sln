@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Papyrus.Core", "Papyrus.Core\Papyrus.Core.csproj", "{228E5ABF-DFBF-401A-A176-41571856B7BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Papyrus.Tests", "Papyrus.Tests\Papyrus.Tests.csproj", "{2CF76D27-2814-43D7-B4BB-4D6AC578FA43}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{228E5ABF-DFBF-401A-A176-41571856B7BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{228E5ABF-DFBF-401A-A176-41571856B7BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{228E5ABF-DFBF-401A-A176-41571856B7BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{228E5ABF-DFBF-401A-A176-41571856B7BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CF76D27-2814-43D7-B4BB-4D6AC578FA43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CF76D27-2814-43D7-B4BB-4D6AC578FA43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CF76D27-2814-43D7-B4BB-4D6AC578FA43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CF76D27-2814-43D7-B4BB-4D6AC578FA43}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
