@@ -42,8 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Freezable.cs" />
+    <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Record.cs" />
+    <Compile Include="RecordCollection.cs" />
     <Compile Include="RecordDatabase.cs" />
     <Compile Include="RecordKey.cs" />
     <Compile Include="RecordRef.cs" />

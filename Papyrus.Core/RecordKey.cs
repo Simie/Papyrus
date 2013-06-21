@@ -25,6 +25,12 @@ namespace Papyrus.Core
 		/// </summary>
 		public int Index { get; internal set; }
 
+		public RecordKey(int index, string plugin = null) : this()
+		{
+			Index = index;
+			Plugin = plugin;
+		}
+
 		public bool Equals(RecordKey other)
 		{
 			return string.Equals(Plugin, other.Plugin) && Index == other.Index;
