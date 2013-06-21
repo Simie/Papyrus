@@ -98,5 +98,49 @@ namespace Papyrus.Tests
 
 		}
 
+		[TestMethod]
+		public void TestMergeCollection()
+		{
+
+			var collection1 = new RecordCollection();
+
+			var testRecord1 = new TestRecordOne(); var testKey1 = new RecordKey(0);
+			var testRecord2 = new TestRecordTwo(); var testKey2 = new RecordKey(1);
+			var testRecord3 = new TestRecordOne(); var testKey3 = new RecordKey(2);
+
+			collection1.AddRecord(testKey1, testRecord1);
+			collection1.AddRecord(testKey2, testRecord2);
+			collection1.AddRecord(testKey3, testRecord3);
+
+			var collection2 = new RecordCollection();
+
+			var testOverrideRecord1 = new TestRecordOne();
+			var testOverrideRecord2 = new TestRecordTwo();
+			var testNewRecord1 = new TestRecordOne(); var testNewKey1 = new RecordKey(0, "Plugin");
+			var testNewRecord2 = new TestRecord(); var testNewKey2 = new RecordKey(0);
+
+			collection2.AddRecord(testKey1, testOverrideRecord1);
+			collection2.AddRecord(testKey2, testOverrideRecord2);
+
+			collection2.AddRecord(testNewKey1, testNewRecord1);
+			collection2.AddRecord(testNewKey2, testNewRecord2);
+
+			collection1.Merge(collection2);
+
+			// Test that the record was overriden correctly
+			Assert.AreSame(collection1.GetRecord<TestRecordOne>(testKey1), testOverrideRecord1);
+			Assert.AreSame(collection1.GetRecord<TestRecordTwo>(testKey2), testOverrideRecord2);
+
+			// Test that the non-overriden record is still accessible
+			Assert.AreSame(collection1.GetRecord<TestRecordOne>(testKey3), testRecord3);
+
+			// Test that the new (appended) record is accessible
+			Assert.AreSame(collection1.GetRecord<TestRecordOne>(testNewKey1), testNewRecord1);
+
+			// Test that the record list that didn't exist in the original collection was correctly copied over
+			Assert.AreSame(collection1.GetRecord<TestRecord>(testNewKey2), testNewRecord2);
+
+		}
+
 	}
 }

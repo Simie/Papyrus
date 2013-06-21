@@ -18,8 +18,8 @@ namespace Papyrus.Core
 
 		internal Plugin(string name)
 		{
-			
-			
+
+			Name = name;
 
 		}
 

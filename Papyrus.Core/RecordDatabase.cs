@@ -14,6 +14,33 @@ namespace Papyrus.Core
 	public sealed class RecordDatabase
 	{
 
+		/// <summary>
+		/// Composite collection of records from loaded plugins.
+		/// </summary>
+		private RecordCollection _internalCollection;
+
+		public RecordDatabase()
+		{
+			_internalCollection = new RecordCollection();
+		}
+
+		/// <summary>
+		/// Create a database, loading from the provided plugins
+		/// </summary>
+		/// <param name="plugins">List of plugins to composite into this database.</param>
+		/// <param name="sort">Sort the list before appending (ensures that dependencies are loaded in order). Defaults to true.</param>
+		public RecordDatabase(IList<Plugin> plugins, bool sort = true) : this()
+		{
+			
+		}
+
+		public void LoadPlugin(Plugin plugin)
+		{
+			
+			
+
+		}
+
 		public T GetRecord<T>(RecordKey key) where T : Record
 		{
 			throw new NotImplementedException();

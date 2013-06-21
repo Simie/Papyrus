@@ -18,6 +18,12 @@ namespace Papyrus.Core
 			public Type Type;
 			public Dictionary<RecordKey, Record> Records;
 
+			public RecordList(Type type, Dictionary<RecordKey, Record> records) : this()
+			{
+				Type = type;
+				Records = records;
+			}
+
 		}
 
 		private readonly Dictionary<Type,RecordList> _recordLists;
@@ -124,6 +130,39 @@ namespace Papyrus.Core
 				return false;
 
 			return recordList.Records.Remove(key);
+
+		}
+
+		/// <summary>
+		/// Merge the other collection into this. Overwrites any overlapping records with the other collection's copy.
+		/// </summary>
+		/// <param name="other"></param>
+		public void Merge(RecordCollection other)
+		{
+
+			foreach (var list in other._recordLists) {
+
+				var listType = list.Key;
+
+				// Check for existing record list of that type
+				if (!_recordLists.ContainsKey(listType)) {
+
+					// If this collection doesn't have one, copy the other collections list wholesale.
+					_recordLists.Add(listType, new RecordList(listType, new Dictionary<RecordKey, Record>(list.Value.Records)));
+					continue;
+
+				}
+
+				var ourList = _recordLists[listType];
+
+				// Iterate over records in the other collections list and add/replace records in this collections list
+				foreach (var record in list.Value.Records) {
+
+					ourList.Records[record.Key] = record.Value;
+
+				}
+
+			}
 
 		}
 
