@@ -45,7 +45,7 @@ namespace Papyrus.Core.Util.JsonConverters
 
 		public override bool CanConvert(Type objectType)
 		{
-			return objectType.GetGenericTypeDefinition() == typeof(RecordRef<>);
+			return objectType.IsGenericType && objectType.GetGenericTypeDefinition() == typeof(RecordRef<>);
 		}
 
 	}
