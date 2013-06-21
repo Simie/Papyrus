@@ -14,12 +14,10 @@ namespace Papyrus.Core
 		struct RecordList
 		{
 
-			public Type Type;
 			public Dictionary<RecordKey, Record> Records;
 
-			public RecordList(Type type, Dictionary<RecordKey, Record> records) : this()
+			public RecordList(Dictionary<RecordKey, Record> records) : this()
 			{
-				Type = type;
 				Records = records;
 			}
 
@@ -82,6 +80,9 @@ namespace Papyrus.Core
 		public void AddRecord(RecordKey key, Record rec)
 		{
 
+			// Freeze record once it is added to a record collection
+			rec.IsFrozen = true;
+
 			Type type = rec.GetType();
 
 			RecordList recordList;
@@ -91,7 +92,6 @@ namespace Papyrus.Core
 
 				// Create it if not
 				recordList = new RecordList() {
-					Type = type,
 					Records = new Dictionary<RecordKey, Record>()
 				};
 				_recordLists.Add(type, recordList);
@@ -178,7 +178,7 @@ namespace Papyrus.Core
 				if (!_recordLists.ContainsKey(listType)) {
 
 					// If this collection doesn't have one, copy the other collections list wholesale.
-					_recordLists.Add(listType, new RecordList(listType, new Dictionary<RecordKey, Record>(list.Value.Records)));
+					_recordLists.Add(listType, new RecordList(new Dictionary<RecordKey, Record>(list.Value.Records)));
 					continue;
 
 				}
