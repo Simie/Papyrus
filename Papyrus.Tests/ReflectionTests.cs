@@ -49,8 +49,8 @@ namespace Papyrus.Tests
 			TestPropertyDiff("TestString", "Old", "Changed");
 			TestPropertyDiff("TestInteger", 1337, 20000);
 
-			var ref1 = new RecordRef<TestRecordOne> {Key = new RecordKey(10, "Plugin")};
-			var ref2 = new RecordRef<TestRecordOne> {Key = new RecordKey(11, "Plugin")};
+			var ref1 = new RecordRef<TestRecordOne>(new RecordKey(10, "Plugin"));
+			var ref2 = new RecordRef<TestRecordOne>(new RecordKey(11, "Plugin"));
 
 
 			TestPropertyDiff("TestReference", ref1, ref2);

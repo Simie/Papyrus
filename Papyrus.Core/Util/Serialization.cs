@@ -18,6 +18,7 @@ namespace Papyrus.Core.Util
 
 			settings.Converters.Add(new StringEnumConverter());
 			settings.Converters.Add(new RecordKeyConverter());
+			settings.Converters.Add(new RecordRefConverter());
 
 			return settings;
 
