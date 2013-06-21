@@ -10,6 +10,24 @@ namespace Papyrus.Core.Util
 	{
 		
 		/// <summary>
+		/// Resolve a record type FullName into a Type object
+		/// </summary>
+		/// <param name="typeString"></param>
+		/// <returns></returns>
+		public static Type ResolveRecordType(string typeString)
+		{
+
+			var thisAssemblyName = Assembly.GetExecutingAssembly().FullName;
+
+			// Get assemblies, filtered to those than contain Papyrus.Core.dll as a reference
+			var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(p => p.GetReferencedAssemblies().Any(q => q.FullName == thisAssemblyName));
+
+			// TODO: Cache type results or specify loaded modules somewhere
+			return assemblies.Select(assembly => assembly.GetType(typeString, false, false)).FirstOrDefault(type => type != null);
+
+		}
+
+		/// <summary>
 		/// Due to odd C# behaviour, you can only get a writable property setter when reflecting the class it is declared in.
 		/// (not child classes, for example). This method walks up the type inheritance tree until if finds a writable property.
 		/// </summary>

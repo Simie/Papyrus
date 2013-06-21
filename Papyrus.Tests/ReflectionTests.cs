@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Papyrus.Core;
@@ -83,6 +84,38 @@ namespace Papyrus.Tests
 			Assert.IsFalse(
 				differences.Any(p => p.Property.Name == prop),
 				"False-positive for property {0} with value [{1}]", prop, oldValue);
+
+		}
+
+		[TestMethod]
+		public void TestTypeNameResolve()
+		{
+
+			TestType(typeof(TestRecordOne));
+			TestType(typeof(TestRecordTwo));
+
+
+			TestType(typeof(object), false);
+
+		}
+
+		void TestType(Type type, bool expectTrue = true)
+		{
+
+			var name = type.FullName;
+
+			var resolvedType = Core.Util.ReflectionUtil.ResolveRecordType(name);
+
+			if (expectTrue) {
+
+				Assert.IsNotNull(resolvedType);
+				Assert.AreEqual(resolvedType, type);
+
+			} else {
+
+				Assert.IsNull(resolvedType);
+
+			}
 
 		}
 
