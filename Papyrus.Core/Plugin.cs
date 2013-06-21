@@ -16,10 +16,11 @@ namespace Papyrus.Core
 
 		internal RecordCollection Records { get; private set; }
 
-		Plugin()
+		internal Plugin(string name)
 		{
 			
 			
+
 		}
 
 	}

@@ -7,14 +7,31 @@ using Papyrus.Core;
 namespace Papyrus.Tests
 {
 
-	class TestRecord1 : Record
+	class TestRecord : Record
+	{
+
+		public bool TestBoolean { get; private set; }
+
+		public string TestString { get; private set; }
+
+		public int TestInteger { get; private set; }
+
+		public RecordRef<TestRecordOne> TestReference { get; private set; }
+			
+		[Newtonsoft.Json.JsonIgnore]
+		public int ShouldIgnore { get; private set; }
+
+
+	}
+
+	class TestRecordOne : Record
 	{
 
 
 
 	}
 
-	class TestRecord2 : Record
+	class TestRecordTwo : Record
 	{
 
 

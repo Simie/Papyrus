@@ -19,17 +19,17 @@ namespace Papyrus.Tests
 			var recordCollection = new RecordCollection();
 
 			var testKey1 = new RecordKey(20, "TestPlugin");
-			var testRecord1 = new TestRecord1();
+			var testRecord1 = new TestRecordOne();
 
 			try {
-				recordCollection.GetRecord<TestRecord1>(testKey1);
+				recordCollection.GetRecord<TestRecordOne>(testKey1);
 				Assert.Fail("Didn't throw exception when record doesn't exist");
 			} catch (KeyNotFoundException) { }
 
 			recordCollection.AddRecord(testKey1, testRecord1);
 
 			try {
-				Assert.AreSame(recordCollection.GetRecord<TestRecord1>(testKey1), testRecord1);
+				Assert.AreSame(recordCollection.GetRecord<TestRecordOne>(testKey1), testRecord1);
 			} catch { Assert.Fail("GetRecord threw exception"); }
 
 		}
@@ -41,8 +41,8 @@ namespace Papyrus.Tests
 			var recordCollection = new RecordCollection();
 
 			var testKey1 = new RecordKey(20, "TestPlugin");
-			var testRecord1 = new TestRecord1();
-			var testRecord2 = new TestRecord1();
+			var testRecord1 = new TestRecordOne();
+			var testRecord2 = new TestRecordOne();
 
 			recordCollection.AddRecord(testKey1, testRecord1);
 
@@ -60,19 +60,19 @@ namespace Papyrus.Tests
 			var recordCollection = new RecordCollection();
 
 			var testKey1 = new RecordKey(20, "TestPlugin");
-			var testRecord1 = new TestRecord1();
-			var testRecord2 = new TestRecord2();
+			var testRecord1 = new TestRecordOne();
+			var testRecord2 = new TestRecordTwo();
 
 			recordCollection.AddRecord(testKey1, testRecord1);
 			recordCollection.AddRecord(testKey1, testRecord2);
 
 			// Ensure that the record is reported removed
-			Assert.IsTrue(recordCollection.RemoveRecord<TestRecord1>(testKey1));
+			Assert.IsTrue(recordCollection.RemoveRecord<TestRecordOne>(testKey1));
 
 			Record testRecord2Ret;
 
 			// Ensure the record with the same key but different type still exists
-			Assert.IsTrue(recordCollection.TryGetRecord(typeof (TestRecord2), testKey1, out testRecord2Ret));
+			Assert.IsTrue(recordCollection.TryGetRecord(typeof (TestRecordTwo), testKey1, out testRecord2Ret));
 			Assert.AreSame(testRecord2, testRecord2Ret);
 
 		}
@@ -84,16 +84,16 @@ namespace Papyrus.Tests
 			var recordCollection = new RecordCollection();
 
 			var testKey1 = new RecordKey(20, "TestPlugin");
-			var testRecord1 = new TestRecord1();
-			var testRecord2 = new TestRecord2();
+			var testRecord1 = new TestRecordOne();
+			var testRecord2 = new TestRecordTwo();
 
 			// Test that the same key retrieves different results when fetching different types
 			recordCollection.AddRecord(testKey1, testRecord1);
 			recordCollection.AddRecord(testKey1, testRecord2);
 
 			try {
-				Assert.AreSame(recordCollection.GetRecord<TestRecord1>(testKey1), testRecord1);
-				Assert.AreSame(recordCollection.GetRecord<TestRecord2>(testKey1), testRecord2);
+				Assert.AreSame(recordCollection.GetRecord<TestRecordOne>(testKey1), testRecord1);
+				Assert.AreSame(recordCollection.GetRecord<TestRecordTwo>(testKey1), testRecord2);
 			} catch { Assert.Fail("GetRecord threw exception"); }
 
 		}

@@ -53,6 +53,7 @@
     <Compile Include="Util\RecordDiffUtil.cs" />
     <Compile Include="Util\RecordReflectionUtil.cs" />
     <Compile Include="Util\ReflectionExtensions.cs" />
+    <Compile Include="Util\ReflectionUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

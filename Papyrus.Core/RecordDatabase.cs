@@ -14,7 +14,25 @@ namespace Papyrus.Core
 	public sealed class RecordDatabase
 	{
 
-		
+		public T GetRecord<T>(RecordKey key) where T : Record
+		{
+			throw new NotImplementedException();
+		}
+
+		public Record GetRecord(Type type, RecordKey key)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ICollection<T> GetRecords<T>() where T : Record
+		{
+			throw new NotImplementedException();
+		}
+
+		public ICollection<Record> GetRecords(Type type)
+		{
+			throw new NotImplementedException();
+		} 
 
 	}
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
 using Papyrus.Core.Util;
@@ -34,7 +35,7 @@ namespace Papyrus.Core
 		/// </summary>
 		public void SetProperty(string name, object value)
 		{
-			SetPropertyInternal(GetType().GetProperty(name), value);
+			SetPropertyInternal(ReflectionUtil.GetWritablePropertyInfo(GetType(), name), value);
 		}
 
 		/// <summary>
