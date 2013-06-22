@@ -27,23 +27,5 @@ namespace Papyrus.Tests
 
 		}
 
-		[TestMethod]
-		public void TestSerialization()
-		{
-
-			var recordRef = new RecordRef<TestRecordOne>(new RecordKey(120, "TestPlugin"));
-
-			var settings = Core.Util.Serialization.GetJsonSettings();
-
-			var json = JsonConvert.SerializeObject(recordRef, settings);
-
-			Debug.WriteLine(json);
-
-			var deserRef = JsonConvert.DeserializeObject<RecordRef<TestRecordOne>>(json, settings);
-
-			Assert.AreEqual(recordRef, deserRef);
-
-		}
-
 	}
 }

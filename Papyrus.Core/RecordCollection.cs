@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Papyrus.Core
 {
@@ -11,7 +12,7 @@ namespace Papyrus.Core
 	internal class RecordCollection
 	{
 
-		struct RecordList
+		internal struct RecordList
 		{
 
 			public Dictionary<RecordKey, Record> Records;
@@ -23,11 +24,11 @@ namespace Papyrus.Core
 
 		}
 
-		private readonly Dictionary<Type,RecordList> _recordLists;
+		internal readonly Dictionary<Type,RecordList> RecordLists;
 
 		public RecordCollection()
 		{
-			_recordLists = new Dictionary<Type, RecordList>();
+			RecordLists = new Dictionary<Type, RecordList>();
 		}
 
 		/// <summary>
@@ -68,7 +69,7 @@ namespace Papyrus.Core
 
 			RecordList list;
 
-			if (!_recordLists.TryGetValue(recordType, out list)) {
+			if (!RecordLists.TryGetValue(recordType, out list)) {
 				value = null;
 				return false;
 			}
@@ -82,19 +83,21 @@ namespace Papyrus.Core
 
 			// Freeze record once it is added to a record collection
 			rec.IsFrozen = true;
+			rec.InternalKey = key;
+			// TODO: Copy object instead of freezing existing?
 
 			Type type = rec.GetType();
 
 			RecordList recordList;
 
 			// Check a record list for this record type exists
-			if (!_recordLists.TryGetValue(type, out recordList)) {
+			if (!RecordLists.TryGetValue(type, out recordList)) {
 
 				// Create it if not
 				recordList = new RecordList() {
 					Records = new Dictionary<RecordKey, Record>()
 				};
-				_recordLists.Add(type, recordList);
+				RecordLists.Add(type, recordList);
 
 			}
 
@@ -125,7 +128,7 @@ namespace Papyrus.Core
 			RecordList recordList;
 
 			// Check a record list for this record type exists
-			if (!_recordLists.TryGetValue(recordType, out recordList))
+			if (!RecordLists.TryGetValue(recordType, out recordList))
 				return false;
 
 			return recordList.Records.Remove(key);
@@ -141,10 +144,10 @@ namespace Papyrus.Core
 
 			var type = typeof (T);
 
-			if (!_recordLists.ContainsKey(type))
+			if (!RecordLists.ContainsKey(type))
 				return new T[0];
 
-			return _recordLists[type].Records.Values.Cast<T>().ToArray();
+			return RecordLists[type].Records.Values.Cast<T>().ToArray();
 
 		} 
 
@@ -156,10 +159,10 @@ namespace Papyrus.Core
 		public ICollection<Record> GetRecords(Type type)
 		{
 
-			if(!_recordLists.ContainsKey(type))
+			if(!RecordLists.ContainsKey(type))
 				return new Record[0];
 
-			return _recordLists[type].Records.Values;
+			return RecordLists[type].Records.Values;
 
 		} 
 
@@ -170,20 +173,20 @@ namespace Papyrus.Core
 		public void Merge(RecordCollection other)
 		{
 
-			foreach (var list in other._recordLists) {
+			foreach (var list in other.RecordLists) {
 
 				var listType = list.Key;
 
 				// Check for existing record list of that type
-				if (!_recordLists.ContainsKey(listType)) {
+				if (!RecordLists.ContainsKey(listType)) {
 
 					// If this collection doesn't have one, copy the other collections list wholesale.
-					_recordLists.Add(listType, new RecordList(new Dictionary<RecordKey, Record>(list.Value.Records)));
+					RecordLists.Add(listType, new RecordList(new Dictionary<RecordKey, Record>(list.Value.Records)));
 					continue;
 
 				}
 
-				var ourList = _recordLists[listType];
+				var ourList = RecordLists[listType];
 
 				// Iterate over records in the other collections list and add/replace records in this collections list
 				foreach (var record in list.Value.Records) {
