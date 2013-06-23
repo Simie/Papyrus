@@ -19,7 +19,7 @@ namespace Papyrus.Tests
 		public RecordRef<TestRecordOne> TestReference { get; private set; }
 			
 		[Newtonsoft.Json.JsonIgnore]
-		public int ShouldIgnore { get; private set; }
+		public int ShouldIgnore { get; set; }
 
 
 	}

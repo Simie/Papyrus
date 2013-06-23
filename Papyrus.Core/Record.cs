@@ -12,7 +12,7 @@ namespace Papyrus.Core
 
 		// Store the key in an internal field to prevent user setting it from SetProperty (IFreezable)
 		[JsonIgnore]
-		internal RecordKey InternalKey;
+		internal RecordKey InternalKey = RecordKey.Identity;
 
 		/// <summary>
 		/// Key that can be used to reference this record again later (for example, when loading from a save game)

@@ -75,7 +75,7 @@ namespace Papyrus.Core.Util.JsonConverters
 
 					// Read record
 					var record = (Record)serializer.Deserialize(reader, type);
-					collection.AddRecord(record.Key, record);
+					collection.AddRecord(record);
 
 					reader.Read();
 

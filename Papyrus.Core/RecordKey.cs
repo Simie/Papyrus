@@ -13,6 +13,11 @@ namespace Papyrus.Core
 	public struct RecordKey : IEquatable<RecordKey>
 	{
 
+		/// <summary>
+		/// A blank record key
+		/// </summary>
+		public static readonly RecordKey Identity = new RecordKey(-1);
+
 		public const char Seperator = '/';
 
 		/// <summary>

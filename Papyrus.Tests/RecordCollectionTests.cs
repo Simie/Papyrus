@@ -20,13 +20,14 @@ namespace Papyrus.Tests
 
 			var testKey1 = new RecordKey(20, "TestPlugin");
 			var testRecord1 = new TestRecordOne();
+			testRecord1.InternalKey = testKey1;
 
 			try {
 				recordCollection.GetRecord<TestRecordOne>(testKey1);
 				Assert.Fail("Didn't throw exception when record doesn't exist");
 			} catch (KeyNotFoundException) { }
 
-			recordCollection.AddRecord(testKey1, testRecord1);
+			recordCollection.AddRecord(testRecord1);
 
 			try {
 				Assert.AreSame(recordCollection.GetRecord<TestRecordOne>(testKey1), testRecord1);
@@ -42,12 +43,14 @@ namespace Papyrus.Tests
 
 			var testKey1 = new RecordKey(20, "TestPlugin");
 			var testRecord1 = new TestRecordOne();
+			testRecord1.InternalKey = testKey1;
 			var testRecord2 = new TestRecordOne();
+			testRecord2.InternalKey = testKey1;
 
-			recordCollection.AddRecord(testKey1, testRecord1);
+			recordCollection.AddRecord(testRecord1);
 
 			try {
-				recordCollection.AddRecord(testKey1, testRecord2);
+				recordCollection.AddRecord(testRecord2);
 				Assert.Fail("Adding duplicate key didn't throw exception.");
 			} catch(ArgumentException) {}
 
@@ -61,10 +64,12 @@ namespace Papyrus.Tests
 
 			var testKey1 = new RecordKey(20, "TestPlugin");
 			var testRecord1 = new TestRecordOne();
+			testRecord1.InternalKey = testKey1;
 			var testRecord2 = new TestRecordTwo();
+			testRecord2.InternalKey = testKey1;
 
-			recordCollection.AddRecord(testKey1, testRecord1);
-			recordCollection.AddRecord(testKey1, testRecord2);
+			recordCollection.AddRecord(testRecord1);
+			recordCollection.AddRecord(testRecord2);
 
 			// Ensure that the record is reported removed
 			Assert.IsTrue(recordCollection.RemoveRecord<TestRecordOne>(testKey1));
@@ -93,9 +98,11 @@ namespace Papyrus.Tests
 			var testRecord1 = new TestRecordOne();
 			var testRecord2 = new TestRecordTwo();
 
+			testRecord1.InternalKey = testRecord2.InternalKey = testKey1;
+
 			// Test that the same key retrieves different results when fetching different types
-			recordCollection.AddRecord(testKey1, testRecord1);
-			recordCollection.AddRecord(testKey1, testRecord2);
+			recordCollection.AddRecord(testRecord1);
+			recordCollection.AddRecord(testRecord2);
 
 			try {
 				Assert.AreSame(recordCollection.GetRecord<TestRecordOne>(testKey1), testRecord1);
@@ -111,25 +118,34 @@ namespace Papyrus.Tests
 			var collection1 = new RecordCollection();
 
 			var testRecord1 = new TestRecordOne(); var testKey1 = new RecordKey(0);
-			var testRecord2 = new TestRecordTwo(); var testKey2 = new RecordKey(1);
-			var testRecord3 = new TestRecordOne(); var testKey3 = new RecordKey(2);
+			testRecord1.InternalKey = testKey1;
 
-			collection1.AddRecord(testKey1, testRecord1);
-			collection1.AddRecord(testKey2, testRecord2);
-			collection1.AddRecord(testKey3, testRecord3);
+			var testRecord2 = new TestRecordTwo(); var testKey2 = new RecordKey(1);
+			testRecord2.InternalKey = testKey2;
+
+			var testRecord3 = new TestRecordOne(); var testKey3 = new RecordKey(2);
+			testRecord3.InternalKey = testKey3;
+
+			collection1.AddRecord(testRecord1);
+			collection1.AddRecord(testRecord2);
+			collection1.AddRecord(testRecord3);
 
 			var collection2 = new RecordCollection();
 
-			var testOverrideRecord1 = new TestRecordOne();
-			var testOverrideRecord2 = new TestRecordTwo();
+			var testOverrideRecord1 = new TestRecordOne(); testOverrideRecord1.InternalKey = testKey1;
+			var testOverrideRecord2 = new TestRecordTwo(); testOverrideRecord2.InternalKey = testKey2;
+
 			var testNewRecord1 = new TestRecordOne(); var testNewKey1 = new RecordKey(0, "Plugin");
+			testNewRecord1.InternalKey = testNewKey1;
+
 			var testNewRecord2 = new TestRecord(); var testNewKey2 = new RecordKey(0);
+			testNewRecord2.InternalKey = testNewKey2;
 
-			collection2.AddRecord(testKey1, testOverrideRecord1);
-			collection2.AddRecord(testKey2, testOverrideRecord2);
+			collection2.AddRecord(testOverrideRecord1);
+			collection2.AddRecord(testOverrideRecord2);
 
-			collection2.AddRecord(testNewKey1, testNewRecord1);
-			collection2.AddRecord(testNewKey2, testNewRecord2);
+			collection2.AddRecord(testNewRecord1);
+			collection2.AddRecord(testNewRecord2);
 
 			collection1.Merge(collection2);
 
@@ -154,15 +170,15 @@ namespace Papyrus.Tests
 
 			var collection = new RecordCollection();
 
-			var record1 = new TestRecordOne();
-			var record2 = new TestRecordOne();
-			var record3 = new TestRecordTwo();
-			var record4 = new TestRecordTwo();
+			var record1 = new TestRecordOne(); record1.InternalKey = new RecordKey(0);
+			var record2 = new TestRecordOne(); record2.InternalKey = new RecordKey(1);
+			var record3 = new TestRecordTwo(); record3.InternalKey = new RecordKey(0);
+			var record4 = new TestRecordTwo(); record4.InternalKey = new RecordKey(1);
 
-			collection.AddRecord(new RecordKey(0), record1);
-			collection.AddRecord(new RecordKey(1), record2);
-			collection.AddRecord(new RecordKey(0), record3);
-			collection.AddRecord(new RecordKey(1), record4);
+			collection.AddRecord(record1);
+			collection.AddRecord(record2);
+			collection.AddRecord(record3);
+			collection.AddRecord(record4);
 
 			// Check that the generic and non-generic methods work the same (they have slightly different implementation)
 			var recordsOneOne = collection.GetRecords<TestRecordOne>().ToList(); // Cast to list for CollectionAssert

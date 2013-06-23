@@ -70,6 +70,47 @@ namespace Papyrus.Core
 			_pluginList = new List<Plugin>(plugins);
 		}
 
+		/// <summary>
+		/// Create a new record and return an editable copy.
+		/// </summary>
+		/// <typeparam name="T">Record type</typeparam>
+		/// <returns>Editable record copy</returns>
+		public T CreateRecord<T>() where T : Record, new()
+		{
+			return (T)CreateRecord(typeof (T));
+		}
+
+		/// <summary>
+		/// Create a new record and add it to the database. Returns an editable
+		/// copy
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public Record CreateRecord(Type type)
+		{
+			
+			if(!typeof(Record).IsAssignableFrom(type))
+				throw new ArgumentException("Type is not decended from record");
+
+			var record = (Record)Activator.CreateInstance(type);
+			record.InternalKey = Plugin.NextKey(type);
+			record.IsFrozen = true;
+
+			Plugin.Records.AddRecord(record);
+
+			return record;
+
+		}
+
+		/// <summary>
+		/// Save changes to a record.
+		/// </summary>
+		/// <param name="record"></param>
+		public void SaveRecord(Record record)
+		{
+			
+		}
+
 		public T GetRecord<T>(RecordKey key) where T : Record
 		{
 			return (T) GetRecord(typeof (T), key);

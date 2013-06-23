@@ -78,15 +78,17 @@ namespace Papyrus.Core
 
 		}
 
-		public void AddRecord(RecordKey key, Record rec)
+		/// <summary>
+		/// Add a record to the collection.
+		/// </summary>
+		/// <param name="record"></param>
+		public void AddRecord(Record record)
 		{
 
-			// Freeze record once it is added to a record collection
-			rec.IsFrozen = true;
-			rec.InternalKey = key;
-			// TODO: Copy object instead of freezing existing?
+			if (record.Key == RecordKey.Identity)
+				throw new ArgumentException("Record has no Key set");
 
-			Type type = rec.GetType();
+			Type type = record.GetType();
 
 			RecordList recordList;
 
@@ -101,7 +103,7 @@ namespace Papyrus.Core
 
 			}
 
-			recordList.Records.Add(key, rec);
+			recordList.Records.Add(record.Key, record);
 
 		}
 

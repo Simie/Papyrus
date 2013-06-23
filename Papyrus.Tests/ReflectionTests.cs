@@ -119,6 +119,28 @@ namespace Papyrus.Tests
 
 		}
 
+		[TestMethod]
+		public void TestRecordClone()
+		{
+
+			var record = new TestRecord();
+			record.SetProperty(() => record.TestBoolean, true);
+			record.SetProperty(() => record.TestInteger, 10);
+			record.SetProperty(() => record.TestString, "Test String");
+			record.SetProperty(() => record.TestReference, new RecordRef<TestRecordOne>(new RecordKey(1337, "TestPlugin")));
+			record.ShouldIgnore = 122;
+
+			var clone = (TestRecord)record.Clone();
+
+			Assert.AreEqual(record.TestBoolean, clone.TestBoolean);
+			Assert.AreEqual(record.TestInteger, clone.TestInteger);
+			Assert.AreEqual(record.TestString, clone.TestString);
+			Assert.AreEqual(record.TestReference, clone.TestReference);
+
+			Assert.AreEqual(clone.ShouldIgnore, default(int));
+
+		}
+
 	}
 
 }

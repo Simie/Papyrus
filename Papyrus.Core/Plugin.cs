@@ -23,6 +23,22 @@ namespace Papyrus.Core
 
 		}
 
+		/// <summary>
+		/// Get a key for the next record
+		/// </summary>
+		/// <param name="recordType"></param>
+		/// <returns></returns>
+		internal RecordKey NextKey(Type recordType)
+		{
+
+			var records = Records.GetRecords(recordType);
+			
+			var nextIndex = records.Max(p => p.InternalKey.Index)+1;
+
+			return new RecordKey(nextIndex, Name);
+
+		}
+
 	}
 
 }
