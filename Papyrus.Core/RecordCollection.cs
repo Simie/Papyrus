@@ -82,11 +82,15 @@ namespace Papyrus.Core
 		/// Add a record to the collection.
 		/// </summary>
 		/// <param name="record"></param>
-		public void AddRecord(Record record)
+		/// <param name="overwrite">True to overwrite existing record with duplicate key</param>
+		public void AddRecord(Record record, bool overwrite = false)
 		{
 
 			if (record.Key == RecordKey.Identity)
 				throw new ArgumentException("Record has no Key set");
+
+			// Freeze record upon entering a collection
+			record.IsFrozen = true;
 
 			Type type = record.GetType();
 
@@ -103,7 +107,10 @@ namespace Papyrus.Core
 
 			}
 
-			recordList.Records.Add(record.Key, record);
+			if(overwrite)
+				recordList.Records[record.Key] = record;
+			else
+				recordList.Records.Add(record.Key, record);
 
 		}
 

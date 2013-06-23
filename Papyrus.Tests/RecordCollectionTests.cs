@@ -54,6 +54,15 @@ namespace Papyrus.Tests
 				Assert.Fail("Adding duplicate key didn't throw exception.");
 			} catch(ArgumentException) {}
 
+			try {
+
+				recordCollection.AddRecord(testRecord2, true);
+
+			} catch (ArgumentException) { Assert.Fail("Adding duplicate key with overwrite flag set thrww exception."); }
+
+			// Check that overwrite operation succeeded
+			Assert.AreEqual(recordCollection.GetRecord<TestRecordOne>(testRecord2.Key), testRecord2, "Overwrite operation didn't assign new value");
+
 		}
 
 		[TestMethod]
