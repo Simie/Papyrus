@@ -20,6 +20,7 @@ namespace Papyrus.Core
 		{
 
 			Name = name;
+			Records = new RecordCollection();
 
 		}
 
@@ -32,8 +33,11 @@ namespace Papyrus.Core
 		{
 
 			var records = Records.GetRecords(recordType);
-			
-			var nextIndex = records.Max(p => p.InternalKey.Index)+1;
+
+			var nextIndex = 0;
+
+			if(records.Any())
+				nextIndex = records.Max(p => p.InternalKey.Index)+1;
 
 			return new RecordKey(nextIndex, Name);
 

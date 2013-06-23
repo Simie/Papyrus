@@ -58,13 +58,13 @@ namespace Papyrus.Core
 		/// </summary>
 		private readonly List<Plugin> _pluginList;
 
-		internal PluginComposer(Plugin plugin)
+		PluginComposer(Plugin plugin)
 		{
 			Plugin = plugin;
 			_pluginList = new List<Plugin>();
 		}
 
-		internal PluginComposer(Plugin plugin, IEnumerable<Plugin> plugins)
+		PluginComposer(Plugin plugin, IEnumerable<Plugin> plugins)
 		{
 			Plugin = plugin;
 			_pluginList = new List<Plugin>(plugins);
@@ -119,7 +119,10 @@ namespace Papyrus.Core
 			if (Plugin.Records.TryGetRecord(record.GetType(), record.Key, out existing)) {
 				
 				// Copy new values to existing record
+				existing.IsFrozen = false;
 				Util.RecordReflectionUtil.Populate(record, existing);
+				existing.IsFrozen = true;
+
 				return;
 
 			}
