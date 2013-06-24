@@ -28,8 +28,13 @@ namespace Papyrus.Core
 		[JsonProperty]
 		public string Name { get; private set; }
 
+		public IList<string> Parents { get { return _parents.AsReadOnly(); } }
+			
 		[JsonProperty]
 		internal RecordCollection Records { get; private set; }
+
+		[JsonProperty("Parents")]
+		private List<string> _parents = new List<string>(); 
 
 		internal Plugin(string name)
 		{
@@ -60,6 +65,31 @@ namespace Papyrus.Core
 			return new RecordKey(nextIndex, Name);
 
 		}
+
+		/// <summary>
+		/// Scan records in this plugin to determine which plugins this plugin is child too
+		/// </summary>
+		internal void RefreshParents()
+		{
+
+			// Clear existing parent list
+			_parents.Clear();
+
+			// Fetch all records
+			var records = Records.GetAllRecords();
+
+			foreach (var record in records) {
+
+				// If this record is overriding a parents record, add that parent to the list
+				if(record.InternalKey.Plugin != Name)
+					_parents.Add(record.InternalKey.Plugin);
+
+				// Add any non-existing parents which have records referenced to the parent list
+				_parents.AddRange(Util.RecordUtils.GetReferences(record).Select(p => p.Key.Plugin).Where(p => !string.IsNullOrEmpty(p)).Except(_parents));
+
+			}
+
+		} 
 
 	}
 
