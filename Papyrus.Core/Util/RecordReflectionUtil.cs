@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace Papyrus.Core.Util
 {
@@ -31,7 +32,7 @@ namespace Papyrus.Core.Util
 		internal static List<PropertyInfo> GetProperties(Type t)
 		{
 
-			var props = t.GetProperties().Where(p => !p.HasAttribute<Newtonsoft.Json.JsonIgnoreAttribute>());
+			var props = t.GetProperties().Where(p => !p.HasAttribute<JsonIgnoreAttribute>());
 
 			return props.ToList();
 
@@ -98,6 +99,22 @@ namespace Papyrus.Core.Util
 		{
 			
 		}*/
+
+		/// <summary>
+		/// Search all loaded assemblies for record types
+		/// </summary>
+		/// <returns></returns>
+		public static List<Type> GetRecordTypes()
+		{
+
+			return (
+				       from assembly in AppDomain.CurrentDomain.GetAssemblies()
+				       from type in assembly.GetTypes()
+				       where type.IsSubclassOf(typeof (Record))
+				       select type
+			       ).ToList();
+
+		}
 
 	}
 

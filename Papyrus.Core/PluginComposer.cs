@@ -65,6 +65,11 @@ namespace Papyrus.Core
 		/// </summary>
 		private readonly List<Plugin> _pluginList;
 
+		/// <summary>
+		/// Simple event when an operation should cause a record list refresh
+		/// </summary>
+		public event EventHandler RecordListChanged;
+
 		PluginComposer(Plugin plugin)
 		{
 			Plugin = plugin;
@@ -110,8 +115,13 @@ namespace Papyrus.Core
 			// Assign next key
 			record.InternalKey = Plugin.NextKey(type);
 
+			// Set default editor ID
+			record.SetProperty(() => record.EditorID, record.InternalKey.ToString());
+
 			// Add to plugin collection
 			Plugin.Records.AddRecord(record);
+
+			OnRecordListChanged();
 
 			// Return editable clone
 			return Util.RecordReflectionUtil.Clone(record);
@@ -145,6 +155,9 @@ namespace Papyrus.Core
 
 			// Add record to active plugin
 			Plugin.Records.AddRecord(ourClone);
+
+			// Editor record list needs updating as a result
+			OnRecordListChanged();
 
 		}
 
@@ -230,6 +243,16 @@ namespace Papyrus.Core
 			collection.Merge(Plugin.Records);
 
 			return collection;
+
+		}
+
+		private void OnRecordListChanged()
+		{
+
+			EventHandler handler = RecordListChanged;
+
+			if (handler != null)
+				handler(this, EventArgs.Empty);
 
 		}
 

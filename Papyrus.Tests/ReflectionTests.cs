@@ -168,6 +168,21 @@ namespace Papyrus.Tests
 
 		}
 
+		/// <summary>
+		/// Test scanning AppDomain for record types
+		/// </summary>
+		[TestMethod]
+		public void TestRecordTypeDetection()
+		{
+
+			var types = RecordReflectionUtil.GetRecordTypes();
+
+			CollectionAssert.Contains(types, typeof(TestRecordOne));
+			CollectionAssert.Contains(types, typeof(TestRecordTwo));
+			CollectionAssert.Contains(types, typeof(TestRecord));
+
+		}
+
 	}
 
 }
