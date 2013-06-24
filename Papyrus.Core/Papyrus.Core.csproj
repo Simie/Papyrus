@@ -45,6 +45,7 @@
     <Compile Include="MissingPluginException.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="PluginComposer.cs" />
+    <Compile Include="PluginLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Record.cs" />
     <Compile Include="RecordCollection.cs" />

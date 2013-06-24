@@ -16,6 +16,11 @@ namespace Papyrus.Core
 	{
 
 		/// <summary>
+		/// File extension for a plugin file
+		/// </summary>
+		public const string Extension = "jpp"; // json-papyrus-plugin
+
+		/// <summary>
 		/// Load a plugin from a json string
 		/// </summary>
 		/// <param name="json"></param>
@@ -29,7 +34,17 @@ namespace Papyrus.Core
 		public string Name { get; private set; }
 
 		public IList<string> Parents { get { return _parents.AsReadOnly(); } }
-			
+
+		#region Plugin Meta Data
+
+		[JsonProperty]
+		public string Author { get; set; }
+
+		[JsonProperty]
+		public string Description { get; set; }
+
+		#endregion
+
 		[JsonProperty]
 		internal RecordCollection Records { get; private set; }
 
