@@ -9,63 +9,12 @@ namespace Papyrus.Tests
 	public class RecordDatabaseTests
 	{
 
-		private const string TestParentPlugin = 
-@"{
-	""Name"": ""Master"",
-	""Parents"": [],
-	""Records"": {
-	""Papyrus.Tests.TestRecord"": [
-		{
-		""Key"": ""Master/000000"",
-		""TestBoolean"": true,
-		""TestString"": ""Original Value"",
-		""TestInteger"": 0,
-		""TestReference"": ""000000"",
-		""EditorID"": null
-		},
-		{
-		""Key"": ""Master/000001"",
-		""TestBoolean"": false,
-		""TestString"": ""Test String Value"",
-		""TestInteger"": 0,
-		""TestReference"": ""000000"",
-		""EditorID"": null
-		}
-	]
-	}
-}";
-		private const string TestChildPlugin =
-@"{
-	""Name"": ""Child"",
-	""Parents"": [""Master""],
-	""Records"": {
-	""Papyrus.Tests.TestRecord"": [
-		{
-		""Key"": ""Master/000000"",
-		""TestBoolean"": true,
-		""TestString"": ""Overwritten"",
-		""TestInteger"": 0,
-		""TestReference"": ""000000"",
-		""EditorID"": null
-		},
-		{
-		""Key"": ""Child/000000"",
-		""TestBoolean"": false,
-		""TestString"": ""New Record"",
-		""TestInteger"": 0,
-		""TestReference"": ""000000"",
-		""EditorID"": null
-		}
-	]
-	}
-}";
-
 		[TestMethod]
 		public void TestSimpleSetup()
 		{
 
-			var parent = Plugin.FromString(TestParentPlugin);
-			var child = Plugin.FromString(TestChildPlugin);
+			var parent = Plugin.FromString(TestPlugins.TestParentPlugin);
+			var child = Plugin.FromString(TestPlugins.TestChildPlugin);
 
 			var database = new RecordDatabase(new List<Plugin>() {child, parent});
 
@@ -75,5 +24,20 @@ namespace Papyrus.Tests
 			Assert.AreEqual(overriden.TestString, "Overwritten");
 
 		}
+
+		[TestMethod]
+		public void TestMissingPlugin()
+		{
+
+			var child = Plugin.FromString(TestPlugins.TestChildPlugin);
+
+			try {
+				var database = new RecordDatabase(new List<Plugin>() {child});
+				Assert.Fail("Didn't throw exception with missing plugin");
+			} catch (MissingPluginException) {}
+			
+
+		}
+
 	}
 }

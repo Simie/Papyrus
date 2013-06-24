@@ -35,7 +35,7 @@ namespace Papyrus.Core
 
 			// Check all parents are present
 			if(!plugins.All(p => p.VerifyParents(plugins)))
-				throw new Exception("Not all plugin parents can be resolved.");
+				throw new MissingPluginException("Not all plugin parents can be resolved.", "Unknown"); // TODO: Report missing plugins
 
 			// Sort plugins
 			if (sort) {

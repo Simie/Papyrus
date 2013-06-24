@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
@@ -9,6 +10,19 @@ namespace Papyrus.Tests
 	[TestClass]
 	public class PluginComposerTests
 	{
+
+		[TestMethod]
+		public void TestMissingParent()
+		{
+
+			var testChild = Plugin.FromString(TestPlugins.TestChildPlugin);
+
+			try {
+				var composer = PluginComposer.EditPlugin(testChild, new List<Plugin>());
+				Assert.Fail("Exception wasn't thrown with missing parent");
+			} catch (MissingPluginException) { }
+
+		}
 
 		[TestMethod]
 		public void TestBasicAddRetrieve()

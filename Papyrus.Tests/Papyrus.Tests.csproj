@@ -67,6 +67,7 @@
     <Compile Include="ReflectionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializationTests.cs" />
+    <Compile Include="TestPlugins.cs" />
     <Compile Include="TestRecords.cs" />
     <Compile Include="PluginTests.cs" />
     <Compile Include="RecordDatabaseTests.cs" />

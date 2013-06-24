@@ -64,10 +64,15 @@ namespace Papyrus.Core
 			_pluginList = new List<Plugin>();
 		}
 
-		PluginComposer(Plugin plugin, IEnumerable<Plugin> plugins)
+		PluginComposer(Plugin plugin, IEnumerable<Plugin> plugins, bool sort = true)
 		{
+
 			Plugin = plugin;
 			_pluginList = new List<Plugin>(plugins);
+
+			if(!Plugin.VerifyParents(_pluginList) || !_pluginList.All(p => p.VerifyParents(_pluginList)))
+				throw new MissingPluginException("Missing parent plugins", "Unknown");
+
 		}
 
 		/// <summary>
@@ -222,5 +227,4 @@ namespace Papyrus.Core
 		}
 
 	}
-
 }
