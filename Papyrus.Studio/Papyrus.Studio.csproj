@@ -51,6 +51,12 @@
     <Reference Include="Ookii.Dialogs.Wpf">
       <HintPath>..\packages\Ookii.Dialogs.1.0\lib\net35\Ookii.Dialogs.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="PropertyTools">
+      <HintPath>..\Lib\PropertyTools.dll</HintPath>
+    </Reference>
+    <Reference Include="PropertyTools.Wpf">
+      <HintPath>..\Lib\PropertyTools.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
@@ -112,8 +118,16 @@
     <Compile Include="Framework\Services\IExceptionHandler.cs" />
     <Compile Include="Framework\Services\ResultExtensions.cs" />
     <Compile Include="Modules\PapyrusManager\ViewModels\PluginViewModel.cs" />
+    <Compile Include="Modules\RecordBrowser\IRecordBrowser.cs" />
+    <Compile Include="Modules\RecordBrowser\Module.cs" />
+    <Compile Include="Modules\RecordBrowser\ViewModels\RecordBrowserViewModel.cs" />
+    <Compile Include="Modules\RecordBrowser\ViewModels\RecordTypeViewModel.cs" />
+    <Compile Include="Modules\RecordBrowser\Views\RecordBrowserView.xaml.cs">
+      <DependentUpon>RecordBrowserView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Modules\Startup\Module.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="TestTypes\SampleRecord.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Framework\IRecordDocument.cs" />
@@ -178,12 +192,38 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Modules\RecordBrowser\Views\RecordBrowserResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Modules\RecordBrowser\Views\RecordBrowserView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Modules\RecordBrowser\Views\VS2010Theme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Papyrus.Core\Papyrus.Core.csproj">
       <Project>{228e5abf-dfbf-401a-a176-41571856b7bf}</Project>
       <Name>Papyrus.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Copy.png" />
+    <Resource Include="Resources\Icons\Database.png" />
+    <Resource Include="Resources\Icons\Eyedropper.png" />
+    <Resource Include="Resources\Icons\Fullscreen.png" />
+    <Resource Include="Resources\Icons\Minus_Blue.png" />
+    <Resource Include="Resources\Icons\New.png" />
+    <Resource Include="Resources\Icons\plus_24x24.png" />
+    <Resource Include="Resources\Icons\Plus_Blue.png" />
+    <Resource Include="Resources\Icons\Search.png" />
+    <Resource Include="Resources\Icons\Table.ico" />
+    <Resource Include="Resources\Icons\Table.png" />
+    <Resource Include="Resources\Icons\x_28x28.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
