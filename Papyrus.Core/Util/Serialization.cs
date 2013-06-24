@@ -16,12 +16,14 @@ namespace Papyrus.Core.Util
 
 			var settings = new JsonSerializerSettings();
 
+			// Default to indented, for easy user-editing
+			settings.Formatting = Formatting.Indented;
+
 			settings.Converters.Add(new StringEnumConverter());
 			settings.Converters.Add(new RecordKeyConverter());
 			settings.Converters.Add(new RecordRefConverter());
 			settings.Converters.Add(new RecordCollectionConverter());
 			settings.Converters.Add(new RecordConverter());
-
 
 			return settings;
 

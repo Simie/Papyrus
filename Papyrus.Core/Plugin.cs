@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace Papyrus.Core
 {
@@ -9,11 +11,24 @@ namespace Papyrus.Core
 	/// <summary>
 	/// A collection of record lists, with add/remove operations
 	/// </summary>
+	[JsonObject(MemberSerialization.OptIn)]
 	public class Plugin
 	{
 
+		/// <summary>
+		/// Load a plugin from a json string
+		/// </summary>
+		/// <param name="json"></param>
+		/// <returns></returns>
+		public static Plugin FromString(string json)
+		{
+			return JsonConvert.DeserializeObject<Plugin>(json, Util.Serialization.GetJsonSettings());
+		}
+
+		[JsonProperty]
 		public string Name { get; private set; }
 
+		[JsonProperty]
 		internal RecordCollection Records { get; private set; }
 
 		internal Plugin(string name)
@@ -23,6 +38,9 @@ namespace Papyrus.Core
 			Records = new RecordCollection();
 
 		}
+
+		[JsonConstructor]
+		Plugin() { }
 
 		/// <summary>
 		/// Get a key for the next record
