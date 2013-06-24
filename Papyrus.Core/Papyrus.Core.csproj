@@ -57,6 +57,7 @@
     <Compile Include="Util\JsonConverters\RecordRefConverter.cs" />
     <Compile Include="Util\RecordDiffUtil.cs" />
     <Compile Include="Util\RecordReflectionUtil.cs" />
+    <Compile Include="Util\RecordUtils.cs" />
     <Compile Include="Util\ReflectionExtensions.cs" />
     <Compile Include="Util\ReflectionUtil.cs" />
     <Compile Include="Util\Serialization.cs" />

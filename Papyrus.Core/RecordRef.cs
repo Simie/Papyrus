@@ -6,12 +6,22 @@ using System.Text;
 namespace Papyrus.Core
 {
 
-	public struct RecordRef<T> : IEquatable<RecordRef<T>> where T : Record
+	internal interface IRecordRef
+	{
+
+		RecordKey Key { get; }
+		Type Type { get; }
+
+	}
+		
+	public struct RecordRef<T> : IEquatable<RecordRef<T>>, IRecordRef where T : Record
 	{
 
 		public RecordKey Key { get; private set; }
 
 		public T Value { get; internal set; }
+
+		public Type Type { get { return typeof (T); } }
 
 		public RecordRef(RecordKey key) : this()
 		{
