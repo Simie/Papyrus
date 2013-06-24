@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace Papyrus.Core
 {
@@ -58,6 +59,31 @@ namespace Papyrus.Core
 			var jsonText = File.ReadAllText(filePath, Encoding.UTF8);
 
 			return Plugin.FromString(jsonText);
+
+		}
+
+		/// <summary>
+		/// Save plugin to directory
+		/// </summary>
+		/// <param name="plugin"></param>
+		/// <param name="directory"></param>
+		/// <returns></returns>
+		public static bool SavePlugin(Plugin plugin, string directory)
+		{
+
+			if (!Directory.Exists(directory))
+				throw new DirectoryNotFoundException("Directory not found " + directory);
+
+			var savePath = Path.Combine(directory, plugin.Name + "." + Plugin.Extension);
+
+			// Ensure the latest dependencies are known
+			plugin.RefreshParents();
+
+			var pluginJson = JsonConvert.SerializeObject(plugin, Util.Serialization.GetJsonSettings());
+
+			File.WriteAllText(savePath, pluginJson, Encoding.UTF8);
+
+			return true;
 
 		}
 
