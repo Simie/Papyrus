@@ -176,6 +176,15 @@ namespace Papyrus.Core
 		} 
 
 		/// <summary>
+		/// Get every record in this collection
+		/// </summary>
+		/// <returns></returns>
+		public ICollection<Record> GetAllRecords()
+		{
+			return RecordLists.SelectMany(p => p.Value.Records.Values).ToList();
+		} 
+
+		/// <summary>
 		/// Merge the other collection into this. Overwrites any overlapping records with the other collection's copy.
 		/// </summary>
 		/// <param name="other"></param>

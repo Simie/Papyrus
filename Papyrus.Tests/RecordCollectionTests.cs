@@ -203,5 +203,31 @@ namespace Papyrus.Tests
 
 		}
 
+		[TestMethod]
+		public void TestGetAll()
+		{
+
+			var collection = new RecordCollection();
+
+			var record1 = new TestRecordOne {InternalKey = new RecordKey(0)};
+			var record2 = new TestRecordOne {InternalKey = new RecordKey(1)};
+			var record3 = new TestRecordTwo {InternalKey = new RecordKey(0)};
+			var record4 = new TestRecordTwo {InternalKey = new RecordKey(1)};
+
+			collection.AddRecord(record1);
+			collection.AddRecord(record2);
+			collection.AddRecord(record3);
+			collection.AddRecord(record4);
+
+			var all = collection.GetAllRecords();
+
+			Assert.AreEqual(all.Count, 4);
+			Assert.IsTrue(all.Contains(record1));
+			Assert.IsTrue(all.Contains(record2));
+			Assert.IsTrue(all.Contains(record3));
+			Assert.IsTrue(all.Contains(record4));
+
+		}
+
 	}
 }
