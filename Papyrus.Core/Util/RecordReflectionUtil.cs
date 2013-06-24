@@ -31,6 +31,20 @@ namespace Papyrus.Core.Util
 		}
 
 		/// <summary>
+		/// Get a list of RecordRef properties in a record type.
+		/// </summary>
+		/// <param name="t"></param>
+		/// <returns></returns>
+		internal static List<PropertyInfo> GetReferenceProperties(Type t)
+		{
+
+			return
+				GetProperties(t)
+					.Where(p => p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof (RecordRef<>)).ToList();
+
+		} 
+
+		/// <summary>
 		/// Clone all record properties and key to a new record
 		/// </summary>
 		/// <param name="record"></param>

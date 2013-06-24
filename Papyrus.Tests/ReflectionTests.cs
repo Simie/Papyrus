@@ -141,6 +141,17 @@ namespace Papyrus.Tests
 
 		}
 
+		[TestMethod]
+		public void TestReferencePropertyDetection()
+		{
+
+			var properties = RecordReflectionUtil.GetReferenceProperties(typeof (TestRecord));
+
+			Assert.AreEqual(properties.Count, 1);
+			Assert.IsTrue(properties.Single().Name == "TestReference");
+
+		}
+
 	}
 
 }

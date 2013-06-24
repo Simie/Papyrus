@@ -69,6 +69,7 @@
     <Compile Include="SerializationTests.cs" />
     <Compile Include="TestRecords.cs" />
     <Compile Include="PluginTests.cs" />
+    <Compile Include="RecordDatabaseTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Papyrus.Core\Papyrus.Core.csproj">
