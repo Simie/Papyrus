@@ -67,6 +67,16 @@ namespace Papyrus.Core
 		}
 
 		/// <summary>
+		/// Verify that the plugin list provided contains all the parents of this plugin.
+		/// </summary>
+		/// <param name="plugins"></param>
+		/// <returns></returns>
+		internal bool VerifyParents(IList<Plugin> plugins)
+		{
+			return _parents.All(parent => plugins.Any(p => p.Name == parent));
+		}
+
+		/// <summary>
 		/// Scan records in this plugin to determine which plugins this plugin is child too
 		/// </summary>
 		internal void RefreshParents()

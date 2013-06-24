@@ -58,7 +58,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="DependencySorterTests.cs" />
     <Compile Include="PluginComposerTests.cs" />
     <Compile Include="RecordCollectionTests.cs" />
     <Compile Include="RecordKeyTests.cs" />

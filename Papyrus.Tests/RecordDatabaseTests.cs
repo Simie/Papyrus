@@ -12,6 +12,7 @@ namespace Papyrus.Tests
 		private const string TestParentPlugin = 
 @"{
 	""Name"": ""Master"",
+	""Parents"": [],
 	""Records"": {
 	""Papyrus.Tests.TestRecord"": [
 		{
@@ -33,9 +34,10 @@ namespace Papyrus.Tests
 	]
 	}
 }";
-		private const string TestChildPlugin = 
+		private const string TestChildPlugin =
 @"{
 	""Name"": ""Child"",
+	""Parents"": [""Master""],
 	""Records"": {
 	""Papyrus.Tests.TestRecord"": [
 		{
@@ -59,13 +61,18 @@ namespace Papyrus.Tests
 }";
 
 		[TestMethod]
-		public void TestMethod1()
+		public void TestSimpleSetup()
 		{
 
 			var parent = Plugin.FromString(TestParentPlugin);
 			var child = Plugin.FromString(TestChildPlugin);
 
-			var database = new RecordDatabase(new List<Plugin>() {parent, child});
+			var database = new RecordDatabase(new List<Plugin>() {child, parent});
+
+			// Test record was overriden correctly
+			var overriden = database.GetRecord<TestRecord>(new RecordKey(0, "Master"));
+
+			Assert.AreEqual(overriden.TestString, "Overwritten");
 
 		}
 	}

@@ -7,6 +7,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Papyrus.Core;
+using Papyrus.Core.Util;
 
 namespace Papyrus.Tests
 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Papyrus.Core.Util;
 using System.Linq;
 using System.Text;
 
@@ -31,12 +32,28 @@ namespace Papyrus.Core
 		/// <param name="sort">Sort the list before appending (ensures that dependencies are loaded in order). Defaults to true.</param>
 		public RecordDatabase(IList<Plugin> plugins, bool sort = true) : this()
 		{
-			
 
+			// Check all parents are present
+			if(!plugins.All(p => p.VerifyParents(plugins)))
+				throw new Exception("Not all plugin parents can be resolved.");
+
+			// Sort plugins
+			if (sort) {
+				// Sort plugins by dependencies
+				plugins = plugins.TSort(
+					// Convert list of plugin names to plugin objects
+					plugin => plugin.Parents.Select(p => plugins.FirstOrDefault(q => q.Name == p))
+				).ToList();
+			}
+
+			// Load plugins
+			foreach (var plugin in plugins) {
+				LoadPlugin(plugin);
+			}
 
 		}
 
-		public void LoadPlugin(Plugin plugin)
+		internal void LoadPlugin(Plugin plugin)
 		{
 			
 			// Merge plugin records into internal collection
