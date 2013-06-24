@@ -12,7 +12,7 @@ namespace Papyrus.Studio.TestTypes
 
 		public string TestString { get; private set; }
 
-		public string TestInteger { get; private set; }
+		public int TestInteger { get; private set; }
 
 	}
 
