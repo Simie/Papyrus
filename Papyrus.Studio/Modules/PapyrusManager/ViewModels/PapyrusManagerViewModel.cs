@@ -236,7 +236,7 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 		public IEnumerable<IResult> OpenRecord(Record record)
 		{
 
-			var existingEditor = GetOpenRecordEditors().FirstOrDefault(p => p.Record.Key == record.Key);
+			var existingEditor = FindExistingEditor(record);
 
 			if (existingEditor != null) {
 				yield return Show.Document(existingEditor);
@@ -246,6 +246,22 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 			var editorProvider = EditorProvidersForRecord(record).FirstOrDefault();
 
 			yield return new SequentialResult(OpenRecordWith(record, editorProvider).GetEnumerator());
+
+		}
+
+		private IRecordDocument FindExistingEditor(Record record)
+		{
+			var recordType = record.GetType();
+			var existingEditor =
+				GetOpenRecordEditors().Where(p => p.Record.GetType() == recordType).FirstOrDefault(p => p.Record.Key == record.Key);
+			return existingEditor;
+		}
+
+		public IEnumerable<IResult> OpenRecord(Type recordType, RecordKey record)
+		{
+
+			var r = _pluginComposer.GetRecord(recordType, record);
+			yield return OpenRecord(r).ToResult();
 
 		}
 
@@ -270,7 +286,7 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 
 			}
 
-			var existingEditor = GetOpenRecordEditors().FirstOrDefault(p => p.Record.Key == record.Key);
+			var existingEditor = FindExistingEditor(record);
 
 			if (existingEditor != null) {
 

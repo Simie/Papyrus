@@ -41,6 +41,13 @@ namespace Papyrus.Studio.Modules.PapyrusManager
 		IEnumerable<IResult> OpenRecord(Papyrus.Core.Record record);
 
 		/// <summary>
+		/// Opens the given record in the default editor.
+		/// </summary>
+		/// <param name="recordType">Record type</param>
+		/// <param name="record">Record key</param>
+		IEnumerable<IResult> OpenRecord(Type recordType, Papyrus.Core.RecordKey record);
+
+		/// <summary>
 		/// Open the given record in the provided editor, or pass null to display a list to choose from.
 		/// </summary>
 		/// <param name="record">Record to open</param>

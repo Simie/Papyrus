@@ -17,7 +17,7 @@
 							<ColumnDefinition Width="Auto" />
 							<ColumnDefinition Width="Auto" />
 						</Grid.ColumnDefinitions>
-						<Label Content="{Binding RecordReference,RelativeSource={RelativeSource TemplatedParent}}" />
+						<Label Content="{Binding Path=RecordReference.Key,RelativeSource={RelativeSource TemplatedParent}}" />
 						<Button Grid.Column="2" MinWidth="40" Content="Pick" Command="{Binding BrowseCommand,RelativeSource={RelativeSource TemplatedParent}}" Margin="4 0 0 0" />
 						<Button Grid.Column="1" MinWidth="40" Content="Open" Command="{Binding OpenCommand,RelativeSource={RelativeSource TemplatedParent}}" Margin="4 0 0 0" />
 					</Grid>

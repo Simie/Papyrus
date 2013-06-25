@@ -123,6 +123,9 @@
       <DependentUpon>PapyrusPropertyControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Framework\Controls\RecordList\RecordList.cs" />
+    <Compile Include="Framework\Controls\RecordPicker.xaml.cs">
+      <DependentUpon>RecordPicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Framework\Controls\RecordReferenceItem\RecordReferenceItem.cs" />
     <Compile Include="Framework\IRecordViewModel.cs" />
     <Compile Include="Framework\ISaveAware.cs" />
@@ -235,7 +238,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Framework\Controls\RecordPicker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Framework\Controls\RecordReferenceItem\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Framework\Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -25,6 +25,8 @@ namespace Papyrus.Studio.TestTypes
 
 		public int TestierInteger { get; private set; }
 
+		public RecordRef<SampleRecord> TestReference { get; private set; } 
+
 	}
 
 }

@@ -30,6 +30,8 @@ namespace Papyrus.Studio.Framework.Controls
 			typeof(RecordReferenceItem),
 			new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, RecordReferenceChangedCallback));
 
+		private IPapyrusManager _papyrusManager;
+
 		/// <summary>
 		/// Gets or sets the data pointer.
 		/// </summary>
@@ -70,12 +72,13 @@ namespace Papyrus.Studio.Framework.Controls
 		{
 			BrowseCommand = new DelegateCommand(Browse);
 			OpenCommand = new DelegateCommand(Open, () => RecordReference != null && RecordReference.Key != RecordKey.Identity);
+			_papyrusManager = IoC.Get<IPapyrusManager>();
 		}
 
 		private void Browse()
 		{
 
-			//RecordReference = Papyrus.Design.Controls.RecordPicker.PickRecord(RecordReference);
+			RecordReference = RecordPicker.PickRecord(RecordReference);
 
 		}
 
@@ -84,8 +87,7 @@ namespace Papyrus.Studio.Framework.Controls
 
 			if (this.RecordReference != null && this.RecordReference.Key != RecordKey.Identity) {
 
-				var papyrusManager = IoC.Get<IPapyrusManager>();
-				//Coroutine.BeginExecute(papyrusManager.OpenRecord(this.RecordReference.Key).GetEnumerator());
+				Coroutine.BeginExecute(_papyrusManager.OpenRecord(this.RecordReference.Type, this.RecordReference.Key).GetEnumerator());
 
 			}
 

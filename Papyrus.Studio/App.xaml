@@ -8,6 +8,7 @@
                 <ResourceDictionary>
                     <studio:EditorBootstrapper x:Key="bootstrapper" />
                 </ResourceDictionary>
+                <ResourceDictionary Source="Framework/Themes/Generic.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
         
