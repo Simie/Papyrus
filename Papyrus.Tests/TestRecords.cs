@@ -38,4 +38,11 @@ namespace Papyrus.Tests
 
 	}
 
+	class TestRecordCollectionRecord : Record
+	{
+
+		public RecordRefCollection<TestRecordOne> Records { get; private set; }
+
+	}
+
 }

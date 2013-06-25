@@ -66,24 +66,49 @@ namespace Papyrus.Tests
 			// Should have no parents with no records present
 			Assert.AreEqual(plugin.Parents.Count, 0);
 
-			// Test that adding a record overriden a parent's record is detected correctly
-			plugin.Records.AddRecord(new TestRecordOne() { InternalKey = new RecordKey(0, "Parent")});
+			{
+				// Test that adding a record overriden a parent's record is detected correctly
+				plugin.Records.AddRecord(new TestRecordOne() { InternalKey = new RecordKey(0, "Parent") });
 
-			plugin.RefreshParents();
-			
-			Assert.AreEqual(plugin.Parents.Count, 1);
-			Assert.IsTrue(plugin.Parents.Contains("Parent"));
+				plugin.RefreshParents();
 
-			// Test that adding a record with a reference to a plugin is detected correctly
-			var testRecord = new TestRecord() {InternalKey = new RecordKey(0, "TestPlugin")};
-			testRecord.SetProperty(() => testRecord.TestReference, new RecordRef<TestRecordOne>(new RecordKey(0, "Parent2")));
+				Assert.AreEqual(plugin.Parents.Count, 1);
+				Assert.IsTrue(plugin.Parents.Contains("Parent"));
+			}
 
-			plugin.Records.AddRecord(testRecord);
+			{
+				// Test that adding a record with a reference to a plugin is detected correctly
+				var testRecord = new TestRecord() { InternalKey = new RecordKey(0, "TestPlugin") };
+				testRecord.SetProperty(() => testRecord.TestReference, new RecordRef<TestRecordOne>(new RecordKey(0, "Parent2")));
 
-			plugin.RefreshParents();
+				plugin.Records.AddRecord(testRecord);
 
-			Assert.AreEqual(plugin.Parents.Count, 2);
-			Assert.IsTrue(plugin.Parents.Contains("Parent2"));
+				plugin.RefreshParents();
+
+				Assert.AreEqual(plugin.Parents.Count, 2);
+				Assert.IsTrue(plugin.Parents.Contains("Parent2"));
+
+			}
+
+			{
+
+				// Test that RecordRefCollection references are detected correctly
+				var testCollection = new TestRecordCollectionRecord() {InternalKey = new RecordKey(0, "TestPlugin")};
+
+				testCollection.SetProperty(() => testCollection.Records, new RecordRefCollection<TestRecordOne>(new[] {
+					new RecordRef<TestRecordOne>(new RecordKey(0, "CollectionParent")),
+					new RecordRef<TestRecordOne>(new RecordKey(0, "CollectionParent2")),
+				}));
+
+				plugin.Records.AddRecord(testCollection);
+				plugin.RefreshParents();
+
+				Assert.IsTrue(plugin.Parents.Contains("CollectionParent"));
+				Assert.IsTrue(plugin.Parents.Contains("CollectionParent2"));
+
+			}
+
+			//testCollection.Records.Add(new );
 
 		}
 
