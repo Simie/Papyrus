@@ -121,6 +121,9 @@ namespace Papyrus.Core
 
 			}
 
+			// Don't set self as a parent
+			_parents.Remove(Name);
+				
 		} 
 
 	}

@@ -87,5 +87,23 @@ namespace Papyrus.Tests
 
 		}
 
+		[TestMethod]
+		public void TestCyclicDependency()
+		{
+
+			var plugin = new Plugin("TestPlugin");
+
+			var testRecord = new TestRecord();
+			testRecord.SetProperty(() => testRecord.TestReference, new RecordRef<TestRecordOne>(new RecordKey(0, "TestPlugin")));
+			testRecord.InternalKey = new RecordKey(0, "TestPlugin");
+
+			plugin.Records.AddRecord(testRecord);
+
+			plugin.RefreshParents();
+
+			Assert.IsFalse(plugin.Parents.Contains("TestPlugin"), "Plugin contains itself as a parent");
+
+		}
+
 	}
 }

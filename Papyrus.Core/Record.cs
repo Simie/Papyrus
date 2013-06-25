@@ -46,6 +46,11 @@ namespace Papyrus.Core
 			get { return KeyComparerInstance; }
 		}
 
+		public override string ToString()
+		{
+			return string.Format("{0} ({1}, {2})", EditorID, Key, GetType().Name);
+		}
+
 		/// <summary>
 		/// Comparer which uses reflection to compare papyrus properties for equality.
 		/// </summary>
