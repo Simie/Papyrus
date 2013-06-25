@@ -95,7 +95,7 @@ namespace Papyrus.Tests
 				// Test that RecordRefCollection references are detected correctly
 				var testCollection = new TestRecordCollectionRecord() {InternalKey = new RecordKey(0, "TestPlugin")};
 
-				testCollection.SetProperty(() => testCollection.Records, new RecordRefCollection<TestRecordOne>(new[] {
+				testCollection.SetProperty(() => testCollection.TestRecords, new RecordRefCollection<TestRecordOne>(new[] {
 					new RecordRef<TestRecordOne>(new RecordKey(0, "CollectionParent")),
 					new RecordRef<TestRecordOne>(new RecordKey(0, "CollectionParent2")),
 				}));

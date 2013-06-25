@@ -153,6 +153,17 @@ namespace Papyrus.Tests
 		}
 
 		[TestMethod]
+		public void TestReferenceCollectionPropertyDetection()
+		{
+
+			var properties = RecordReflectionUtil.GetReferenceCollectionProperties(typeof (TestRecordCollectionRecord));
+
+			Assert.AreEqual(properties.Count, 1);
+			Assert.AreEqual(properties.Single().Name, "TestRecords");
+
+		}
+
+		[TestMethod]
 		public void TestReferencePropertyRetrieval()
 		{
 
@@ -165,6 +176,24 @@ namespace Papyrus.Tests
 
 			Assert.AreEqual(references.Count, 1);
 			Assert.AreEqual(references.Single(), reference);
+
+		}
+	
+		[TestMethod]
+		public void TestReferenceCollectionPropertyRetrieval()
+		{
+
+			var testRecord = new TestRecordCollectionRecord();
+
+			var refOne = new RecordRef<TestRecordOne>(new RecordKey(1337, "TestPlugin"));
+			var refTwo = new RecordRef<TestRecordOne>(new RecordKey(1338, "TestPlugin"));
+			testRecord.SetProperty(() => testRecord.TestRecords, new RecordRefCollection<TestRecordOne>(new [] {refOne, refTwo}));
+
+			var references = RecordUtils.GetReferences(testRecord);
+
+			Assert.AreEqual(references.Count, 2);
+			Assert.IsTrue(references.Contains(refOne));
+			Assert.IsTrue(references.Contains(refTwo));
 
 		}
 

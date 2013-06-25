@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace Papyrus.Core
@@ -11,6 +12,8 @@ namespace Papyrus.Core
 	{
 
 		Type RecordType { get; }
+
+		IList<IRecordRef> References { get; } 
 
 	}
 
@@ -26,7 +29,12 @@ namespace Papyrus.Core
 		/// <summary>
 		/// Read-only list of record references
 		/// </summary>
-		public IList<RecordRef<T>> References {get { return _internalList.AsReadOnly(); }} 
+		public IList<RecordRef<T>> References {get { return _internalList.AsReadOnly(); }}
+
+		/// <summary>
+		/// Interface implementation of References property
+		/// </summary>
+		IList<IRecordRef> IRecordRefCollection.References { get { return _internalList.Cast<IRecordRef>().ToList().AsReadOnly(); } } 
 
 		public RecordRefCollection(IEnumerable<RecordRef<T>> recordRefs)
 		{

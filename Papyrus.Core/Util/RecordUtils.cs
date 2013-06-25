@@ -19,7 +19,13 @@ namespace Papyrus.Core.Util
 		public static ICollection<IRecordRef> GetReferences(Record rec)
 		{
 
-			return RecordReflectionUtil.GetReferenceProperties(rec.GetType()).Select(p => (IRecordRef) p.GetValue(rec, null)).ToArray();
+			var basicReferences = RecordReflectionUtil.GetReferenceProperties(rec.GetType()).Select(p => (IRecordRef) p.GetValue(rec, null));
+
+			var collectionReferences =
+				RecordReflectionUtil.GetReferenceCollectionProperties(rec.GetType())
+				                    .SelectMany(p => ((IRecordRefCollection) p.GetValue(rec, null)).References);
+
+			return basicReferences.Concat(collectionReferences).ToArray();
 
 		} 
 

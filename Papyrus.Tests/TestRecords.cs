@@ -41,7 +41,7 @@ namespace Papyrus.Tests
 	class TestRecordCollectionRecord : Record
 	{
 
-		public RecordRefCollection<TestRecordOne> Records { get; private set; }
+		public RecordRefCollection<TestRecordOne> TestRecords { get; private set; }
 
 	}
 

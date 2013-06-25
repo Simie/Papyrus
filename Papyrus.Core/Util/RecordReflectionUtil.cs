@@ -50,6 +50,20 @@ namespace Papyrus.Core.Util
 				GetProperties(t)
 					.Where(p => p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof (RecordRef<>)).ToList();
 
+		}
+		
+		/// <summary>
+		/// Get a list of RecordRef properties in a record type.
+		/// </summary>
+		/// <param name="t"></param>
+		/// <returns></returns>
+		internal static List<PropertyInfo> GetReferenceCollectionProperties(Type t)
+		{
+
+			return
+				GetProperties(t)
+					.Where(p => p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof (RecordRefCollection<>)).ToList();
+
 		} 
 
 		/// <summary>
