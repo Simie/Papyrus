@@ -13,8 +13,8 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows;
 using Caliburn.Micro;
-using Gemini.Framework;
 using Gemini.Framework.Results;
+using Gemini.Framework.Services;
 using Papyrus.Core;
 using Papyrus.Studio.Framework;
 using Papyrus.Studio.Framework.Results;
@@ -32,12 +32,7 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 
 		public event EventHandler RecordDatabaseChanged = delegate { };
 
-		/// <summary>
-		/// True if papyrus has already been initialised (will need a restart if true and modules change)
-		/// </summary>
-		private static bool _papyrusInit;
-
-		//[Import(typeof (IShell))] private IShell _shell;
+		[Import(typeof (IShell))] private IShell _shell;
 
 		private Papyrus.Core.PluginComposer _pluginComposer;
 
@@ -54,50 +49,12 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 		private List<PluginViewModel> _activeMasters;
 		private PluginViewModel _activePlugin;
 
-
-		private List<IRecordDocument> _recordEditors = new List<IRecordDocument>(); 
-
 		public PapyrusManagerViewModel()
 		{
 		}
 
 		private void Init()
 		{
-
-
-			if (!_papyrusInit)
-			{
-
-
-
-				Exception error = null;
-
-				try {
-
-					//Papyrus.RecordDatabase.Initialize(EditorBootstrapper.PapyrusModules);
-
-					_papyrusInit = true;
-
-					bool yesToAll = false;
-
-					/*Papyrus.Config.ReferenceErrorCallback = pointer =>
-					{
-						if (yesToAll)
-							return true;
-
-						var handler = new PapyrusErrorViewModel();
-						return handler.HandleException(pointer, ref yesToAll);
-					};*/
-
-				} catch (Exception e) {
-					error = e;
-				}
-
-				if (error != null) {
-					ShowExt.Exception(error);
-				}
-
-			}
 
 
 		}
@@ -137,18 +94,23 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 		public IEnumerable<IResult> CloseAllEditors()
 		{
 
-			var openDocumentsCopy = new List<IDocument>(_recordEditors);
+			var openDocuments = GetOpenRecordEditors();
 
-			foreach (var document in openDocumentsCopy) {
+			foreach (var document in openDocuments) {
 				document.TryClose();
 			}
 
-			if (_recordEditors.Count > 0) {
+			if (GetOpenRecordEditors().Count > 0) {
 				MessageBox.Show("Could not close all editors.");
 				yield break;
 			}
 
 		} 
+
+		public ICollection<IRecordDocument> GetOpenRecordEditors()
+		{
+			return _shell.Documents.Where(p => p is IRecordDocument).Cast<IRecordDocument>().ToList();
+		}  
 
 		public IEnumerable<IResult> SelectDataDirectory()
 		{
@@ -179,6 +141,18 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 			Init();
 
 			yield return new SequentialResult(CloseAllEditors().GetEnumerator());
+
+			if (PluginComposer != null && PluginComposer.NeedSaving) {
+
+				var result = SaveUtil.ShowSaveDialog("Plugin");
+
+				if(result == SaveUtil.SaveDialogResult.Cancel)
+					yield break;
+
+				if (result == SaveUtil.SaveDialogResult.Save)
+					yield return SaveActivePlugin().ToResult();
+
+			}
 
 			if(string.IsNullOrWhiteSpace(DataPath))
 				yield return new SequentialResult(SelectDataDirectory().GetEnumerator());
@@ -250,7 +224,9 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 		{
 
 			if (PluginComposer != null) {
-				PluginLoader.SavePlugin(PluginComposer.Plugin, DataPath);
+
+				PluginComposer.SavePlugin(DataPath);
+
 			}
 
 			yield break;
@@ -260,7 +236,7 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 		public IEnumerable<IResult> OpenRecord(Record record)
 		{
 
-			var existingEditor = _recordEditors.FirstOrDefault(p => p.Record.Equals(record));
+			var existingEditor = GetOpenRecordEditors().FirstOrDefault(p => p.Record.Key == record.Key);
 
 			if (existingEditor != null) {
 				yield return Show.Document(existingEditor);
@@ -294,7 +270,7 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 
 			}
 
-			var existingEditor = _recordEditors.FirstOrDefault(p => p.Record == record);
+			var existingEditor = GetOpenRecordEditors().FirstOrDefault(p => p.Record.Key == record.Key);
 
 			if (existingEditor != null) {
 
@@ -334,11 +310,7 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 				yield break;
 			}
 
-			_recordEditors.Add(document);
-
 			yield return Show.Document(document);
-
-			_recordEditors.Remove(document);
 
 		} 
 

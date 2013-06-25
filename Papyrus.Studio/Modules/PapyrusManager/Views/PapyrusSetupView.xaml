@@ -13,7 +13,7 @@
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-									<CheckBox IsChecked="{Binding Path=Enabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+									<CheckBox IsChecked="{Binding Path=IsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 								</Grid>
 								
 							</DataTemplate>
@@ -22,7 +22,17 @@
 					<DataGridTextColumn Width="*"
                             Binding="{Binding Path=Name}"
                             Header="Name" IsReadOnly="True" />
-					<DataGridTextColumn Width="30" IsReadOnly="True" ></DataGridTextColumn>
+					<DataGridTextColumn Width="30" IsReadOnly="True" x:Name="ActiveColumn">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=IsActive}" Value="True">
+                                        <Setter Property="Text" Value="X"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
 				</DataGrid.Columns>
 				<DataGrid.RowStyle>
 					<Style TargetType="{x:Type DataGridRow}">
@@ -31,9 +41,6 @@
 								<Setter Property="Background" Value="Red"></Setter>
 								<Setter Property="IsEnabled" Value="False"></Setter>
 							</DataTrigger>							
-							<DataTrigger Binding="{Binding Path=IsActive}" Value="True">
-								<Setter Property="Background" Value="Green"></Setter>
-							</DataTrigger>
 						</Style.Triggers>
 						<EventSetter Event="MouseDoubleClick"
                          Handler="PluginRowDoubleClick" />

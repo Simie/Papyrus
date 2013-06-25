@@ -132,12 +132,15 @@
     <Compile Include="Framework\RecordViewModel.cs" />
     <Compile Include="Framework\Results\Close.cs" />
     <Compile Include="Framework\Results\CloseDocumentResult.cs" />
+    <Compile Include="Framework\Results\CoroutineResult.cs" />
     <Compile Include="Framework\Results\ShowExceptionResult.cs" />
     <Compile Include="Framework\Results\ShowExt.cs" />
     <Compile Include="Framework\Results\ShowModalResult.cs" />
     <Compile Include="Framework\SaveUtil.cs" />
     <Compile Include="Framework\Services\IExceptionHandler.cs" />
     <Compile Include="Framework\Services\ResultExtensions.cs" />
+    <Compile Include="Modules\ExceptionHandler\Module.cs" />
+    <Compile Include="Modules\ExceptionHandler\ViewModels\ExceptionHandlerViewModel.cs" />
     <Compile Include="Modules\GenericRecordEditor\RecordEditorProvider.cs" />
     <Compile Include="Modules\GenericRecordEditor\ViewModels\GenericEditorViewModel.cs" />
     <Compile Include="Modules\GenericRecordEditor\ViewModels\GenericRecordViewModel.cs" />

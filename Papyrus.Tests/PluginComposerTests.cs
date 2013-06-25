@@ -30,6 +30,8 @@ namespace Papyrus.Tests
 
 			var plugin = PluginComposer.CreateBlank("TestPlugin");
 
+			Assert.IsFalse(plugin.NeedSaving);
+
 			var testRecord = plugin.CreateRecord<TestRecord>();
 			testRecord.SetProperty(() => testRecord.TestBoolean, true);
 			testRecord.SetProperty(() => testRecord.TestString, null);
@@ -44,6 +46,8 @@ namespace Papyrus.Tests
 			var pluginJson = JsonConvert.SerializeObject(plugin.Plugin, Core.Util.Serialization.GetJsonSettings());
 
 			Debug.WriteLine(pluginJson);
+
+			Assert.IsTrue(plugin.NeedSaving);
 
 		}
 

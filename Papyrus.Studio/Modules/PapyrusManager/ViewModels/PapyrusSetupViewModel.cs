@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -58,7 +59,11 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 		{
 
 			_plugins = new BindableCollection<PluginViewModel>(PluginUtil.SortPluginList(plugins.ToList(), p => p.Plugin));
-			
+
+			foreach (var plugin in _plugins) {
+				plugin.PropertyChanged += PluginOnPropertyChanged;
+			}
+
 			DataDirectory = dataDirectory;
 			//SelectedPlugin = plugins.FirstOrDefault();
 
@@ -66,14 +71,33 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 
 		}
 
+		private void PluginOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+		{
+			
+			NotifyOfPropertyChange(() => CanAccept);
+
+		}
+
 		public bool CanAccept
 		{
-			get { return Plugin.Any(p => p.IsActive); }
+			get
+			{
+
+				var activePlugin = Plugin.FirstOrDefault(p => p.IsActive);
+
+				return activePlugin != null && !Plugin.Where(p => p.IsEnabled).Any(p => p.Parents.Contains(activePlugin.Name));
+
+			}
 		}
 
 		public void Accept()
 		{
 			IsCancelled = false;
+
+			foreach (var pluginViewModel in _plugins) {
+				pluginViewModel.PropertyChanged -= PluginOnPropertyChanged;
+			}
+
 		}
 
 		public void Cancel()
@@ -96,6 +120,12 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 			// Enable any dependencies of this plugin
 			foreach (var dependency in SelectedPlugin.Plugin.Parents) {
 				Plugin.Where(p =>p.Name == dependency).ToList().ForEach(p => p.IsEnabled = true);
+			}
+
+			// Disable any plugins that depend on this plugin
+			foreach (var plugin in _plugins) {
+				if (plugin.Parents.Contains(SelectedPlugin.Name))
+					plugin.IsEnabled = false;
 			}
 
 			SelectedPlugin.IsActive = true;
@@ -121,6 +151,8 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 			_plugins.Add(newPlugin);
 
 			SelectedPlugin = newPlugin;
+
+			newPlugin.PropertyChanged += PluginOnPropertyChanged;
 
 			ActivateSelectedPlugin();
 

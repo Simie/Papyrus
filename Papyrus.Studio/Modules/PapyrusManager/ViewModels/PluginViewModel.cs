@@ -52,6 +52,7 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 			set
 			{
 				_isActive = value;
+				IsEnabled = true;
 				NotifyOfPropertyChange(() => IsActive);
 			}
 		}

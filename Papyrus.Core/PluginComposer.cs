@@ -61,6 +61,8 @@ namespace Papyrus.Core
 		/// </summary>
 		public Plugin Plugin { get; private set; }
 
+		public bool NeedSaving { get; private set; }
+
 		/// <summary>
 		/// Additional loaded plugins (read-only)
 		/// </summary>
@@ -87,6 +89,16 @@ namespace Papyrus.Core
 				throw new MissingPluginException("Missing parent plugins", "Unknown");
 
 
+		}
+
+		/// <summary>
+		/// Thin wrapper around PluginLoader.SavePlugin, sets NeedSaving when complete.
+		/// </summary>
+		/// <param name="directory"></param>
+		public void SavePlugin(string directory)
+		{
+			PluginLoader.SavePlugin(Plugin, directory);
+			NeedSaving = false;
 		}
 
 		/// <summary>
@@ -124,6 +136,7 @@ namespace Papyrus.Core
 			Plugin.Records.AddRecord(record);
 
 			OnRecordListChanged();
+			NeedSaving = true;
 
 			// Return editable clone
 			return Util.RecordReflectionUtil.Clone(record);
@@ -138,6 +151,8 @@ namespace Papyrus.Core
 		{
 
 			Record existing;
+
+			NeedSaving = true; // TODO: Check diff before setting NeedSaving
 
 			// Check if this record exists in the current plugin
 			if (Plugin.Records.TryGetRecord(record.GetType(), record.Key, out existing)) {
