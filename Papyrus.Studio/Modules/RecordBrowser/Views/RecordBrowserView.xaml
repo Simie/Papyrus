@@ -16,7 +16,7 @@
             </ResourceDictionary.MergedDictionaries>
 			<pt:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 			<!-- Header data grid column. Has to be here to get the main DataContext to fetch the active record type name.  -->
-            <DataGridTextColumn x:Key="HeaderDataGridColumn" CanUserReorder="False" Binding="{Binding Path=ID}" Header="{Binding Path=DataContext.SelectedRecordTypeName, Source={x:Reference Name=RecordBrowser}}" />
+            <DataGridTextColumn x:Key="HeaderDataGridColumn" CanUserReorder="False" Binding="{Binding Path=EditorID}" Header="{Binding Path=DataContext.SelectedRecordTypeName, Source={x:Reference Name=RecordBrowser}}" />
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<DockPanel>
