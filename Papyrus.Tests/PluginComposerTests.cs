@@ -47,5 +47,25 @@ namespace Papyrus.Tests
 
 		}
 
+		[TestMethod]
+		public void TestEvent()
+		{
+			
+			// Test RecordListChanged event
+
+			var composer = PluginComposer.CreateBlank("Test");
+
+			bool called = false;
+
+			composer.RecordListChanged += (sender, args) => called = true;
+
+			var record = composer.CreateRecord<TestRecord>();
+
+			Assert.IsTrue(called);
+
+			//composer.DeleteRecord(record.GetType(), record.Key);
+
+		}
+
 	}
 }
