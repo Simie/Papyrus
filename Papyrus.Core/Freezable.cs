@@ -6,7 +6,9 @@
  * of the license can be found at https://github.com/stompyrobot/Papyrus/wiki/License.
  */
 using System;
+using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Papyrus.Core.Util;
@@ -37,6 +39,9 @@ namespace Papyrus.Core
 		[Newtonsoft.Json.JsonIgnore]
 		public bool IsFrozen { get; internal set; }
 
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
 		/// <summary>
 		/// Set property value. Throws <c>InvalidOperationException</c> when called on a frozen object.
 		/// </summary>
@@ -65,6 +70,16 @@ namespace Papyrus.Core
 				throw new ArgumentException("Expected member to be property.");
 
 			properyInfo.SetValue(this, value, null);
+
+			OnPropertyChanged(member.Name);
+
+		}
+
+		protected void OnPropertyChanged(string propName)
+		{
+
+			if(PropertyChanged != null)
+				PropertyChanged(this, new PropertyChangedEventArgs(propName));
 
 		}
 

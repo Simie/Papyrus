@@ -7,6 +7,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -15,6 +16,8 @@ using Newtonsoft.Json;
 namespace Papyrus.Core
 {
 
+	//[TypeConverter("Papyrus.Studio.Framework.PapyrusObjectTypeConverter, Papyrus.Studio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null")]
+	[TypeDescriptionProvider("Papyrus.Studio.Framework.RecordTypeDescriptor, Papyrus.Studio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null")]
 	public class Record : Freezable
 	{
 
@@ -26,11 +29,13 @@ namespace Papyrus.Core
 		/// Key that can be used to reference this record again later (for example, when loading from a save game)
 		/// </summary>
 		[JsonIgnore]
+		[Category("Internal")]
 		public RecordKey Key { get { return InternalKey; } }
 
 		/// <summary>
 		/// A friendly name to appear in the editor (default to RecordKey)
 		/// </summary>
+		[Category("Editor")]
 		public string EditorID { get; private set; }
 
 		/// <summary>

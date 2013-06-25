@@ -13,7 +13,7 @@ using System.Text;
 namespace Papyrus.Core
 {
 
-	internal interface IRecordRef
+	public interface IRecordRef
 	{
 
 		RecordKey Key { get; }

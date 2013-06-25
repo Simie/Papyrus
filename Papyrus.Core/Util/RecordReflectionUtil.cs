@@ -24,12 +24,12 @@ namespace Papyrus.Core.Util
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		internal static List<PropertyInfo> GetProperties<T>() where T : Record
+		public static List<PropertyInfo> GetProperties<T>() where T : Record
 		{
 			return GetProperties(typeof (T));
 		} 
 
-		internal static List<PropertyInfo> GetProperties(Type t)
+		public static List<PropertyInfo> GetProperties(Type t)
 		{
 
 			var props = t.GetProperties().Where(p => !p.HasAttribute<JsonIgnoreAttribute>());

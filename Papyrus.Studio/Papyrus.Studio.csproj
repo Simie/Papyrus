@@ -59,6 +59,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Caliburn.Micro.1.5.2\lib\net40\System.Windows.Interactivity.dll</HintPath>
@@ -108,7 +109,27 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Framework\ComponentModel\RecordTypeDescriptor.cs" />
+    <Compile Include="Framework\ComponentModel\RecordTypeProvider.cs" />
+    <Compile Include="Framework\Controls\CollectionEditor\CollectionEditor.cs" />
+    <Compile Include="Framework\Controls\ContextMenuButton.xaml.cs">
+      <DependentUpon>ContextMenuButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\Controls\LongMessageBox.xaml.cs">
+      <DependentUpon>LongMessageBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\Controls\PapyrusPropertyControl.xaml.cs">
+      <DependentUpon>PapyrusPropertyControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\Controls\RecordList\RecordList.cs" />
+    <Compile Include="Framework\Controls\RecordReferenceItem\RecordReferenceItem.cs" />
+    <Compile Include="Framework\IRecordViewModel.cs" />
     <Compile Include="Framework\ISaveAware.cs" />
+    <Compile Include="Framework\PapyrusPropertyControlFactory.cs" />
+    <Compile Include="Framework\ComponentModel\PapyrusPropertyDescriptor.cs" />
+    <Compile Include="Framework\PapyrusPropertyItem.cs" />
+    <Compile Include="Framework\PapyrusPropertyItemFactory.cs" />
+    <Compile Include="Framework\RecordViewModel.cs" />
     <Compile Include="Framework\Results\Close.cs" />
     <Compile Include="Framework\Results\CloseDocumentResult.cs" />
     <Compile Include="Framework\Results\ShowExceptionResult.cs" />
@@ -117,6 +138,15 @@
     <Compile Include="Framework\SaveUtil.cs" />
     <Compile Include="Framework\Services\IExceptionHandler.cs" />
     <Compile Include="Framework\Services\ResultExtensions.cs" />
+    <Compile Include="Modules\GenericRecordEditor\RecordEditorProvider.cs" />
+    <Compile Include="Modules\GenericRecordEditor\ViewModels\GenericEditorViewModel.cs" />
+    <Compile Include="Modules\GenericRecordEditor\ViewModels\GenericRecordViewModel.cs" />
+    <Compile Include="Modules\GenericRecordEditor\Views\GenericEditorView.xaml.cs">
+      <DependentUpon>GenericEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\GenericRecordEditor\Views\GenericRecordView.xaml.cs">
+      <DependentUpon>GenericRecordView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Modules\PapyrusManager\ViewModels\PluginViewModel.cs" />
     <Compile Include="Modules\RecordBrowser\IRecordBrowser.cs" />
     <Compile Include="Modules\RecordBrowser\Module.cs" />
@@ -180,6 +210,38 @@
     <Folder Include="Modules\Startup\ViewModels\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Framework\Controls\CollectionEditor\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Framework\Controls\ContextMenuButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Framework\Controls\LongMessageBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Framework\Controls\PapyrusPropertyControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Framework\Controls\RecordList\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Framework\Controls\RecordReferenceItem\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Modules\GenericRecordEditor\Views\GenericEditorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Modules\GenericRecordEditor\Views\GenericRecordView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Modules\PapyrusManager\Views\EditorSelectView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
