@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using Caliburn.Micro;
 using Papyrus.Core;
+using Papyrus.Core.Util;
 using Papyrus.Studio.Framework.Results;
 
 namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
@@ -56,7 +57,8 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 		public PapyrusSetupViewModel(IEnumerable<PluginViewModel> plugins, string dataDirectory)
 		{
 
-			_plugins = new BindableCollection<PluginViewModel>(plugins);
+			_plugins = new BindableCollection<PluginViewModel>(PluginUtil.SortPluginList(plugins.ToList(), p => p.Plugin));
+			
 			DataDirectory = dataDirectory;
 			//SelectedPlugin = plugins.FirstOrDefault();
 
@@ -121,20 +123,6 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 			SelectedPlugin = newPlugin;
 
 			ActivateSelectedPlugin();
-
-			/*var plugin = Papyrus.PluginUtilities.CreateNewPlugin(newPlugin.PluginName, newPlugin.PluginDirectory, newPlugin.PluginType.Format);
-
-			plugin.Description = newPlugin.PluginDescription;
-			plugin.Author = newPlugin.PluginAuthor;
-			
-			Papyrus.PluginUtilities.ApplyPluginInfo(plugin);
-
-			plugin.IsValid = true;
-
-			Plugin.Add(plugin);
-			SelectedPlugin = plugin;
-
-			ActivateSelectedPlugin();*/
 
 
 			yield break;

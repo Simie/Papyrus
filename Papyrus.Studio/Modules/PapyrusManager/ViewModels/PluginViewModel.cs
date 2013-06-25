@@ -24,6 +24,8 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 		public string Author { get { return Plugin.Author; } }
 		public string Description { get { return Plugin.Description; } }
 
+		public IList<string> Parents { get { return Plugin.Parents; } } 
+
 		private bool _isEnabled;
 
 		/// <summary>

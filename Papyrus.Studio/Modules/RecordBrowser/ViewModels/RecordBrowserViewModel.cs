@@ -110,6 +110,8 @@ namespace Papyrus.Studio.Modules.RecordBrowser.ViewModels
 			if(SelectedRecordType != null)
 				_activeRecordSource.AddRange(_papyrusManager.PluginComposer.GetRecords(SelectedRecordType.Type));
 
+			UpdateFilter();
+
 		}
 
 		private void UpdateFilter()

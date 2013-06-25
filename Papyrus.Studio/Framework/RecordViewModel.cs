@@ -89,6 +89,8 @@ namespace Papyrus.Studio.Framework
 
 			_papyrusManager.PluginComposer.SaveRecord(Record);
 
+			OriginalRecord = (T)_papyrusManager.PluginComposer.GetRecord(Record.GetType(), Record.Key);
+
 			CheckIsDirty();
 
 			OnSaved();

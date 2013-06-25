@@ -45,7 +45,7 @@
 			<Button Content="Accept" Margin="0,0,6,6" Name="Accept" HorizontalAlignment="Right" Width="75" IsDefault="True" Height="23" VerticalAlignment="Bottom" Click="Accept_Click" />
 			<Button Content="Cancel" Margin="0,0,87,6" Name="Cancel" IsCancel="True" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" />
 			
-			<ListBox Margin="0,30,6,35" ItemsSource="{Binding Path=SelectedPlugin.Dependencies, Mode=OneWay}" HorizontalAlignment="Right" Width="156" />
+			<ListBox Margin="0,30,6,35" ItemsSource="{Binding Path=SelectedPlugin.Parents, Mode=OneWay}" HorizontalAlignment="Right" Width="156" />
 
 			<!-- Middle Box -->
             <TextBox HorizontalAlignment="Stretch" IsReadOnly="True" Margin="235,103,177,35" Text="{Binding Path=SelectedPlugin.Description, Mode=OneWay}" TextWrapping="Wrap" VerticalAlignment="Stretch" Width="Auto" />

@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Papyrus.Core.Util;
 
 namespace Papyrus.Core
 {
@@ -63,7 +64,7 @@ namespace Papyrus.Core
 		/// <summary>
 		/// Additional loaded plugins (read-only)
 		/// </summary>
-		private readonly List<Plugin> _pluginList;
+		private readonly IList<Plugin> _pluginList;
 
 		/// <summary>
 		/// Simple event when an operation should cause a record list refresh
@@ -76,14 +77,15 @@ namespace Papyrus.Core
 			_pluginList = new List<Plugin>();
 		}
 
-		PluginComposer(Plugin plugin, IEnumerable<Plugin> plugins, bool sort = true)
+		PluginComposer(Plugin plugin, IList<Plugin> plugins, bool sort = true)
 		{
 
 			Plugin = plugin;
-			_pluginList = new List<Plugin>(plugins);
+			_pluginList = sort ? PluginUtil.SortPluginList(plugins) : new List<Plugin>(plugins);
 
 			if(!Plugin.VerifyParents(_pluginList) || !_pluginList.All(p => p.VerifyParents(_pluginList)))
 				throw new MissingPluginException("Missing parent plugins", "Unknown");
+
 
 		}
 

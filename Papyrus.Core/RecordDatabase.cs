@@ -46,11 +46,7 @@ namespace Papyrus.Core
 
 			// Sort plugins
 			if (sort) {
-				// Sort plugins by dependencies
-				plugins = plugins.TSort(
-					// Convert list of plugin names to plugin objects
-					plugin => plugin.Parents.Select(p => plugins.FirstOrDefault(q => q.Name == p))
-				).ToList();
+				plugins = PluginUtil.SortPluginList(plugins);
 			}
 
 			// Load plugins
