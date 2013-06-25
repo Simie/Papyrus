@@ -109,6 +109,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="EditorBootstrapper.cs" />
     <Compile Include="Framework\ComponentModel\RecordTypeDescriptor.cs" />
     <Compile Include="Framework\ComponentModel\RecordTypeProvider.cs" />
     <Compile Include="Framework\Controls\CollectionEditor\CollectionEditor.cs" />
@@ -159,6 +160,7 @@
       <DependentUpon>RecordBrowserView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Modules\Startup\Module.cs" />
+    <Compile Include="PapyrusCloseStrategy.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="TestTypes\SampleRecord.cs" />
   </ItemGroup>
