@@ -42,8 +42,8 @@
 						</StackPanel>
 
 						<ListBox MinWidth="150" Height="Auto" ItemsSource="{Binding ListCopy,RelativeSource={RelativeSource TemplatedParent}}"
-								 SelectionMode="Single" SelectedItem="{Binding SelectedItem,RelativeSource={RelativeSource TemplatedParent}}"
-								 IsSynchronizedWithCurrentItem="True">
+								 SelectionMode="Single" SelectedIndex="{Binding SelectedIndex,RelativeSource={RelativeSource TemplatedParent}}"
+								 AlternationCount="{Binding Path=ListCopy.Count,FallbackValue='10000',RelativeSource={RelativeSource TemplatedParent}}">
 							<ListBox.ItemTemplate>
 								<DataTemplate DataType="papyrus:IRecordRef">
 									<DockPanel>
@@ -51,10 +51,10 @@
 											<MouseBinding Gesture="RightClick" Command="{Binding OpenCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=controls:RecordList, AncestorLevel=1}}"
 														  CommandParameter="{Binding}"></MouseBinding>
 											<MouseBinding Gesture="LeftDoubleClick" Command="{Binding BrowseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=controls:RecordList, AncestorLevel=1}}"
-														  CommandParameter="{Binding}"></MouseBinding>
+														  CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ListBoxItem}, FallbackValue=FAIL}"></MouseBinding>
 										</DockPanel.InputBindings>
 										<Label>
-                                            <TextBlock Text="{Binding Record.ID, FallbackValue=Unresolved}" />
+                                            <TextBlock Text="{Binding Key, FallbackValue=Unresolved}" />
                                         </Label>
 									</DockPanel>
 								</DataTemplate>

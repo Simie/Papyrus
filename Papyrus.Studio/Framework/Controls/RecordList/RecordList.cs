@@ -6,6 +6,10 @@
  * of the license can be found at https://github.com/stompyrobot/Papyrus/wiki/License.
  */
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -46,14 +50,13 @@ namespace Papyrus.Studio.Framework.Controls
 			}
 		}
 
-		public static readonly DependencyProperty SelectedItemProperty =
-			DependencyProperty.Register("SelectedItem", typeof (IRecordRef), typeof (RecordList), new PropertyMetadata(default(IRecordRef), SelectedItemChanged));
+		public static readonly DependencyProperty SelectedIndexProperty =
+			DependencyProperty.Register("SelectedIndex", typeof (int), typeof (RecordList), new PropertyMetadata(default(int)));
 
-
-		public IRecordRef SelectedItem
+		public int SelectedIndex
 		{
-			get { return (IRecordRef)GetValue(SelectedItemProperty); }
-			set { SetValue(SelectedItemProperty, value); }
+			get { return (int) GetValue(SelectedIndexProperty); }
+			set { SetValue(SelectedIndexProperty, value); }
 		}
 
 		public static readonly DependencyProperty ListCopyProperty =
@@ -110,7 +113,7 @@ namespace Papyrus.Studio.Framework.Controls
 			MoveUpCommand = new DelegateCommand(MoveUp, MoveUpCanExecute);
 			MoveDownCommand = new DelegateCommand(MoveDown, MoveDownCanExecute);
 			NewItemCommand = new DelegateCommand(NewItem);
-			RemoveItemCommand = new DelegateCommand(RemoveItem, () => SelectedItem != null);
+			RemoveItemCommand = new DelegateCommand(RemoveItem, () => SelectedIndex >= 0);
 
 			Loaded += (sender, args) =>
 			{
@@ -136,21 +139,45 @@ namespace Papyrus.Studio.Framework.Controls
 
 		}
 
+		private static MethodInfo _applyMethodInfo;
+
+		/// <summary>
+		/// Applies changes to the source list
+		/// </summary>
+		private void Apply()
+		{
+
+			if (_applyMethodInfo == null) {
+				_applyMethodInfo = GetType().GetMethod("ApplyInternal", BindingFlags.Instance | BindingFlags.NonPublic).MakeGenericMethod(SourceList.RecordType);
+			}
+
+			_applyMethodInfo.Invoke(this, null);
+
+			Update();
+
+		}
+
+		private void ApplyInternal<T>() where T : Record
+		{
+
+			SourceList = new RecordRefCollection<T>(ListCopy.Cast<RecordRef<T>>());
+
+		}
+
 		private void Browse(object obj)
 		{
 
-			var recordReference = obj as IRecordRef;
+			var index = (int) obj;
 
-			if (recordReference != null) {
+			if (!(index >= 0 && index < ListCopy.Count))
+				return;
 
-				var index = SourceList.References.IndexOf(recordReference);
+			var recordReference = ListCopy[index];
 
-				/*if(index >= 0)
-					SourceList[index] = Papyrus.Studio.Controls.RecordPicker.PickRecord(recordReference);
-				*/
-				Update();
+			var newEntry = RecordPicker.PickRecord(recordReference);
+			ListCopy[index] = newEntry;
+			Apply();
 
-			}
 
 		}
 
@@ -170,76 +197,66 @@ namespace Papyrus.Studio.Framework.Controls
 
 		private void NewItem()
 		{
-			//SourceList.Add(Activator.CreateInstance(typeof(RecordRef<>).MakeGenericType(SourceList.RecordType)) as IRecordRef);
-			Update();
+			ListCopy.Add(Activator.CreateInstance(typeof(RecordRef<>).MakeGenericType(SourceList.RecordType)) as IRecordRef);
+			Apply();
 		}
 
 		private void RemoveItem()
 		{
 
-			/*if(SelectedItem != null)
-				SourceList.Remove(SelectedItem);*/
-			Update();
+			if(SelectedIndex >= 0)
+				ListCopy.RemoveAt(SelectedIndex);
+
+			Apply();
 
 		}
 
 		private void MoveUp()
 		{
 
-			/*var currentIndex = SourceList.References.IndexOf(SelectedItem);
-			var item = SelectedItem;
+			var currentIndex = SelectedIndex;
+			var item = ListCopy[currentIndex];
 
-			var oldPointer = SourceList[currentIndex - 1];
-			SourceList[currentIndex - 1] = SelectedItem;
-			SourceList[currentIndex] = oldPointer;
+			var oldPointer = ListCopy[currentIndex - 1];
+			ListCopy[currentIndex - 1] = item;
+			ListCopy[currentIndex] = oldPointer;
 
-			Update();
+			Apply();
 
-			SelectedItem = item;*/
+			SelectedIndex = currentIndex - 1;
 
 		}
 
 		private bool MoveUpCanExecute()
 		{
-			/*if (SelectedItem == null)
-				return false;
 
-			var currentIndex = SourceList.IndexOf(SelectedItem);
+			return (SelectedIndex > 0);
 
-			if (currentIndex < 1)
-				return false;*/
-
-
-			return true;
 		}
 
 		private void MoveDown()
 		{
 
-			/*var currentIndex = SourceList.IndexOf(SelectedItem);
-			var item = SelectedItem;
+			var currentIndex = SelectedIndex;
+			var item = ListCopy[SelectedIndex];
 
-			var oldPointer = SourceList[currentIndex + 1];
-			SourceList[currentIndex + 1] = SelectedItem;
-			SourceList[currentIndex] = oldPointer;
+			var oldPointer = ListCopy[currentIndex + 1];
+			ListCopy[currentIndex + 1] = item;
+			ListCopy[currentIndex] = oldPointer;
 
-			Update();
-			SelectedItem = item;*/
+			Apply();
+			SelectedIndex = currentIndex + 1;
 
 		}
 
 		private bool MoveDownCanExecute()
 		{
-			/*if (SelectedItem == null)
+
+			if (ListCopy == null)
 				return false;
 
-			var currentIndex = SourceList.IndexOf(SelectedItem);
+			return SelectedIndex < ListCopy.Count - 1;
 
-			if (currentIndex >= SourceList.Count - 1)
-				return false;*/
-
-
-			return true;
 		}
 
 		private static void SourceListChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
