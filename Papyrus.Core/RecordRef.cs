@@ -26,8 +26,6 @@ namespace Papyrus.Core
 
 		public RecordKey Key { get; private set; }
 
-		public T Value { get; internal set; }
-
 		public Type Type { get { return typeof (T); } }
 
 		public RecordRef(RecordKey key) : this()
