@@ -51,32 +51,50 @@ namespace Papyrus.Core.Util.JsonConverters
 
 			var validProperties = RecordReflectionUtil.GetProperties(objectType);
 
+			bool finished = false;
 
+			// Read past StartObject
 			reader.Read();
 
-			while (reader.TokenType != JsonToken.EndObject) {
+			do {
+				switch (reader.TokenType) {
 
-				var propName = reader.Value.ToString();
+					case JsonToken.PropertyName: {
 
-				reader.Read();
+						var propName = reader.Value.ToString();
 
-				if (propName == "Key") {
+						reader.Read();
 
-					record.InternalKey = serializer.Deserialize<RecordKey>(reader);
+						if (propName == "Key") {
 
-				} else {
+							record.InternalKey = serializer.Deserialize<RecordKey>(reader);
 
-					var property = validProperties.FirstOrDefault(p => p.Name == propName);
+						} else {
 
-					if (property != null) {
-						record.SetProperty(propName, serializer.Deserialize(reader, property.PropertyType));
+							var property = validProperties.FirstOrDefault(p => p.Name == propName);
+
+							if (property != null) {
+								record.SetProperty(propName, serializer.Deserialize(reader, property.PropertyType));
+							}
+
+						}
+
+						break;
 					}
 
+					case JsonToken.EndObject:
+						finished = true;
+						break;
+					case JsonToken.Comment:
+						// ignore
+						break;
+					default:
+						throw new JsonSerializationException("Unexpected token when deserializing object: " + reader.TokenType);
 				}
+			} while (!finished && reader.Read());
 
-				reader.Read();
-
-			}
+			if(!finished)
+				throw new JsonSerializationException("Unexpected end when deserializing object");
 
 			return record;
 

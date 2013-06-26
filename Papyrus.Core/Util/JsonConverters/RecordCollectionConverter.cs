@@ -6,6 +6,7 @@
  * of the license can be found at https://github.com/stompyrobot/Papyrus/wiki/License.
  */
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -56,10 +57,54 @@ namespace Papyrus.Core.Util.JsonConverters
 			if (reader.TokenType == JsonToken.Null)
 				return null;
 
+			// Read past StartObject
+			reader.Read();
+
 			// Check for existing record collection, or create a new one
 			var collection = (existingValue is RecordCollection) ? (RecordCollection)existingValue : new RecordCollection();
 
-			if (reader.TokenType != JsonToken.StartObject)
+
+			bool finished = false;
+
+			do {
+				switch (reader.TokenType) {
+
+					case JsonToken.PropertyName: {
+
+						var typeString = reader.Value.ToString();
+						var type = ReflectionUtil.ResolveRecordType(typeString);
+
+						if (type == null || !typeof(Record).IsAssignableFrom(type))
+							throw new JsonSerializationException("Unable to resolve type");
+
+						// Read past PropertyName
+						reader.Read();
+
+						var records = (IList)serializer.Deserialize(reader, typeof (List<>).MakeGenericType(type));
+
+						foreach (var record in records) {
+							collection.AddRecord((Record)record);
+						}
+
+						break;
+
+					}
+
+					case JsonToken.EndObject:
+						finished = true;
+						break;
+					case JsonToken.Comment:
+						// ignore
+						break;
+					default:
+						throw new JsonSerializationException("Unexpected token when deserializing object: " + reader.TokenType);
+				}
+			} while (!finished && reader.Read());
+
+			if (!finished)
+				throw new JsonSerializationException("Unexpected end when deserializing object");
+
+			/*if (reader.TokenType != JsonToken.StartObject)
 				throw new JsonSerializationException("Expected StartObject token");
 
 			reader.Read();
@@ -90,7 +135,7 @@ namespace Papyrus.Core.Util.JsonConverters
 
 				reader.Read();
 
-			}
+			}*/
 
 			return collection;
 
