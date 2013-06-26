@@ -61,6 +61,7 @@
     <Compile Include="Util\JsonConverters\RecordCollectionConverter.cs" />
     <Compile Include="Util\JsonConverters\RecordConverter.cs" />
     <Compile Include="Util\JsonConverters\RecordKeyConverter.cs" />
+    <Compile Include="Util\JsonConverters\RecordRefCollectionConverter.cs" />
     <Compile Include="Util\JsonConverters\RecordRefConverter.cs" />
     <Compile Include="Util\PluginUtil.cs" />
     <Compile Include="Util\RecordDiffUtil.cs" />

@@ -29,12 +29,26 @@ namespace Papyrus.Core
 		/// <summary>
 		/// Read-only list of record references
 		/// </summary>
-		public IList<RecordRef<T>> References {get { return _internalList.AsReadOnly(); }}
+		public IList<RecordRef<T>> References
+		{
+			get
+			{
+
+				if(_internalList == null)
+					return new RecordRef<T>[0];
+
+				return _internalList.AsReadOnly();
+
+			}
+		}
 
 		/// <summary>
 		/// Interface implementation of References property
 		/// </summary>
-		IList<IRecordRef> IRecordRefCollection.References { get { return _internalList.Cast<IRecordRef>().ToList().AsReadOnly(); } } 
+		IList<IRecordRef> IRecordRefCollection.References
+		{
+			get { return References.Cast<IRecordRef>().ToArray(); }
+		} 
 
 		public RecordRefCollection(IEnumerable<RecordRef<T>> recordRefs)
 		{

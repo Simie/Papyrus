@@ -31,6 +31,7 @@ namespace Papyrus.Core.Util
 			settings.Converters.Add(new RecordRefConverter());
 			settings.Converters.Add(new RecordCollectionConverter());
 			settings.Converters.Add(new RecordConverter());
+			settings.Converters.Add(new RecordRefCollectionConverter());
 
 			return settings;
 

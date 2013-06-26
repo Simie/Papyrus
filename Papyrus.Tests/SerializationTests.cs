@@ -105,6 +105,33 @@ namespace Papyrus.Tests
 
 		}
 
+		[TestMethod]
+		public void TestRecordRefCollectionSerialization()
+		{
+
+			var referenceOne = new RecordRef<TestRecord>(new RecordKey(1337, "TestPlugin"));
+			var referenceTwo = new RecordRef<TestRecord>(new RecordKey(1330, "TestPlugin2"));
+			var referenceThree = new RecordRef<TestRecord>(new RecordKey(1337, "TestPlugin2"));
+
+			var collection = new RecordRefCollection<TestRecord>(new [] {
+				referenceOne, referenceTwo, referenceThree
+			});
+
+			var settings = Serialization.GetJsonSettings();
+
+			var json = JsonConvert.SerializeObject(collection, settings);
+
+			Debug.WriteLine(json);
+
+			var loaded = JsonConvert.DeserializeObject<RecordRefCollection<TestRecord>>(json, settings);
+
+			Assert.IsTrue(loaded.Count() == collection.Count());
+			Assert.IsTrue(loaded.Contains(referenceOne));
+			Assert.IsTrue(loaded.Contains(referenceTwo));
+			Assert.IsTrue(loaded.Contains(referenceThree));
+
+		}
+
 
 	}
 

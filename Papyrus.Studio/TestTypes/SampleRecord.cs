@@ -28,5 +28,12 @@ namespace Papyrus.Studio.TestTypes
 		public RecordRef<SampleRecord> TestReference { get; private set; } 
 
 	}
+	
+	public class SampleRecord4 : Record
+	{
+
+		public RecordRefCollection<SampleRecord> TestReferences { get; private set; } 
+
+	}
 
 }
