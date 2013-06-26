@@ -40,13 +40,13 @@ namespace Papyrus.Studio.Framework
 			}
 
 
-			/*if (typeof (IRecordReferenceList).IsAssignableFrom(property.ActualPropertyType)) {
+			if (typeof (IRecordRefCollection).IsAssignableFrom(property.ActualPropertyType)) {
 
 				return CreateRecordReferenceListControl(property);
 
 			}
 
-			if (typeof (Papyrus.DataTypes.Color) == property.ActualPropertyType) {
+			/*if (typeof (Papyrus.DataTypes.Color) == property.ActualPropertyType) {
 
 				return CreatePapyrusColorControl(property);
 
@@ -65,14 +65,14 @@ namespace Papyrus.Studio.Framework
 
 		}
 
-		/*public FrameworkElement CreateRecordReferenceListControl(PropertyItem item)
+		public FrameworkElement CreateRecordReferenceListControl(PropertyItem item)
 		{
 
 			var c = new RecordList();
 			c.SetBinding(RecordList.SourceListProperty, item.CreateBinding());
 			return c;
 
-		}*/
+		}
 
 		/*public FrameworkElement CreatePapyrusColorControl(PropertyItem item)
 		{

@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Caliburn.Micro;
 using Gemini.Framework;
+using Papyrus.Core;
 using Papyrus.Studio.Modules.PapyrusManager;
 using PropertyTools.Wpf;
 
@@ -19,24 +20,24 @@ namespace Papyrus.Studio.Framework.Controls
 
 	public class RecordList : Control
 	{
-		/*
+		
 		/// <summary>
 		/// The directory property.
 		/// </summary>
 		public static readonly DependencyProperty SourceListProperty = DependencyProperty.Register(
 			"SourceList",
-			typeof(IRecordReferenceList),
+			typeof(IRecordRefCollection),
 			typeof(RecordReferenceItem),
-			new FrameworkPropertyMetadata(default(IRecordReferenceList), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, SourceListChanged));
+			new FrameworkPropertyMetadata(default(IRecordRefCollection), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, SourceListChanged));
 
 		/// <summary>
 		/// Gets or sets the data pointer.
 		/// </summary>
-		public IRecordReferenceList SourceList
+		public IRecordRefCollection SourceList
 		{
 			get
 			{
-				return (IRecordReferenceList)this.GetValue(SourceListProperty);
+				return (IRecordRefCollection)this.GetValue(SourceListProperty);
 			}
 
 			set
@@ -46,21 +47,21 @@ namespace Papyrus.Studio.Framework.Controls
 		}
 
 		public static readonly DependencyProperty SelectedItemProperty =
-			DependencyProperty.Register("SelectedItem", typeof (RecordReference), typeof (RecordList), new PropertyMetadata(default(RecordReference), SelectedItemChanged));
+			DependencyProperty.Register("SelectedItem", typeof (IRecordRef), typeof (RecordList), new PropertyMetadata(default(IRecordRef), SelectedItemChanged));
 
 
-		public RecordReference SelectedItem
+		public IRecordRef SelectedItem
 		{
-			get { return (RecordReference)GetValue(SelectedItemProperty); }
+			get { return (IRecordRef)GetValue(SelectedItemProperty); }
 			set { SetValue(SelectedItemProperty, value); }
 		}
 
 		public static readonly DependencyProperty ListCopyProperty =
-			DependencyProperty.Register("ListCopy", typeof(IObservableCollection<RecordReference>), typeof(RecordList), new PropertyMetadata(default(IObservableCollection<RecordReference>)));
+			DependencyProperty.Register("ListCopy", typeof(IObservableCollection<IRecordRef>), typeof(RecordList), new PropertyMetadata(default(IObservableCollection<IRecordRef>)));
 
-		public IObservableCollection<RecordReference> ListCopy
+		public IObservableCollection<IRecordRef> ListCopy
 		{
-			get { return (IObservableCollection<RecordReference>)GetValue(ListCopyProperty); }
+			get { return (IObservableCollection<IRecordRef>)GetValue(ListCopyProperty); }
 			set { SetValue(ListCopyProperty, value); }
 		}
 
@@ -105,7 +106,7 @@ namespace Papyrus.Studio.Framework.Controls
 		public RecordList()
 		{
 			BrowseCommand = new RelayCommand(Browse, (obj) => obj != null);
-			OpenCommand = new RelayCommand(Open, (obj) => (obj as RecordReference) != null && ((RecordReference)(obj)).IsValid);
+			OpenCommand = new RelayCommand(Open, (obj) => (obj as IRecordRef) != null && ((IRecordRef)(obj)).Key != RecordKey.Identity);
 			MoveUpCommand = new DelegateCommand(MoveUp, MoveUpCanExecute);
 			MoveDownCommand = new DelegateCommand(MoveDown, MoveDownCanExecute);
 			NewItemCommand = new DelegateCommand(NewItem);
@@ -128,25 +129,25 @@ namespace Papyrus.Studio.Framework.Controls
 		{
 			
 			if(ListCopy == null)
-				ListCopy = new BindableCollection<RecordReference>();
+				ListCopy = new BindableCollection<IRecordRef>();
 
 			ListCopy.Clear();
-			ListCopy.AddRange(SourceList.Records);
+			ListCopy.AddRange(SourceList.References);
 
 		}
 
 		private void Browse(object obj)
 		{
 
-			var recordReference = obj as RecordReference;
+			var recordReference = obj as IRecordRef;
 
 			if (recordReference != null) {
 
-				var index = SourceList.IndexOf(recordReference);
+				var index = SourceList.References.IndexOf(recordReference);
 
-				if(index >= 0)
-					SourceList[index] = Papyrus.Design.Controls.RecordPicker.PickRecord(recordReference);
-
+				/*if(index >= 0)
+					SourceList[index] = Papyrus.Studio.Controls.RecordPicker.PickRecord(recordReference);
+				*/
 				Update();
 
 			}
@@ -156,12 +157,12 @@ namespace Papyrus.Studio.Framework.Controls
 		private void Open(object obj)
 		{
 
-			var recordReference = obj as RecordReference;
+			var recordReference = obj as IRecordRef;
 
-			if (recordReference != null && recordReference.IsValid) {
+			if (recordReference != null && recordReference.Key != RecordKey.Identity) {
 
 				var papyrusManager = IoC.Get<IPapyrusManager>();
-				Coroutine.BeginExecute(papyrusManager.OpenRecord(recordReference.Record).GetEnumerator());
+				Coroutine.BeginExecute(papyrusManager.OpenRecord(recordReference.Type, recordReference.Key).GetEnumerator());
 
 			}
 
@@ -169,15 +170,15 @@ namespace Papyrus.Studio.Framework.Controls
 
 		private void NewItem()
 		{
-			SourceList.Add(Activator.CreateInstance(typeof(RecordReference<>).MakeGenericType(SourceList.RecordType)) as RecordReference);
+			//SourceList.Add(Activator.CreateInstance(typeof(RecordRef<>).MakeGenericType(SourceList.RecordType)) as IRecordRef);
 			Update();
 		}
 
 		private void RemoveItem()
 		{
 
-			if(SelectedItem != null)
-				SourceList.Remove(SelectedItem);
+			/*if(SelectedItem != null)
+				SourceList.Remove(SelectedItem);*/
 			Update();
 
 		}
@@ -185,7 +186,7 @@ namespace Papyrus.Studio.Framework.Controls
 		private void MoveUp()
 		{
 
-			var currentIndex = SourceList.IndexOf(SelectedItem);
+			/*var currentIndex = SourceList.References.IndexOf(SelectedItem);
 			var item = SelectedItem;
 
 			var oldPointer = SourceList[currentIndex - 1];
@@ -194,19 +195,19 @@ namespace Papyrus.Studio.Framework.Controls
 
 			Update();
 
-			SelectedItem = item;
+			SelectedItem = item;*/
 
 		}
 
 		private bool MoveUpCanExecute()
 		{
-			if (SelectedItem == null)
+			/*if (SelectedItem == null)
 				return false;
 
 			var currentIndex = SourceList.IndexOf(SelectedItem);
 
 			if (currentIndex < 1)
-				return false;
+				return false;*/
 
 
 			return true;
@@ -215,7 +216,7 @@ namespace Papyrus.Studio.Framework.Controls
 		private void MoveDown()
 		{
 
-			var currentIndex = SourceList.IndexOf(SelectedItem);
+			/*var currentIndex = SourceList.IndexOf(SelectedItem);
 			var item = SelectedItem;
 
 			var oldPointer = SourceList[currentIndex + 1];
@@ -223,19 +224,19 @@ namespace Papyrus.Studio.Framework.Controls
 			SourceList[currentIndex] = oldPointer;
 
 			Update();
-			SelectedItem = item;
+			SelectedItem = item;*/
 
 		}
 
 		private bool MoveDownCanExecute()
 		{
-			if (SelectedItem == null)
+			/*if (SelectedItem == null)
 				return false;
 
 			var currentIndex = SourceList.IndexOf(SelectedItem);
 
 			if (currentIndex >= SourceList.Count - 1)
-				return false;
+				return false;*/
 
 
 			return true;
@@ -256,7 +257,7 @@ namespace Papyrus.Studio.Framework.Controls
 			CommandManager.InvalidateRequerySuggested();
 
 		}
-		*/
+		
 	}
 
 }
