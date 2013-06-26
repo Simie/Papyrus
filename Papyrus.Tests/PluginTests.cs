@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Papyrus.Core;
 
@@ -28,6 +29,16 @@ namespace Papyrus.Tests
 		""TestReference"": ""000000"",
 		""EditorID"": null
 	  }
+	],
+	""Papyrus.Tests.TestRecordCollectionRecord"": [
+	  {
+		""Key"": ""TestPlugin/000000"",
+		""EditorID"": ""TestPlugin/000000"",
+		""TestRecords"": /*TestRecordOne Collection*/ [
+			""TestPlugin/000000"",
+			""TestPlugin/000001""
+		]
+	  }
 	]
   }
 }";
@@ -43,12 +54,17 @@ namespace Papyrus.Tests
 
 			var record1 = plugin.Records.GetRecord<TestRecord>(new RecordKey(0, "TestPlugin"));
 			var record2 = plugin.Records.GetRecord<TestRecord>(new RecordKey(1, "TestPlugin"));
+			var record3 = plugin.Records.GetRecord<TestRecordCollectionRecord>(new RecordKey(0, "TestPlugin"));
 
 			Assert.AreEqual(record1.TestBoolean, true);
 			Assert.AreEqual(record1.TestInteger, 0);
 
 			Assert.AreEqual(record2.TestBoolean, false);
 			Assert.AreEqual(record2.TestString, "Test String Value");
+
+			Assert.IsTrue(record3.TestRecords.Count() == 2);
+			Assert.IsTrue(record3.TestRecords.ElementAt(0) == new RecordRef<TestRecordOne>(new RecordKey(0, "TestPlugin")));
+			Assert.IsTrue(record3.TestRecords.ElementAt(1) == new RecordRef<TestRecordOne>(new RecordKey(1, "TestPlugin")));
 
 		}
 

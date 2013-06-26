@@ -81,6 +81,7 @@ namespace Papyrus.Tests
 			original.AddRecord(new TestRecordOne() { InternalKey = new RecordKey(1, "PluginName")});
 			original.AddRecord(new TestRecordTwo() { InternalKey = new RecordKey(0, "PluginName")});
 			original.AddRecord(new TestRecordTwo() { InternalKey = new RecordKey(1, "PluginName")});
+			original.AddRecord(new TestRecordCollectionRecord() { InternalKey = new RecordKey(0, "PluginName")});
 
 			var settings = Core.Util.Serialization.GetJsonSettings();
 
