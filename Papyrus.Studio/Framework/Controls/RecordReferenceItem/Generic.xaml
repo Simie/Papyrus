@@ -1,7 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-					xmlns:Controls="clr-namespace:Papyrus.Studio.Framework.Controls">
+					xmlns:Controls="clr-namespace:Papyrus.Studio.Framework.Controls"
+                    xmlns:converters="clr-namespace:Papyrus.Studio.Framework.Converters">
 	
+    <converters:RecordRefNameConverter x:Key="RecordRefConverter" />
+    
 	<Style TargetType="{x:Type Controls:RecordReferenceItem}">
 		<Setter Property="MinWidth" Value="30" />
 		<Setter Property="Template">
@@ -11,15 +14,19 @@
 						<Grid.InputBindings>
 							<MouseBinding Gesture="RightClick" Command="{Binding OpenCommand,RelativeSource={RelativeSource TemplatedParent}}"></MouseBinding>
 							<MouseBinding Gesture="LeftDoubleClick" Command="{Binding BrowseCommand,RelativeSource={RelativeSource TemplatedParent}}"></MouseBinding>
-						</Grid.InputBindings>
+                        </Grid.InputBindings>
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="*" />
 							<ColumnDefinition Width="Auto" />
 							<ColumnDefinition Width="Auto" />
 						</Grid.ColumnDefinitions>
-						<Label Content="{Binding Path=RecordReference.Key,RelativeSource={RelativeSource TemplatedParent}}" />
-						<Button Grid.Column="2" MinWidth="40" Content="Pick" Command="{Binding BrowseCommand,RelativeSource={RelativeSource TemplatedParent}}" Margin="4 0 0 0" />
-						<Button Grid.Column="1" MinWidth="40" Content="Open" Command="{Binding OpenCommand,RelativeSource={RelativeSource TemplatedParent}}" Margin="4 0 0 0" />
+                        <TextBox VerticalContentAlignment="Center" Background="Transparent" BorderThickness="0" IsReadOnly="True" IsReadOnlyCaretVisible="False" Text="{Binding Path=RecordReference,RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource RecordRefConverter}}">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Delete" Command="{Binding ClearCommand, RelativeSource={RelativeSource TemplatedParent}}"></KeyBinding>
+                            </TextBox.InputBindings>
+                        </TextBox>
+					    <Button IsTabStop="False" Grid.Column="2" MinWidth="40" Content="Pick" Command="{Binding BrowseCommand,RelativeSource={RelativeSource TemplatedParent}}" Margin="4 0 0 0" />
+						<Button IsTabStop="False" Grid.Column="1" MinWidth="40" Content="Open" Command="{Binding OpenCommand,RelativeSource={RelativeSource TemplatedParent}}" Margin="4 0 0 0" />
 					</Grid>
 				</ControlTemplate>
 			</Setter.Value>

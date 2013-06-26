@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:Papyrus.Studio.Framework.Controls"
                     xmlns:pt="http://propertytools.codeplex.com"
-                    xmlns:papyrus="clr-namespace:Papyrus.Core;assembly=Papyrus.Core">
+                    xmlns:papyrus="clr-namespace:Papyrus.Core;assembly=Papyrus.Core"
+                    xmlns:converters="clr-namespace:Papyrus.Studio.Framework.Converters">
 
 	<!-- Credit: extended WPF toolkit -->
 	<Style x:Key="CollectionEditorButtonStyle" TargetType="{x:Type Button}">
@@ -16,6 +17,8 @@
 		<Setter Property="Height" Value="26" />
 		<Setter Property="Width" Value="26" />
 	</Style>
+    
+    <converters:RecordRefNameConverter x:Key="RecordRefConverter" />
 
 	<Style TargetType="{x:Type controls:RecordList}">
 		<Setter Property="MinWidth" Value="250" />
@@ -54,7 +57,7 @@
 														  CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ListBoxItem}, FallbackValue=FAIL}"></MouseBinding>
 										</DockPanel.InputBindings>
 										<Label>
-                                            <TextBlock Text="{Binding Key, FallbackValue=Unresolved}" />
+                                            <TextBlock Text="{Binding Converter={StaticResource RecordRefConverter}}" />
                                         </Label>
 									</DockPanel>
 								</DataTemplate>

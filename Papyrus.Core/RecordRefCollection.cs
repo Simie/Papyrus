@@ -18,7 +18,7 @@ namespace Papyrus.Core
 	}
 
 	[JsonObject]
-	public struct RecordRefCollection<T> : IRecordRefCollection, IEnumerable<RecordRef<T>> where T : Record
+	public struct RecordRefCollection<T> : IRecordRefCollection, IEnumerable<RecordRef<T>>, IEquatable<RecordRefCollection<T>> where T : Record
 	{
 
 		private readonly List<RecordRef<T>> _internalList;
@@ -63,6 +63,34 @@ namespace Papyrus.Core
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
+		}
+
+
+		public bool Equals(RecordRefCollection<T> other)
+		{
+			return References.SequenceEqual(other.References);
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj))
+				return false;
+			return obj is RecordRefCollection<T> && Equals((RecordRefCollection<T>) obj);
+		}
+
+		public override int GetHashCode()
+		{
+			return (_internalList != null ? _internalList.GetHashCode() : 0);
+		}
+
+		public static bool operator ==(RecordRefCollection<T> left, RecordRefCollection<T> right)
+		{
+			return left.Equals(right);
+		}
+
+		public static bool operator !=(RecordRefCollection<T> left, RecordRefCollection<T> right)
+		{
+			return !left.Equals(right);
 		}
 
 	}

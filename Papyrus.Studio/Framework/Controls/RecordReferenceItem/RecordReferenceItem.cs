@@ -62,6 +62,8 @@ namespace Papyrus.Studio.Framework.Controls
 		/// <value> The browse command. </value>
 		public ICommand OpenCommand { get; set; }
 
+		public ICommand ClearCommand { get; set; }
+
 		static RecordReferenceItem()
 		{
 			DefaultStyleKeyProperty.OverrideMetadata(
@@ -72,6 +74,7 @@ namespace Papyrus.Studio.Framework.Controls
 		{
 			BrowseCommand = new DelegateCommand(Browse);
 			OpenCommand = new DelegateCommand(Open, () => RecordReference != null && RecordReference.Key != RecordKey.Identity);
+			ClearCommand = new DelegateCommand(Clear);
 			_papyrusManager = IoC.Get<IPapyrusManager>();
 		}
 
@@ -91,6 +94,12 @@ namespace Papyrus.Studio.Framework.Controls
 
 			}
 
+		}
+
+		private void Clear()
+		{
+			RecordReference = (IRecordRef)Activator.CreateInstance(typeof (RecordRef<>).MakeGenericType(RecordReference.Type),
+			                                           RecordKey.Identity);
 		}
 
 		protected void OnRecordReferenceChanged(IRecordRef oldReference, IRecordRef newReference)
