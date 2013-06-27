@@ -88,6 +88,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SampleRecord.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -115,6 +116,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Papyrus.Core\Papyrus.Core.csproj">
+      <Project>{228e5abf-dfbf-401a-a176-41571856b7bf}</Project>
+      <Name>Papyrus.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Papyrus.Studio\Papyrus.Studio.csproj">
       <Project>{8344f7b0-5ab6-4390-a626-066a6b56bf6d}</Project>
       <Name>Papyrus.Studio</Name>

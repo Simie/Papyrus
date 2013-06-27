@@ -5,13 +5,8 @@
  * have received a copy of the license along with the source code. If not, an online copy
  * of the license can be found at https://github.com/stompyrobot/Papyrus/wiki/License.
  */
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
+
 using Papyrus.Core;
-using Papyrus.Studio.Framework;
 
 namespace Papyrus.Studio.TestTypes
 {
