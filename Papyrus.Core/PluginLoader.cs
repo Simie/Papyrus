@@ -42,8 +42,9 @@ namespace Papyrus.Core
 				
 				try {
 					plugins.Add(LoadPluginFile(pluginFile.FullName));
-				} catch {
-					// Ignore errors?
+				} catch(Exception e) {
+					Console.WriteLine("Error Reading Plugin: " + pluginFile.FullName);
+					Console.WriteLine(e.ToString());
 				}
 
 			}

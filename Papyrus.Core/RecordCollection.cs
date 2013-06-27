@@ -108,7 +108,7 @@ namespace Papyrus.Core
 
 				// Create it if not
 				recordList = new RecordList() {
-					Records = new Dictionary<RecordKey, Record>()
+					Records = new Dictionary<RecordKey, Record>(RecordKey.Comparer)
 				};
 				RecordLists.Add(type, recordList);
 
@@ -206,7 +206,7 @@ namespace Papyrus.Core
 				if (!RecordLists.ContainsKey(listType)) {
 
 					// If this collection doesn't have one, copy the other collections list wholesale.
-					RecordLists.Add(listType, new RecordList(new Dictionary<RecordKey, Record>(list.Value.Records)));
+					RecordLists.Add(listType, new RecordList(new Dictionary<RecordKey, Record>(list.Value.Records, RecordKey.Comparer)));
 					continue;
 
 				}

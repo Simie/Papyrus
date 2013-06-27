@@ -113,6 +113,33 @@ namespace Papyrus.Core
 			return !left.Equals(right);
 		}
 
+		/// <summary>
+		/// A simple concrete equality comparer to fix AOT errors when with Unity
+		/// </summary>
+		private sealed class EqualityComparer : IEqualityComparer<RecordKey>
+		{
+
+			public bool Equals(RecordKey x, RecordKey y)
+			{
+				return x.Equals(y);
+			}
+
+			public int GetHashCode(RecordKey obj)
+			{
+				unchecked {
+					return obj.GetHashCode();
+				}
+			}
+
+		}
+
+		private static readonly IEqualityComparer<RecordKey> ComparerInstance = new EqualityComparer();
+
+		public static IEqualityComparer<RecordKey> Comparer
+		{
+			get { return ComparerInstance; }
+		}
+
 	}
 
 }
