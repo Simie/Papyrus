@@ -39,5 +39,13 @@ namespace Papyrus.Tests
 
 		}
 
+		[TestMethod]
+		public void TestEmptyDatabase()
+		{
+
+			var database = new RecordDatabase(new List<Plugin>());
+
+		}
+
 	}
 }
