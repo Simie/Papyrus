@@ -64,25 +64,62 @@ namespace Papyrus.Core
 
 		}
 
+		/// <summary>
+		/// Get record with key
+		/// </summary>
+		/// <typeparam name="T">Record type</typeparam>
+		/// <param name="key">Record key</param>
+		/// <returns></returns>
 		public T GetRecord<T>(RecordKey key) where T : Record
 		{
 			return _internalCollection.GetRecord<T>(key);
 		}
 
+		/// <summary>
+		/// Get record with key and type
+		/// </summary>
+		/// <param name="type">Record type</param>
+		/// <param name="key">Record key</param>
+		/// <returns></returns>
 		public Record GetRecord(Type type, RecordKey key)
 		{
 			return _internalCollection.GetRecord(type, key);
 		}
 
+		/// <summary>
+		/// Get all records of type T
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
 		public ICollection<T> GetRecords<T>() where T : Record
 		{
 			return _internalCollection.GetRecords<T>();
 		}
 
+		/// <summary>
+		/// Get all records of type
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
 		public ICollection<Record> GetRecords(Type type)
 		{
 			return _internalCollection.GetRecords(type);
-		} 
+		}
+
+		/// <summary>
+		/// Get record from a reference.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="recordRef"></param>
+		/// <param name="throwException">True to throw an exception if not found. Defaults to false</param>
+		/// <returns></returns>
+		public T Get<T>(RecordRef<T> recordRef, bool throwException = false) where T : Record
+		{
+			Record rec;
+			if(!_internalCollection.TryGetRecord(typeof (T), recordRef.Key, out rec) && throwException)
+				throw new KeyNotFoundException("No record with key found");
+			return rec as T;
+		}
 
 	}
 

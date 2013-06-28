@@ -57,7 +57,6 @@
     <Compile Include="RecordKey.cs" />
     <Compile Include="RecordRef.cs" />
     <Compile Include="RecordRefCollection.cs" />
-    <Compile Include="Util\DependencySorter.cs" />
     <Compile Include="Util\EnumerableExtensions.cs" />
     <Compile Include="Util\ExpressionExtensions.cs" />
     <Compile Include="Util\JsonConverters\RecordCollectionConverter.cs" />

@@ -26,6 +26,27 @@ namespace Papyrus.Tests
 		}
 
 		[TestMethod]
+		public void TestRefGet()
+		{
+
+			var parent = Plugin.FromString(TestPlugins.TestParentPlugin);
+
+			var database = new RecordDatabase(new List<Plugin>() { parent });
+
+			var validRecord = new RecordRef<TestRecord>(new RecordKey(0, "Master"));
+			var invalidRecord = new RecordRef<TestRecord>(new RecordKey(0, "NonExist"));
+
+			Assert.IsNotNull(database.Get(validRecord));
+			Assert.IsNull(database.Get(invalidRecord));
+
+			try {
+				database.Get(invalidRecord, true);
+				Assert.Fail("Didn't throw exception");
+			} catch {}
+
+		}
+
+		[TestMethod]
 		public void TestMissingPlugin()
 		{
 
