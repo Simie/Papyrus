@@ -25,7 +25,7 @@ namespace Papyrus.Core
 	}
 
 	[JsonObject]
-	public class RecordRefCollection<T> : IRecordRefCollection, IEnumerable<RecordRef<T>>, IEquatable<RecordRefCollection<T>> where T : Record
+	public struct RecordRefCollection<T> : IRecordRefCollection, IEnumerable<RecordRef<T>>, IEquatable<RecordRefCollection<T>> where T : Record
 	{
 
 		private readonly List<RecordRef<T>> _internalList;
@@ -65,14 +65,6 @@ namespace Papyrus.Core
 		{
 			_internalList = new List<RecordRef<T>>(recordRefs);
 		}
-
-		/// <summary>
-		/// Create a new read-only RecordRefCollection
-		/// </summary>
-		public RecordRefCollection()
-		{
-			_internalList = new List<RecordRef<T>>();
-		} 
 
 		public IEnumerator<RecordRef<T>> GetEnumerator()
 		{

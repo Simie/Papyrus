@@ -7,7 +7,7 @@ using System.Text;
 namespace Papyrus.Core
 {
 
-	public class ReadOnlyCollection<T> : ICollection<T>
+	public struct ReadOnlyCollection<T> : ICollection<T>
 	{
 
 		private List<T> _internalList;

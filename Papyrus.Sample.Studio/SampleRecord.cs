@@ -11,6 +11,15 @@ using Papyrus.Core;
 namespace Papyrus.Studio.TestTypes
 {
 
+	public struct TestStuff
+	{
+
+		public string Property { get; set; }
+
+		public int Property2 { get; set; }
+
+	}
+
 	public class SampleRecord : Record
 	{
 
@@ -19,6 +28,8 @@ namespace Papyrus.Studio.TestTypes
 		public int TestInteger { get; private set; }
 
 		public RecordRef<ParentRecord> TestPolyRef { get; private set; }
+
+		public ReadOnlyCollection<TestStuff> TestCollection { get; private set; }
 
 	}
 

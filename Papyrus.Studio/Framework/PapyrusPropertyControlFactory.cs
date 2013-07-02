@@ -12,6 +12,7 @@ using System.Windows.Data;
 using Papyrus.Core;
 using Papyrus.Studio.Framework.Controls;
 using PropertyTools.Wpf;
+using Xceed.Wpf.Toolkit;
 
 namespace Papyrus.Studio.Framework
 {
@@ -47,6 +48,13 @@ namespace Papyrus.Studio.Framework
 
 			}
 
+			if (property.ActualPropertyType.IsGenericType &&
+			    property.ActualPropertyType.GetGenericTypeDefinition() == typeof (ReadOnlyCollection<>)) {
+
+				return CreateCollectionControl(property);
+
+			}
+
 			/*if (typeof (Papyrus.DataTypes.Color) == property.ActualPropertyType) {
 
 				return CreatePapyrusColorControl(property);
@@ -71,6 +79,15 @@ namespace Papyrus.Studio.Framework
 
 			var c = new RecordList();
 			c.SetBinding(RecordList.SourceListProperty, item.CreateBinding());
+			return c;
+
+		}
+
+		public FrameworkElement CreateCollectionControl(PropertyItem item)
+		{
+
+			var c = new CollectionEditor();
+			c.SetBinding(CollectionEditor.ItemsSourceProperty, item.CreateBinding());
 			return c;
 
 		}

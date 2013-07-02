@@ -64,6 +64,7 @@
     <Compile Include="RecordRefCollection.cs" />
     <Compile Include="Util\EnumerableExtensions.cs" />
     <Compile Include="Util\ExpressionExtensions.cs" />
+    <Compile Include="Util\JsonConverters\ReadOnlyCollectionConverter.cs" />
     <Compile Include="Util\JsonConverters\RecordCollectionConverter.cs" />
     <Compile Include="Util\JsonConverters\RecordConverter.cs" />
     <Compile Include="Util\JsonConverters\RecordKeyConverter.cs" />
