@@ -60,5 +60,29 @@ namespace Papyrus.Tests
 	}
 }";
 
+		public const string TestPolymorphicPlugin =
+	@"{
+	""Name"": ""Master"",
+	""Parents"": [],
+	""Records"": {
+	""Papyrus.Tests.TestChild1"": [
+		{
+		""Key"": ""Master/000000"",
+		""TestFloat"": 5,
+		""TestChildProperty1"": 1,
+		""EditorID"": null
+		}
+	],
+	""Papyrus.Tests.TestChild2"": [
+		{
+		""Key"": ""Master/000000"",
+		""TestFloat"": 5,
+		""TestChildProperty2"": 2,
+		""EditorID"": null
+		}
+	]
+	}
+}";
+
 	}
 }

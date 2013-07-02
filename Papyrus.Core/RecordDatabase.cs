@@ -116,7 +116,7 @@ namespace Papyrus.Core
 		public T Get<T>(RecordRef<T> recordRef, bool throwException = false) where T : Record
 		{
 			Record rec;
-			if(!_internalCollection.TryGetRecord(typeof (T), recordRef.Key, out rec) && throwException)
+			if(!_internalCollection.TryGetRecord(recordRef.ValueType, recordRef.Key, out rec) && throwException)
 				throw new KeyNotFoundException("No record with key found");
 			return rec as T;
 		}

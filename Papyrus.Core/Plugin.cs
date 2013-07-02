@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 
 namespace Papyrus.Core
@@ -60,6 +61,9 @@ namespace Papyrus.Core
 
 		internal Plugin(string name)
 		{
+
+			if(!CheckValidName(name))
+				throw new ArgumentException("Plugin name is not in valid format. Check with Plugin.CheckPluginName", "name");
 
 			Name = name;
 			Records = new RecordCollection();
@@ -125,6 +129,26 @@ namespace Papyrus.Core
 			_parents.Remove(Name);
 				
 		} 
+
+		/// <summary>
+		/// Check that a string is a valid plugin name
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public static bool CheckValidName(string name)
+		{
+
+			if (name == null)
+				return false;
+
+			if (name.Length < 2)
+				return false;
+
+			Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+
+			return !rgx.IsMatch(name);
+
+		}
 
 	}
 

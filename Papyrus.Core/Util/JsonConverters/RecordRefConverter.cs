@@ -25,9 +25,16 @@ namespace Papyrus.Core.Util.JsonConverters
 			if(!(type.IsGenericType && type.GetGenericTypeDefinition() == typeof(RecordRef<>)))
 				throw new JsonSerializationException("Expected value to be a RecordRef<T>");
 
-			var key = (RecordKey)value.GetType().GetProperty("Key").GetValue(value, null);
+			var recordRef = value as IRecordRef;
 
-			writer.WriteValue(key.ToString());
+			var key = value.GetType().GetProperty("Key").GetValue(value, null).ToString();
+
+
+			if (recordRef.ValueType != recordRef.Type) {
+				key += ", " + (recordRef.ValueType.FullName);
+			}
+
+			writer.WriteValue(key);
 
 		}
 
@@ -39,14 +46,28 @@ namespace Papyrus.Core.Util.JsonConverters
 
 			var str = reader.Value.ToString();
 
-			var key = RecordKey.FromString(str);
+			RecordKey key;
+			Type valueType = null;
 
-			var constructor = objectType.GetConstructor(new [] {typeof (RecordKey)});
+			// Check for polymorphic reference
+			if (str.Contains(',')) {
+
+				var split = str.Split(',');
+				key = RecordKey.FromString(split[0]);
+				valueType = ReflectionUtil.ResolveRecordType(split[1]);
+
+			} else {
+
+				key = RecordKey.FromString(str);
+
+			}
+
+			var constructor = objectType.GetConstructor(new [] { typeof (RecordKey), typeof(Type) });
 
 			if(constructor == null) 
 				throw new JsonSerializationException("Could not find RecordRef<> constructor");
 
-			return constructor.Invoke(new object[] { key });
+			return constructor.Invoke(new object[] { key, valueType });
 
 		}
 

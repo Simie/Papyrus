@@ -146,5 +146,22 @@ namespace Papyrus.Tests
 
 		}
 
+		[TestMethod]
+		public void TestValidPluginNames()
+		{
+			
+			Assert.IsFalse(Plugin.CheckValidName("Haha/Ruined"));
+			Assert.IsFalse(Plugin.CheckValidName("Haha,Ruined"));
+			Assert.IsFalse(Plugin.CheckValidName("Ha''haRuined"));
+			Assert.IsFalse(Plugin.CheckValidName("HahaRuin\"ed"));
+			Assert.IsFalse(Plugin.CheckValidName("HahaRuin@@@ed"));
+			Assert.IsFalse(Plugin.CheckValidName("H/ah,aRu'i\"n@@@ed"));
+			
+			Assert.IsTrue(Plugin.CheckValidName("TestPlugin"));
+			Assert.IsTrue(Plugin.CheckValidName("TestPlugin876"));
+			Assert.IsTrue(Plugin.CheckValidName("Te"));
+
+		}
+
 	}
 }

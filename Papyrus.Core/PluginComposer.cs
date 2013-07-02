@@ -120,8 +120,11 @@ namespace Papyrus.Core
 		public Record CreateRecord(Type type)
 		{
 			
-			if(!typeof(Record).IsAssignableFrom(type))
-				throw new ArgumentException("Type is not decended from record");
+			if(!type.IsSubclassOf(typeof(Record)))
+				throw new ArgumentException("Type is not subclass of Record", "type");
+
+			if(type.IsAbstract)
+				throw new ArgumentException("Type is abstract", "type");
 
 			// Create new record of type
 			var record = (Record)Activator.CreateInstance(type);

@@ -27,5 +27,19 @@ namespace Papyrus.Tests
 
 		}
 
+		[TestMethod]
+		public void TestPolymorphicReference()
+		{
+
+			var ref1 = new RecordRef<TestRecordParent>(new RecordKey(120, "TestPlugin"), typeof (TestChild1));
+			var ref2 = new RecordRef<TestRecordParent>(new RecordKey(120, "TestPlugin"), typeof (TestChild2));
+			var ref3 = new RecordRef<TestChild2>(new RecordKey(120, "TestPlugin"), typeof (TestChild2));
+
+			Assert.AreEqual(ref2, ref3);
+			Assert.AreNotEqual(ref1, ref2);
+			Assert.AreNotEqual(ref1, ref3);
+
+		}
+
 	}
 }

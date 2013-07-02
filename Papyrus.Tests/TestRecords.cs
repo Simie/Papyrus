@@ -45,4 +45,35 @@ namespace Papyrus.Tests
 
 	}
 
+	public abstract class TestRecordParent : Record
+	{
+
+		public float TestFloat { get; private set; }
+
+	}
+
+	public class TestChild1 : TestRecordParent
+	{
+
+		public int TestChildProperty1 { get; private set; }
+
+	}
+
+	public class TestChild2 : TestRecordParent
+	{
+
+		public string TestChildProperty2 { get; private set; }
+		
+	}
+
+	public class TestPolymorphicRecord : Record
+	{
+
+		public RecordRef<TestRecordParent> TestRef1 { get; private set; } 
+		public RecordRef<TestRecordParent> TestRef2 { get; private set; }
+
+		public RecordRefCollection<TestRecordParent> TestReferenceList { get; private set; } 
+
+	}
+
 }

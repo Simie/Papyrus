@@ -47,6 +47,28 @@ namespace Papyrus.Tests
 		}
 
 		[TestMethod]
+		public void TestPolymorphicReference()
+		{
+
+			var plugin = Plugin.FromString(TestPlugins.TestPolymorphicPlugin);
+
+			var database = new RecordDatabase(new List<Plugin>() {plugin});
+
+			var record1Ref = new RecordRef<TestRecordParent>(new RecordKey(0, "Master"), typeof (TestChild1));
+			var record2Ref = new RecordRef<TestRecordParent>(new RecordKey(0, "Master"), typeof (TestChild2));
+
+			var record1 = database.Get(record1Ref);
+			var record2 = database.Get(record2Ref);
+
+			Assert.IsNotNull(record1);
+			Assert.IsNotNull(record2);
+
+			Assert.IsTrue(record1 is TestChild1);
+			Assert.IsTrue(record2 is TestChild2);
+
+		}
+
+		[TestMethod]
 		public void TestMissingPlugin()
 		{
 

@@ -16,33 +16,96 @@ namespace Papyrus.Core
 	public interface IRecordRef
 	{
 
+		/// <summary>
+		/// Record Key
+		/// </summary>
 		RecordKey Key { get; }
+
+		/// <summary>
+		/// Reference Type
+		/// </summary>
 		Type Type { get; }
+		
+		/// <summary>
+		/// The actual record value type. Can differ from Reference Type if the reference is to a subclass of T
+		/// </summary>
+		Type ValueType { get; }
 
 	}
 		
-	public struct RecordRef<T> : IEquatable<RecordRef<T>>, IRecordRef where T : Record
+	public struct RecordRef<T> : IEquatable<IRecordRef>, IRecordRef where T : Record
 	{
 
+		/// <summary>
+		/// Record Key
+		/// </summary>
 		public RecordKey Key { get; private set; }
 
+		/// <summary>
+		/// Reference Type
+		/// </summary>
 		public Type Type { get { return typeof (T); } }
 
-		public RecordRef(RecordKey key) : this()
+		/// <summary>
+		/// The actual record value type. Can differ from Reference Type if the reference is to a subclass of T
+		/// </summary>
+		public Type ValueType
+		{
+			get
+			{
+				if (_valueType == null)
+					return Type;
+				return _valueType;
+			}
+		}
+
+		private Type _valueType;
+
+		/// <summary>
+		/// Create a new RecordRef object, with the specified key. Optionally pass a type for polymorphic behaviour
+		/// </summary>
+		/// <param name="key">Record key</param>
+		/// <param name="type">Record type. Must be subclass of T</param>
+		public RecordRef(RecordKey key, Type type = null) : this()
 		{
 			Key = key;
-		} 
 
-		public bool Equals(RecordRef<T> other)
+			if (type == null || type == Type) {
+
+				_valueType = Type;
+
+			} else {
+
+				if (!type.IsSubclassOf(Type))
+					throw new ArgumentException("type is not subclass of reference type", "type");
+
+				_valueType = type;
+
+			}
+
+		}
+
+		/// <summary>
+		/// Create a record reference from a given record
+		/// </summary>
+		/// <param name="record"></param>
+		public RecordRef(T record) : this(record.Key, record.GetType()) {}
+
+		/// <summary>
+		/// Check for equality with another record reference object
+		/// </summary>
+		/// <param name="other"></param>
+		/// <returns></returns>
+		public bool Equals(IRecordRef other)
 		{
-			return Key.Equals(other.Key);
+			return Key.Equals(other.Key) && ValueType == other.ValueType;
 		}
 
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(null, obj))
 				return false;
-			return obj is RecordRef<T> && Equals((RecordRef<T>) obj);
+			return obj is IRecordRef && Equals((IRecordRef) obj);
 		}
 
 		public override int GetHashCode()

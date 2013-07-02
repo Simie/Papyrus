@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
@@ -130,6 +127,50 @@ namespace Papyrus.Tests
 			Assert.IsTrue(loaded.Contains(referenceOne));
 			Assert.IsTrue(loaded.Contains(referenceTwo));
 			Assert.IsTrue(loaded.Contains(referenceThree));
+
+		}
+
+		[TestMethod]
+		public void TestPolymorphicRecordRefSerialization()
+		{
+
+			var ref1 = new RecordRef<TestRecordParent>(new RecordKey(1, "TestPlugin"), typeof(TestChild1));
+			var ref2 = new RecordRef<TestRecordParent>(new RecordKey(10, "TestPlugin"), typeof(TestChild2));
+			var ref3 = new RecordRef<TestRecordParent>(new RecordKey(1, "TestPlugin"), typeof(TestChild1));
+			var refNorm = new RecordRef<TestRecordOne>(new RecordKey(1, "TestPlugin"));
+			var settings = Serialization.GetJsonSettings();
+
+			var json1 = JsonConvert.SerializeObject(ref1, settings);
+			var json2 = JsonConvert.SerializeObject(ref2, settings);
+			var json3 = JsonConvert.SerializeObject(ref3, settings);
+			var jsonNorm = JsonConvert.SerializeObject(refNorm, settings);
+
+			Assert.AreEqual(json1, "\"TestPlugin/000001, Papyrus.Tests.TestChild1\"");
+			Assert.AreEqual(json2, "\"TestPlugin/00000A, Papyrus.Tests.TestChild2\"");
+			Assert.AreEqual(json3, "\"TestPlugin/000001, Papyrus.Tests.TestChild1\""); 
+			Assert.AreEqual(jsonNorm, "\"TestPlugin/000001\""); // Check that normal reference doesn't include type
+
+			// Test collection
+			{
+
+				var collection = new RecordRefCollection<TestRecordParent>(new[] {
+					ref1, ref2, ref3
+				});
+
+
+
+				var json = JsonConvert.SerializeObject(collection, settings);
+
+				Debug.WriteLine(json);
+
+				var loaded = JsonConvert.DeserializeObject<RecordRefCollection<TestRecordParent>>(json, settings);
+
+				Assert.IsTrue(loaded.Count() == collection.Count());
+				Assert.IsTrue(loaded.Contains(ref1));
+				Assert.IsTrue(loaded.Contains(ref2));
+				Assert.IsTrue(loaded.Contains(ref3));
+
+			}
 
 		}
 
