@@ -90,7 +90,7 @@ namespace Papyrus.Studio.Framework.Controls
 
 			if (this.RecordReference != null && this.RecordReference.Key != RecordKey.Identity) {
 
-				Coroutine.BeginExecute(_papyrusManager.OpenRecord(this.RecordReference.Type, this.RecordReference.Key).GetEnumerator());
+				Coroutine.BeginExecute(_papyrusManager.OpenRecord(this.RecordReference.ValueType, this.RecordReference.Key).GetEnumerator());
 
 			}
 
@@ -99,7 +99,7 @@ namespace Papyrus.Studio.Framework.Controls
 		private void Clear()
 		{
 			RecordReference = (IRecordRef)Activator.CreateInstance(typeof (RecordRef<>).MakeGenericType(RecordReference.Type),
-			                                           RecordKey.Identity);
+			                                           RecordKey.Identity, null);
 		}
 
 		protected void OnRecordReferenceChanged(IRecordRef oldReference, IRecordRef newReference)

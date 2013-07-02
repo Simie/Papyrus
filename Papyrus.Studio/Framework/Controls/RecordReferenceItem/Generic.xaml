@@ -11,10 +11,6 @@
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type Controls:RecordReferenceItem}">
 					<Grid>
-						<Grid.InputBindings>
-							<MouseBinding Gesture="RightClick" Command="{Binding OpenCommand,RelativeSource={RelativeSource TemplatedParent}}"></MouseBinding>
-							<MouseBinding Gesture="LeftDoubleClick" Command="{Binding BrowseCommand,RelativeSource={RelativeSource TemplatedParent}}"></MouseBinding>
-                        </Grid.InputBindings>
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="*" />
 							<ColumnDefinition Width="Auto" />
@@ -22,6 +18,8 @@
 						</Grid.ColumnDefinitions>
                         <TextBox VerticalContentAlignment="Center" Background="Transparent" BorderThickness="0" IsReadOnly="True" IsReadOnlyCaretVisible="False" Text="{Binding Path=RecordReference,RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource RecordRefConverter}}">
                             <TextBox.InputBindings>
+                                <MouseBinding Gesture="RightClick" Command="{Binding OpenCommand,RelativeSource={RelativeSource TemplatedParent}}"></MouseBinding>
+                                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding BrowseCommand,RelativeSource={RelativeSource TemplatedParent}}"></MouseBinding>
                                 <KeyBinding Key="Delete" Command="{Binding ClearCommand, RelativeSource={RelativeSource TemplatedParent}}"></KeyBinding>
                             </TextBox.InputBindings>
                         </TextBox>

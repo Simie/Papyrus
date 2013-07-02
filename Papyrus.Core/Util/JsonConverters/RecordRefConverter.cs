@@ -27,14 +27,7 @@ namespace Papyrus.Core.Util.JsonConverters
 
 			var recordRef = value as IRecordRef;
 
-			var key = value.GetType().GetProperty("Key").GetValue(value, null).ToString();
-
-
-			if (recordRef.ValueType != recordRef.Type) {
-				key += ", " + (recordRef.ValueType.FullName);
-			}
-
-			writer.WriteValue(key);
+			writer.WriteValue(recordRef.ToString());
 
 		}
 
@@ -46,28 +39,12 @@ namespace Papyrus.Core.Util.JsonConverters
 
 			var str = reader.Value.ToString();
 
-			RecordKey key;
-			Type valueType = null;
-
-			// Check for polymorphic reference
-			if (str.Contains(',')) {
-
-				var split = str.Split(',');
-				key = RecordKey.FromString(split[0]);
-				valueType = ReflectionUtil.ResolveRecordType(split[1]);
-
-			} else {
-
-				key = RecordKey.FromString(str);
-
-			}
-
-			var constructor = objectType.GetConstructor(new [] { typeof (RecordKey), typeof(Type) });
+			var constructor = objectType.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new [] { typeof (string) }, null);
 
 			if(constructor == null) 
 				throw new JsonSerializationException("Could not find RecordRef<> constructor");
 
-			return constructor.Invoke(new object[] { key, valueType });
+			return constructor.Invoke(new object[] { str });
 
 		}
 

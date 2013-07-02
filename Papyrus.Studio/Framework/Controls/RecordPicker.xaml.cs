@@ -35,9 +35,9 @@ namespace Papyrus.Studio.Framework.Controls
 			
 		}
 
-		private static IRecordRef CreateReference(Type t, RecordKey key)
+		private static IRecordRef CreateReference(Type t, RecordKey key, Type valueType)
 		{
-			return (IRecordRef)Activator.CreateInstance(typeof (RecordRef<>).MakeGenericType(t), key);
+			return (IRecordRef)Activator.CreateInstance(typeof (RecordRef<>).MakeGenericType(t), key, valueType);
 		}
 
 		/// <summary>
@@ -91,7 +91,7 @@ namespace Papyrus.Studio.Framework.Controls
 		private void Pick(Record result)
 		{
 			DialogResult = true;
-			SelectedRecordReference = CreateReference(SelectedRecordReference.Type, result.Key);
+			SelectedRecordReference = CreateReference(SelectedRecordReference.Type, result.Key, result.GetType());
 			Close();
 		}
 

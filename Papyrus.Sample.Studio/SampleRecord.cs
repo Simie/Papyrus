@@ -18,6 +18,8 @@ namespace Papyrus.Studio.TestTypes
 
 		public int TestInteger { get; private set; }
 
+		public RecordRef<ParentRecord> TestPolyRef { get; private set; }
+
 	}
 
 	public class SampleRecord2 : Record
@@ -35,6 +37,34 @@ namespace Papyrus.Studio.TestTypes
 	{
 
 		public RecordRefCollection<SampleRecord> TestReferences { get; private set; } 
+
+	}
+
+	public abstract class ParentRecord : Record
+	{
+
+		public string ParentProperty { get; private set; }
+
+	}
+
+	public class ChildRecord1 : ParentRecord
+	{
+
+		public bool ChildProperty1 { get; private set; }
+
+	}
+	
+	public class ChildRecord2 : ParentRecord
+	{
+
+		public int ChildProperty2 { get; private set; }
+
+	}
+	
+	public class ChildRecord3 : ParentRecord
+	{
+
+		public string ChildProperty3 { get; private set; }
 
 	}
 

@@ -149,7 +149,7 @@ namespace Papyrus.Studio.Modules.RecordBrowser.ViewModels
 		public void NewRecord()
 		{
 
-			if (SelectedRecordType == null)
+			if (SelectedRecordType == null || SelectedRecordType.Type.IsAbstract)
 				return;
 
 			var newRecord = _papyrusManager.PluginComposer.CreateRecord(SelectedRecordType.Type);

@@ -246,6 +246,33 @@ namespace Papyrus.Core
 		}
 
 		/// <summary>
+		/// Get record from a reference.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="recordRef"></param>
+		/// <param name="throwException">True to throw an exception if not found. Defaults to false</param>
+		/// <returns></returns>
+		public T Get<T>(RecordRef<T> recordRef, bool throwException = false) where T : Record
+		{
+			return Get((IRecordRef)recordRef, throwException) as T;
+		}
+	
+		/// <summary>
+		/// Get record from a reference.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="recordRef"></param>
+		/// <param name="throwException">True to throw an exception if not found. Defaults to false</param>
+		/// <returns></returns>
+		public Record Get(IRecordRef recordRef, bool throwException = false)
+		{
+			Record rec;
+			if (!GetMergedCollection().TryGetRecord(recordRef.ValueType, recordRef.Key, out rec) && throwException)
+				throw new KeyNotFoundException("No record with key found");
+			return rec;
+		}
+
+		/// <summary>
 		/// Create a RecordCollection with all dependencies and the primary plugin merged in order.
 		/// </summary>
 		/// <returns></returns>

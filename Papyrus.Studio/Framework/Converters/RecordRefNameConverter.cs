@@ -43,9 +43,9 @@ namespace Papyrus.Studio.Framework.Converters
 
 				var papyrusManager = IoC.Get<IPapyrusManager>();
 
-				var record = papyrusManager.PluginComposer.GetRecord(recordRef.Type, recordRef.Key);
+				var record = papyrusManager.PluginComposer.Get(recordRef);
 
-				return string.Format("{0} ({1})", record.EditorID, record.Key);
+				return string.Format("{0} ({1})", record.EditorID, recordRef);
 
 			} catch {
 

@@ -92,6 +92,47 @@ namespace Papyrus.Core
 		public RecordRef(T record) : this(record.Key, record.GetType()) {}
 
 		/// <summary>
+		/// Create a RecordRef from the string form
+		/// </summary>
+		/// <param name="str"></param>
+		internal RecordRef(string str) : this()
+		{
+
+			try {
+
+				// Check for polymorphic reference
+				if (str.Contains(',')) {
+
+					var split = str.Split(',');
+					Key = RecordKey.FromString(split[0]);
+					_valueType = Util.ReflectionUtil.ResolveRecordType(split[1]);
+
+				} else {
+
+					Key = RecordKey.FromString(str);
+
+				}
+
+			} catch (Exception e) {
+				throw new ArgumentException("String was not in expected format", "str", e);
+			}
+
+		}
+
+		public override string ToString()
+		{
+
+			var key = Key.ToString();
+
+			if (ValueType != Type) {
+				key += ", " + (ValueType.FullName);
+			}
+
+			return key;
+
+		}
+
+		/// <summary>
 		/// Check for equality with another record reference object
 		/// </summary>
 		/// <param name="other"></param>
