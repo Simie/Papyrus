@@ -7,7 +7,11 @@ using System.Text;
 namespace Papyrus.Core
 {
 
-	public struct ReadOnlyCollection<T> : ICollection<T>
+	/// <summary>
+	/// A struct-based Read Only collection for Papyrus Records
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	public struct ReadOnlyCollection<T> : ICollection<T>, ICollection
 	{
 
 		private List<T> _internalList;
@@ -71,7 +75,16 @@ namespace Papyrus.Core
 			throw new NotSupportedException();
 		}
 
+		public void CopyTo(Array array, int index)
+		{
+			List.CopyTo((T[])array, index);
+		}
+
 		public int Count { get { return List.Count; } }
+		public object SyncRoot { get { return null; } }
+
+		public bool IsSynchronized { get { return false; } }
+
 		public bool IsReadOnly { get { return true; } }
 
 	}

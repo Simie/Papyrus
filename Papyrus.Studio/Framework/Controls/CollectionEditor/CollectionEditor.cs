@@ -35,11 +35,11 @@ namespace Papyrus.Studio.Framework.Controls
 		}
 
 		public static readonly DependencyProperty ItemsSourceProperty =
-			DependencyProperty.Register("ItemsSource", typeof (IList), typeof (CollectionEditor), new PropertyMetadata(default(IList), ItemsSourceChanged));
+			DependencyProperty.Register("ItemsSource", typeof (ICollection), typeof (CollectionEditor), new PropertyMetadata(default(IList), ItemsSourceChanged));
 
-		public IList ItemsSource
+		public ICollection ItemsSource
 		{
-			get { return (IList) GetValue(ItemsSourceProperty); }
+			get { return (ICollection) GetValue(ItemsSourceProperty); }
 			set { SetValue(ItemsSourceProperty, value); }
 		}
 
@@ -103,11 +103,11 @@ namespace Papyrus.Studio.Framework.Controls
 			Loaded += (sender, args) =>
 			{
 
-				if (NewItemsSource == null)
-					NewItemsSource = new List<Type>();
-
 				if (ItemsSource == null)
 					ItemsSource = new List<Object>();
+
+				if (NewItemsSource == null)
+					NewItemsSource = new List<Type>() { ItemsSource.GetType().GetGenericArguments()[0] };
 
 			};
 
@@ -131,8 +131,8 @@ namespace Papyrus.Studio.Framework.Controls
 			if (ItemsSource != null)
 				UpdateItems();
 
-			// Hack to fix control factory not being applied correctly
-			/*var propGrid = UIHelper.FindChild<PropertyControl>(this, "_propGrid");
+			/*// Hack to fix control factory not being applied correctly
+			var propGrid = UIHelper.FindChild<PropertyControl>(this, "_propGrid");
 			
 			propGrid.PropertyControlFactory = PapyrusPropertyControlFactory.GetControlFactory();
 			
@@ -145,12 +145,18 @@ namespace Papyrus.Studio.Framework.Controls
 
 		private void PersistChanges()
 		{
-			
-			ItemsSource.Clear();
 
-			foreach (var item in Items) {
-				ItemsSource.Add(item);
+			var type = ItemsSource.GetType();
+
+			var valueType = type.GetGenericArguments()[0];
+
+			dynamic list = Activator.CreateInstance(typeof(List<>).MakeGenericType(valueType));
+
+			foreach (var item in Items.Cast<dynamic>()) {
+				list.Add(item);
 			}
+			
+			ItemsSource = (ICollection) Activator.CreateInstance(type, list);
 
 		}
 
