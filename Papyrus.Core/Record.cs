@@ -33,6 +33,7 @@ namespace Papyrus.Core
 		/// A friendly name to appear in the editor (default to RecordKey)
 		/// </summary>
 		[Category("Editor")]
+		[PropertyTools.DataAnnotations.SortIndex(-100)]
 		public string EditorID { get; private set; }
 
 		/// <summary>

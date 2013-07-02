@@ -27,6 +27,7 @@ namespace Papyrus.Studio.Framework.ComponentModel
 
 			_propertyDescriptors = properties.Select(p => new PapyrusPropertyDescriptor(_recordType, p.Name, p.PropertyType)).Cast<PropertyDescriptor>().ToArray();
 
+
 		}
 
 		public override PropertyDescriptorCollection GetProperties()
@@ -37,7 +38,7 @@ namespace Papyrus.Studio.Framework.ComponentModel
 		public override PropertyDescriptorCollection GetProperties(Attribute[] attributes)
 		{
 
-			return new PropertyDescriptorCollection(_propertyDescriptors);
+			return new PropertyDescriptorCollection(_propertyDescriptors.Where(p => p.Attributes.Contains(attributes)).ToArray());
 
 		}
 

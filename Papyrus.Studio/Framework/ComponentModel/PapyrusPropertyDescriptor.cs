@@ -26,9 +26,22 @@ namespace Papyrus.Studio.Framework
 		public PapyrusPropertyDescriptor(Type ownerType, string name, Type propertyType)
 			: base(name, null)
 		{
+
 			_ownerType = ownerType;
 			_propertyType = propertyType;
 			_propertyInfo = ownerType.GetProperty(name);
+
+		}
+
+		protected override void FillAttributes(System.Collections.IList attributeList)
+		{
+
+			foreach (var attrib in _propertyInfo.GetCustomAttributes(true)) {
+				attributeList.Add(attrib);
+			}
+
+			base.FillAttributes(attributeList);
+
 		}
 
 		public override bool CanResetValue(object component)

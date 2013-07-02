@@ -119,8 +119,6 @@
     <Compile Include="Framework\ISaveAware.cs" />
     <Compile Include="Framework\PapyrusPropertyControlFactory.cs" />
     <Compile Include="Framework\ComponentModel\PapyrusPropertyDescriptor.cs" />
-    <Compile Include="Framework\PapyrusPropertyItem.cs" />
-    <Compile Include="Framework\PapyrusPropertyItemFactory.cs" />
     <Compile Include="Framework\RecordViewModel.cs" />
     <Compile Include="Framework\Results\Close.cs" />
     <Compile Include="Framework\Results\CloseDocumentResult.cs" />

@@ -8,6 +8,7 @@
 
 using System.ComponentModel;
 using System.ComponentModel.Composition;
+using System.Diagnostics.CodeAnalysis;
 using Caliburn.Micro;
 using Papyrus.Core;
 using Papyrus.Studio.Modules.PapyrusManager;
@@ -20,7 +21,9 @@ namespace Papyrus.Studio.Framework
 	public class RecordViewModel<T> : PropertyChangedBase, IRecordViewModel where T : Record
 	{
 
-		[Import] private IPapyrusManager _papyrusManager;
+		[Import]
+		[SuppressMessage("Microsoft.Performance", "CA1823")]
+		private IPapyrusManager _papyrusManager;
 
 		private bool _isDirty;
 

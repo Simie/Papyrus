@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel.Composition;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
 using Caliburn.Micro;
@@ -32,7 +33,9 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 
 		public event EventHandler RecordDatabaseChanged = delegate { };
 
-		[Import(typeof (IShell))] private IShell _shell;
+		[Import(typeof (IShell))]
+		[SuppressMessage("Microsoft.Performance", "CA1823")]
+		private IShell _shell;
 
 		private Papyrus.Core.PluginComposer _pluginComposer;
 
