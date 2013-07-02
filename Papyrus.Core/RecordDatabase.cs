@@ -70,7 +70,7 @@ namespace Papyrus.Core
 		/// <typeparam name="T">Record type</typeparam>
 		/// <param name="key">Record key</param>
 		/// <returns></returns>
-		public T GetRecord<T>(RecordKey key) where T : Record
+		public T GetRecord<T>(RecordKey key) where T : Record, new()
 		{
 			return _internalCollection.GetRecord<T>(key);
 		}

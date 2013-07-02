@@ -229,5 +229,37 @@ namespace Papyrus.Tests
 
 		}
 
+		[TestMethod]
+		public void TestPolymorphicGetRecords()
+		{
+
+			var collection = new RecordCollection();
+
+			var record1 = new TestChild1(); record1.InternalKey = new RecordKey(0);
+			var record2 = new TestChild1(); record2.InternalKey = new RecordKey(1);
+			var record3 = new TestChild2(); record3.InternalKey = new RecordKey(0);
+			var record4 = new TestChild2(); record4.InternalKey = new RecordKey(1);
+
+			collection.AddRecord(record1);
+			collection.AddRecord(record2);
+			collection.AddRecord(record3);
+			collection.AddRecord(record4);
+
+			// Check that the generic and non-generic methods work the same (they have slightly different implementation)
+			var recordsOneOne = collection.GetRecords<TestRecordParent>().ToList();
+			var recordsOneTwo = collection.GetRecords(typeof(TestRecordParent)).ToList();
+
+			CollectionAssert.AreEquivalent(recordsOneOne.ToList(), recordsOneTwo.ToList(), "Record collections differ");
+
+			CollectionAssert.Contains(recordsOneOne, record1);
+			CollectionAssert.Contains(recordsOneOne, record2);
+			CollectionAssert.Contains(recordsOneOne, record3);
+			CollectionAssert.Contains(recordsOneOne, record4);
+
+			CollectionAssert.AllItemsAreInstancesOfType(recordsOneOne, typeof(TestRecordParent));
+			Assert.AreEqual(recordsOneOne.Count, 4);
+
+		}
+
 	}
 }

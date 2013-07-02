@@ -181,7 +181,7 @@ namespace Papyrus.Core
 
 		}
 
-		public T GetRecord<T>(RecordKey key) where T : Record
+		public T GetRecord<T>(RecordKey key) where T : Record, new()
 		{
 			return (T) GetRecord(typeof (T), key);
 		}

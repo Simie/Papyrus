@@ -47,6 +47,9 @@ namespace Papyrus.Core
 		public Record GetRecord(Type recordType, RecordKey key)
 		{
 
+			if(recordType.IsAbstract)
+				throw new ArgumentException("recordType is abstract", "recordType");
+
 			Record record;
 
 			if(!TryGetRecord(recordType, key, out record))
@@ -56,7 +59,7 @@ namespace Papyrus.Core
 
 		}
 
-		public T GetRecord<T>(RecordKey key) where T : Record
+		public T GetRecord<T>(RecordKey key) where T : Record, new()
 		{
 			return (T)GetRecord(typeof (T), key);
 		}
@@ -71,7 +74,7 @@ namespace Papyrus.Core
 		public bool TryGetRecord(Type recordType, RecordKey key, out Record value)
 		{
 
-			if (!typeof(Record).IsAssignableFrom(recordType))
+			if (!recordType.IsSubclassOf(typeof(Record)))
 				throw new InvalidOperationException("Attempted to lookup a non-record type");
 
 			RecordList list;
@@ -158,12 +161,7 @@ namespace Papyrus.Core
 		public ICollection<T> GetRecords<T>() where T : Record
 		{
 
-			var type = typeof (T);
-
-			if (!RecordLists.ContainsKey(type))
-				return new T[0];
-
-			return RecordLists[type].Records.Values.Cast<T>().ToArray();
+			return (GetRecords(typeof (T)).Cast<T>().ToArray());
 
 		} 
 
@@ -175,10 +173,34 @@ namespace Papyrus.Core
 		public ICollection<Record> GetRecords(Type type)
 		{
 
+			if (type.IsAbstract)
+				return GetRecordsTree(type);
+
 			if(!RecordLists.ContainsKey(type))
 				return new Record[0];
 
 			return RecordLists[type].Records.Values;
+
+		} 
+
+		/// <summary>
+		/// Get all records descending from type
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		private ICollection<Record> GetRecordsTree(Type type)
+		{
+			
+			List<Record> retList = new List<Record>();
+
+			foreach (var recordList in RecordLists) {
+				
+				if(recordList.Key.IsSubclassOf(type))
+					retList.AddRange(recordList.Value.Records.Select(p => p.Value));
+
+			}
+
+			return retList;
 
 		} 
 
