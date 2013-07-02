@@ -74,6 +74,7 @@
     <Compile Include="PluginTests.cs" />
     <Compile Include="RecordDatabaseTests.cs" />
     <Compile Include="RecordRefCollectionTests.cs" />
+    <Compile Include="ReadOnlyCollectionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Papyrus.Core\Papyrus.Core.csproj">

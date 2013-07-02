@@ -46,6 +46,9 @@ namespace Papyrus.Core.Util.JsonConverters
 
 			var list = serializer.Deserialize(reader, typeof (List<>).MakeGenericType(recordRefType));
 
+			if (list == null)
+				return Activator.CreateInstance(typeof (RecordRefCollection<>).MakeGenericType(recordType));
+
 			var constructorArgument = typeof (IEnumerable<>).MakeGenericType(recordRefType);
 
 			var constructor = objectType.GetConstructor(new [] { constructorArgument });
