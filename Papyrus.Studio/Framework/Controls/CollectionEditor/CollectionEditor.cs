@@ -53,6 +53,15 @@ namespace Papyrus.Studio.Framework.Controls
 			set { SetValue(SelectedItemProperty, value); }
 		}
 
+		public static readonly DependencyProperty SelectedIndexProperty =
+			DependencyProperty.Register("SelectedIndex", typeof (int), typeof (CollectionEditor), new PropertyMetadata(default(int)));
+
+		public int SelectedIndex
+		{
+			get { return (int) GetValue(SelectedIndexProperty); }
+			set { SetValue(SelectedIndexProperty, value); }
+		}
+
 		public static readonly DependencyProperty NewItemsSourceProperty =
 			DependencyProperty.Register("NewItemsSource", typeof (List<Type>), typeof (CollectionEditor), new PropertyMetadata(default(List<Type>)));
 
@@ -100,17 +109,6 @@ namespace Papyrus.Studio.Framework.Controls
 		public CollectionEditor()
 		{
 
-			Loaded += (sender, args) =>
-			{
-
-				if (ItemsSource == null)
-					ItemsSource = new List<Object>();
-
-				if (NewItemsSource == null)
-					NewItemsSource = new List<Type>() { ItemsSource.GetType().GetGenericArguments()[0] };
-
-			};
-
 			MoveUpCommand = new DelegateCommand(MoveUpExecuted, CanMoveUpExecute);
 			MoveDownCommand = new DelegateCommand(MoveDownExecuted, CanMoveDownExecute);
 			NewItemCommand = new DelegateCommand(NewCommandExecuted, NewItemCanExecute);
@@ -128,18 +126,24 @@ namespace Papyrus.Studio.Framework.Controls
 		private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
 		{
 
-			if (ItemsSource != null)
-				UpdateItems();
+			if (ItemsSource == null)
+				ItemsSource = new List<Object>();
 
-			/*// Hack to fix control factory not being applied correctly
+			if (NewItemsSource == null)
+				NewItemsSource = new List<Type>() { ItemsSource.GetType().GetGenericArguments()[0] };
+
+			NewTypeSelected = NewItemsSource[0];
+
+			UpdateItems();
+
+			// Hack to fix control factory not being applied correctly
 			var propGrid = UIHelper.FindChild<PropertyControl>(this, "_propGrid");
-			
 			propGrid.PropertyControlFactory = PapyrusPropertyControlFactory.GetControlFactory();
 			
 			// Hack to have items refreshing correctly when a property changes in the grid
 			var listView = UIHelper.FindChild<ListBox>(this, "_itemList");
 			propGrid.PreviewKeyUp += (o, args) => listView.Items.Refresh();
-			propGrid.PreviewMouseUp += (o, args) => listView.Items.Refresh();*/
+			propGrid.PreviewMouseUp += (o, args) => listView.Items.Refresh();
 
 		}
 
@@ -187,7 +191,7 @@ namespace Papyrus.Studio.Framework.Controls
 		private bool CanMoveUpExecute()
 		{
 
-			if (SelectedItem != null && Items.IndexOf(SelectedItem) > 0)
+			if (SelectedItem != null && SelectedIndex > 0)
 				return true;
 			return false;
 
@@ -200,7 +204,7 @@ namespace Papyrus.Studio.Framework.Controls
 				return;
 
 			var selectedItem = SelectedItem;
-			var index = Items.IndexOf(selectedItem);
+			var index = SelectedIndex;
 			Items.RemoveAt(index);
 			Items.Insert(index-1, selectedItem);
 
@@ -213,7 +217,7 @@ namespace Papyrus.Studio.Framework.Controls
 		private bool CanMoveDownExecute()
 		{
 
-			if (SelectedItem != null && Items.IndexOf(SelectedItem) < Items.Count-1)
+			if (SelectedItem != null && SelectedIndex < Items.Count-1)
 				return true;
 			return false;
 
@@ -226,7 +230,7 @@ namespace Papyrus.Studio.Framework.Controls
 				return;
 
 			var selectedItem = SelectedItem;
-			var index = Items.IndexOf(selectedItem);
+			var index = SelectedIndex;
 			Items.RemoveAt(index);
 			Items.Insert(index + 1, selectedItem);
 
@@ -244,8 +248,8 @@ namespace Papyrus.Studio.Framework.Controls
 		private void DeleteCommandExecuted()
 		{
 			
-			if(SelectedItem != null)
-				Items.Remove(SelectedItem);
+			if(SelectedIndex >= 0)
+				Items.RemoveAt(SelectedIndex);
 
 			PersistChanges();
 
@@ -260,7 +264,7 @@ namespace Papyrus.Studio.Framework.Controls
 			var newItem = NewItem(NewTypeSelected);
 			Items.Add(newItem);
 			PersistChanges();
-			SelectedItem = newItem;
+			SelectedIndex = Items.Count - 1;
 
 		}
 

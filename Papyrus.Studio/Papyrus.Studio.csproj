@@ -129,6 +129,7 @@
     <Compile Include="Framework\SaveUtil.cs" />
     <Compile Include="Framework\Services\IExceptionHandler.cs" />
     <Compile Include="Framework\Services\ResultExtensions.cs" />
+    <Compile Include="Framework\UIHelper.cs" />
     <Compile Include="Modules\ExceptionHandler\Module.cs" />
     <Compile Include="Modules\ExceptionHandler\ViewModels\ExceptionHandlerViewModel.cs" />
     <Compile Include="Modules\GenericRecordEditor\RecordEditorProvider.cs" />
