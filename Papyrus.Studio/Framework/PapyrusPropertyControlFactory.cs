@@ -7,6 +7,8 @@
  */
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Data;
 using Papyrus.Core;
@@ -53,6 +55,10 @@ namespace Papyrus.Studio.Framework
 
 				return CreateCollectionControl(property);
 
+			}
+
+			if (typeof(ICollection).IsAssignableFrom(property.ActualPropertyType)) {
+				return CreateCollectionControl(property);
 			}
 
 			/*if (typeof (Papyrus.DataTypes.Color) == property.ActualPropertyType) {

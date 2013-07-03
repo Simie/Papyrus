@@ -6,18 +6,54 @@
  * of the license can be found at https://github.com/stompyrobot/Papyrus/wiki/License.
  */
 
+using System;
+using System.Collections.Generic;
 using Papyrus.Core;
 
 namespace Papyrus.Studio.TestTypes
 {
 
-	public struct TestStuff
+	public struct TestStuff : IEquatable<TestStuff>
 	{
 
 		public string Property { get; set; }
 
 		public int Property2 { get; set; }
 
+		public override string ToString()
+		{
+			return Property ?? "No Value";
+		}
+
+		public bool Equals(TestStuff other)
+		{
+			return string.Equals(Property, other.Property) && Property2 == other.Property2;
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj))
+				return false;
+			return obj is TestStuff && Equals((TestStuff) obj);
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked {
+				return ((Property != null ? Property.GetHashCode() : 0)*397) ^ Property2;
+			}
+		}
+
+		public static bool operator ==(TestStuff left, TestStuff right)
+		{
+			return left.Equals(right);
+		}
+
+		public static bool operator !=(TestStuff left, TestStuff right)
+		{
+			return !left.Equals(right);
+		}
+		
 	}
 
 	public class SampleRecord : Record
@@ -29,7 +65,7 @@ namespace Papyrus.Studio.TestTypes
 
 		public RecordRef<ParentRecord> TestPolyRef { get; private set; }
 
-		public ReadOnlyCollection<TestStuff> TestCollection { get; private set; }
+		public List<TestStuff> TestCollection { get; private set; }
 
 	}
 
