@@ -149,10 +149,10 @@ namespace Papyrus.Studio.Framework.Controls
 		{
 
 			if (_applyMethodInfo == null) {
-				_applyMethodInfo = GetType().GetMethod("ApplyInternal", BindingFlags.Instance | BindingFlags.NonPublic).MakeGenericMethod(SourceList.RecordType);
+				_applyMethodInfo = GetType().GetMethod("ApplyInternal", BindingFlags.Instance | BindingFlags.NonPublic);
 			}
 
-			_applyMethodInfo.Invoke(this, null);
+			_applyMethodInfo.MakeGenericMethod(SourceList.RecordType).Invoke(this, null);
 
 			Update();
 
