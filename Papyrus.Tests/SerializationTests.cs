@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -171,6 +172,62 @@ namespace Papyrus.Tests
 				Assert.IsTrue(loaded.Contains(ref3));
 
 			}
+
+		}
+
+		private abstract class TestBase
+		{
+
+			public string Test { get; set; }
+
+		}
+		private class Test1 : TestBase
+		{
+
+			public int Number { get; set; }
+
+		}
+		private class Test2 : TestBase
+		{
+
+			public int OtherNumber { get; set; }
+
+		}
+
+		private class TestCollectionRecord : Record
+		{
+
+			private PapyrusList<TestBase> _entries = new PapyrusList<TestBase>();
+
+			public PapyrusList<TestBase> Entries
+			{
+				get { return _entries; }
+				private set { _entries = value; }
+			}
+
+		}
+
+		[TestMethod]
+		public void TestPolymorphicStandardCollectionSerialization()
+		{
+
+			var testRecord = new TestCollectionRecord();
+			testRecord.SetProperty(() => testRecord.Entries, new PapyrusList<TestBase>() {
+				new Test1(),
+				new Test2(),
+				new Test1()
+			});
+
+			var settings = Serialization.GetJsonSettings();
+
+			var json = JsonConvert.SerializeObject(testRecord, settings);
+
+			var loaded = JsonConvert.DeserializeObject<TestCollectionRecord>(json);
+
+			Assert.AreEqual(loaded.Entries.Count, testRecord.Entries.Count);
+			Assert.IsTrue(loaded.Entries[0] is Test1);
+			Assert.IsTrue(loaded.Entries[1] is Test2);
+			Assert.IsTrue(loaded.Entries[2] is Test1);
 
 		}
 

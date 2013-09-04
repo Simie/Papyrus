@@ -31,7 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DocumentationFile>bin\Release\Papyrus.Core.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Freezable.cs" />
     <Compile Include="MissingPluginException.cs" />
+    <Compile Include="PapyrusList.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="PluginComposer.cs" />
     <Compile Include="PluginLoader.cs" />

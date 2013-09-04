@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using Papyrus.Core;
 
 namespace Papyrus.Studio.TestTypes
@@ -56,8 +57,14 @@ namespace Papyrus.Studio.TestTypes
 		
 	}
 
+	public abstract class TestBase { }
+	public class Test1 : TestBase { }
+	public class Test2 : TestBase { }
+
 	public class SampleRecord : Record
 	{
+
+		private List<TestBase> _testPolyCollection = new List<TestBase>();
 
 		public string TestString { get; private set; }
 
@@ -66,6 +73,13 @@ namespace Papyrus.Studio.TestTypes
 		public RecordRef<ParentRecord> TestPolyRef { get; private set; }
 
 		public List<TestStuff> TestCollection { get; private set; }
+
+		[JsonProperty(ItemTypeNameHandling = TypeNameHandling.All)]
+		public List<TestBase> TestPolyCollection
+		{
+			get { return _testPolyCollection; }
+			private set { _testPolyCollection = value; }
+		}
 
 	}
 
