@@ -11,6 +11,26 @@ namespace Papyrus.Core
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	[JsonArray(ItemTypeNameHandling = TypeNameHandling.Auto)]
-	public class PapyrusList<T> : List<T> { }
+	public class PapyrusList<T> : List<T>
+	{
+
+		/// <summary>
+		/// Construct empty PapyrusList instance
+		/// </summary>
+		public PapyrusList() { }
+
+		/// <summary>
+		/// Construct new PapyrusList with the contents of collection
+		/// </summary>
+		/// <param name="collection"></param>
+		public PapyrusList(IEnumerable<T> collection) : base(collection) {}
+
+		/// <summary>
+		/// Construct new PapyrusList with capacity
+		/// </summary>
+		/// <param name="capacity"></param>
+		public PapyrusList(int capacity) : base(capacity) {}
+
+	}
 
 }
