@@ -129,8 +129,17 @@ namespace Papyrus.Studio.Framework.Controls
 			if (ItemsSource == null)
 				ItemsSource = new List<Object>();
 
-			if (NewItemsSource == null)
-				NewItemsSource = new List<Type>() { ItemsSource.GetType().GetGenericArguments()[0] };
+			if (NewItemsSource == null) {
+
+				var parent = ItemsSource.GetType().GetGenericArguments()[0];
+
+				if (!parent.IsAbstract) {
+					NewItemsSource = new List<Type>() {parent};
+				} else {
+					NewItemsSource = parent.Assembly.GetTypes().Where(type => type.IsSubclassOf(parent) && !type.IsAbstract).ToList();
+				}
+
+			}
 
 			NewTypeSelected = NewItemsSource[0];
 
