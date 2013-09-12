@@ -30,12 +30,23 @@ namespace Papyrus.Core
 		/// <summary>
 		/// Name of plugin the key is referencing
 		/// </summary>
-		public string Plugin { get; internal set; }
+		public string Plugin
+		{
+			get { return _plugin; }
+			internal set { _plugin = value; }
+		}
 
 		/// <summary>
 		/// Record index
 		/// </summary>
-		public int Index { get; internal set; }
+		public int Index
+		{
+			get { return _index; }
+			internal set { _index = value; }
+		}
+
+		private string _plugin;
+		private int _index;
 
 		public RecordKey(int index, string plugin = null) : this()
 		{

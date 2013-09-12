@@ -39,7 +39,11 @@ namespace Papyrus.Core
 		/// <summary>
 		/// Record Key
 		/// </summary>
-		public RecordKey Key { get; private set; }
+		public RecordKey Key
+		{
+			get { return _key; }
+			private set { _key = value; }
+		}
 
 		/// <summary>
 		/// Reference Type
@@ -60,6 +64,9 @@ namespace Papyrus.Core
 		}
 
 		private Type _valueType;
+
+		// Use field so Unity3D can serialize correctly
+		private RecordKey _key;
 
 		/// <summary>
 		/// Create a new RecordRef object, with the specified key. Optionally pass a type for polymorphic behaviour
