@@ -231,6 +231,29 @@ namespace Papyrus.Tests
 
 		}
 
+		/// <summary>
+		/// Test for correct handling of data in a record with no 
+		/// </summary>
+		[TestMethod]
+		public void TestUnexpectedProperty()
+		{
+
+			var json = @"
+				  {
+					""Key"": ""TestPlugin/000000"",
+					""UnexpectedProperty"": true,
+					""TestString"": ""String Contents"",
+					""OtherMissingProperty"": 0,
+					""TestReference"": ""000000"",
+					""EditorID"": null
+				  }";
+
+			var obj = JsonConvert.DeserializeObject<TestRecord>(json, Serialization.GetJsonSettings());
+
+			Assert.AreEqual(obj.TestString, "String Contents");
+
+		}
+
 
 	}
 

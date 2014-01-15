@@ -73,7 +73,9 @@ namespace Papyrus.Core.Util.JsonConverters
 
 							var property = validProperties.FirstOrDefault(p => p.Name == propName);
 
-							if (property != null) {
+							if (property == null) {
+								serializer.Deserialize(reader);
+							} else {
 								record.SetProperty(propName, serializer.Deserialize(reader, property.PropertyType));
 							}
 
