@@ -19,7 +19,7 @@ namespace Papyrus.Core
 	/// A struct-based Read Only collection for Papyrus Records
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public struct ReadOnlyCollection<T> : ICollection<T>, ICollection, IEquatable<ReadOnlyCollection<T>>
+	public struct ReadOnlyCollection<T> : IList<T>, ICollection<T>, ICollection, IEquatable<ReadOnlyCollection<T>>
 	{
 
 		private List<T> _internalList;
@@ -122,6 +122,30 @@ namespace Papyrus.Core
 			return !left.Equals(right);
 		}
 
+
+		public int IndexOf(T item)
+		{
+			return List.IndexOf(item);
+		}
+
+		public void Insert(int index, T item)
+		{
+			throw new NotSupportedException();
+		}
+
+		public void RemoveAt(int index)
+		{
+			throw new NotSupportedException();
+		}
+
+		public T this[int index]
+		{
+			get { return List[index]; }
+			set
+			{
+				throw new InvalidOperationException("ReadOnlyCollection cannot be modified");
+			}
+		}
 	}
 
 }
