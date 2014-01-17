@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Newtonsoft.Json;
 
@@ -19,14 +20,11 @@ namespace Papyrus.Core.Util.JsonConverters
 		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
 		{
 
-			// Remove this converter to prevent infinite loop
-			serializer.Converters.Remove(this);
+			// Get internal list
+			var internalList = (value.GetType().GetProperty("List", BindingFlags.Instance | BindingFlags.NonPublic)).GetValue(value, null);
 
-			// Serialize as-is, it's just an IEnumerable
-			serializer.Serialize(writer, value);
-
-			// Add converter back
-			serializer.Converters.Add(this);
+			// Serialize list
+			serializer.Serialize(writer, internalList);
 
 		}
 

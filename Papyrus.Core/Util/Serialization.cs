@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Papyrus.Core.Util.JsonConverters;
@@ -18,23 +19,23 @@ namespace Papyrus.Core.Util
 	internal static class Serialization
 	{
 
+		private static JsonSerializerSettings _settingsInstance;
+		private static JsonSerializer _serializerInstance;
+
 		public static Newtonsoft.Json.JsonSerializerSettings GetJsonSettings()
 		{
 
-			var settings = new JsonSerializerSettings();
+			if (_settingsInstance != null)
+				return _settingsInstance;
+
+			_settingsInstance = new JsonSerializerSettings();
 
 			// Default to indented, for easy user-editing
-			settings.Formatting = Formatting.Indented;
+			_settingsInstance.Formatting = Formatting.Indented;
 
-			settings.Converters.Add(new StringEnumConverter());
-			settings.Converters.Add(new RecordKeyConverter());
-			settings.Converters.Add(new RecordRefConverter());
-			settings.Converters.Add(new RecordCollectionConverter());
-			settings.Converters.Add(new RecordConverter());
-			settings.Converters.Add(new RecordRefCollectionConverter());
-			settings.Converters.Add(new ReadOnlyCollectionConverter());
+			_settingsInstance.Converters.Add(new StringEnumConverter());
 
-			return settings;
+			return _settingsInstance;
 
 		}
 
@@ -45,8 +46,18 @@ namespace Papyrus.Core.Util
 		public static Newtonsoft.Json.JsonSerializer GetJsonSerializer()
 		{
 
-			return JsonSerializer.Create(GetJsonSettings());
+			return _serializerInstance ?? JsonSerializer.Create(GetJsonSettings());
 
+		}
+
+		/// <summary>
+		/// Strip comments from json file
+		/// </summary>
+		/// <param name="json"></param>
+		/// <returns></returns>
+		public static string StripComments(string json)
+		{
+			return Regex.Replace(json, @"/\*(.*?)\*/", "");
 		}
 
 	}

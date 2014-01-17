@@ -24,7 +24,8 @@ namespace Papyrus.Core
 
 	}
 
-	[JsonObject]
+	[JsonObject()]
+	[JsonConverter(typeof(Util.JsonConverters.RecordRefCollectionConverter))]
 	public struct RecordRefCollection<T> : IRecordRefCollection, IEnumerable<RecordRef<T>>, IEquatable<RecordRefCollection<T>> where T : Record
 	{
 

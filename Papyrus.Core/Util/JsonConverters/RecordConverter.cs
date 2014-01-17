@@ -11,6 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Papyrus.Core.Util.JsonConverters
 {
@@ -20,27 +21,9 @@ namespace Papyrus.Core.Util.JsonConverters
 		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
 		{
 
-			var type = value.GetType();
-
 			var record = (Record) value;
 
-			writer.WriteStartObject();
-
-			// Write record key
-			writer.WritePropertyName("Key");
-			serializer.Serialize(writer, record.InternalKey);
-
-			// Get writable properties
-			var properties = RecordReflectionUtil.GetProperties(type);
-
-			foreach (var prop in properties) {
-				
-				writer.WritePropertyName(prop.Name);
-				serializer.Serialize(writer, prop.GetValue(record, null));
-
-			}
-
-			writer.WriteEndObject();
+			writer.WriteRaw(RecordSerializer.ToJson(record));
 
 		}
 
@@ -49,56 +32,7 @@ namespace Papyrus.Core.Util.JsonConverters
 
 			var record = objectType.IsInstanceOfType(existingValue) ? (Record)existingValue : (Record)Activator.CreateInstance(objectType);
 
-			var validProperties = RecordReflectionUtil.GetProperties(objectType);
-
-			bool finished = false;
-
-			// Read past StartObject
-			reader.Read();
-
-			do {
-				switch (reader.TokenType) {
-
-					case JsonToken.PropertyName: {
-
-						var propName = reader.Value.ToString();
-
-						reader.Read();
-
-						if (propName == "Key") {
-
-							record.InternalKey = serializer.Deserialize<RecordKey>(reader);
-
-						} else {
-
-							var property = validProperties.FirstOrDefault(p => p.Name == propName);
-
-							if (property == null) {
-								serializer.Deserialize(reader);
-							} else {
-								record.SetProperty(propName, serializer.Deserialize(reader, property.PropertyType));
-							}
-
-						}
-
-						break;
-					}
-
-					case JsonToken.EndObject:
-						finished = true;
-						break;
-					case JsonToken.Comment:
-						// ignore
-						break;
-					default:
-						throw new JsonSerializationException("Unexpected token when deserializing object: " + reader.TokenType);
-				}
-			} while (!finished && reader.Read());
-
-			if(!finished)
-				throw new JsonSerializationException("Unexpected end when deserializing object");
-
-			return record;
+			return RecordSerializer.FromJson(JObject.Load(reader).ToString(), objectType, record);
 
 		}
 

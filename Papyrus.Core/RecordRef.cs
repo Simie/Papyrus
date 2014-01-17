@@ -6,9 +6,8 @@
  * of the license can be found at https://github.com/stompyrobot/Papyrus/wiki/License.
  */
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Newtonsoft.Json;
 
 namespace Papyrus.Core
 {
@@ -32,7 +31,8 @@ namespace Papyrus.Core
 		Type ValueType { get; }
 
 	}
-		
+	
+	[JsonConverter(typeof(Util.JsonConverters.RecordRefConverter))]
 	public struct RecordRef<T> : IEquatable<IRecordRef>, IRecordRef where T : Record
 	{
 

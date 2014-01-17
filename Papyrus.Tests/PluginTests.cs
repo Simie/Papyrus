@@ -85,6 +85,7 @@ namespace Papyrus.Tests
 			{
 				// Test that adding a record overriden a parent's record is detected correctly
 				plugin.Records.AddRecord(new TestRecordOne() { InternalKey = new RecordKey(0, "Parent") });
+				plugin.Records.AddRecord(new TestRecordOne() { InternalKey = new RecordKey(1, "Parent") });
 
 				plugin.RefreshParents();
 
@@ -113,6 +114,8 @@ namespace Papyrus.Tests
 
 				testCollection.SetProperty(() => testCollection.TestRecords, new RecordRefCollection<TestRecordOne>(new[] {
 					new RecordRef<TestRecordOne>(new RecordKey(0, "CollectionParent")),
+					new RecordRef<TestRecordOne>(new RecordKey(1, "CollectionParent")),
+					new RecordRef<TestRecordOne>(new RecordKey(2, "CollectionParent")),
 					new RecordRef<TestRecordOne>(new RecordKey(0, "CollectionParent2")),
 				}));
 
@@ -150,16 +153,16 @@ namespace Papyrus.Tests
 		public void TestValidPluginNames()
 		{
 			
-			Assert.IsFalse(Plugin.CheckValidName("Haha/Ruined"));
-			Assert.IsFalse(Plugin.CheckValidName("Haha,Ruined"));
-			Assert.IsFalse(Plugin.CheckValidName("Ha''haRuined"));
-			Assert.IsFalse(Plugin.CheckValidName("HahaRuin\"ed"));
-			Assert.IsFalse(Plugin.CheckValidName("HahaRuin@@@ed"));
-			Assert.IsFalse(Plugin.CheckValidName("H/ah,aRu'i\"n@@@ed"));
+			Assert.IsFalse(Plugin.IsValidName("Haha/Ruined"));
+			Assert.IsFalse(Plugin.IsValidName("Haha,Ruined"));
+			Assert.IsFalse(Plugin.IsValidName("Ha''haRuined"));
+			Assert.IsFalse(Plugin.IsValidName("HahaRuin\"ed"));
+			Assert.IsFalse(Plugin.IsValidName("HahaRuin@@@ed"));
+			Assert.IsFalse(Plugin.IsValidName("H/ah,aRu'i\"n@@@ed"));
 			
-			Assert.IsTrue(Plugin.CheckValidName("TestPlugin"));
-			Assert.IsTrue(Plugin.CheckValidName("TestPlugin876"));
-			Assert.IsTrue(Plugin.CheckValidName("Te"));
+			Assert.IsTrue(Plugin.IsValidName("TestPlugin"));
+			Assert.IsTrue(Plugin.IsValidName("TestPlugin876"));
+			Assert.IsTrue(Plugin.IsValidName("Te"));
 
 		}
 

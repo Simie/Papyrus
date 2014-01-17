@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Papyrus.Core;
+using Papyrus.Core.Util;
 
 namespace Papyrus.Tests
 {
@@ -43,7 +44,7 @@ namespace Papyrus.Tests
 			// Check that properties in saved record match the record we created
 			Assert.IsTrue(Record.PropertyComparer.Equals(fetch, testRecord));
 
-			var pluginJson = JsonConvert.SerializeObject(plugin.Plugin, Core.Util.Serialization.GetJsonSettings());
+			var pluginJson = PluginSerializer.ToJson(plugin.Plugin);
 
 			Debug.WriteLine(pluginJson);
 

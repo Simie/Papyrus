@@ -61,6 +61,5 @@ namespace Papyrus.Core.Util
 
 		}
 
-
 	}
 }

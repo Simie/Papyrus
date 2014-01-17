@@ -10,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 using Papyrus.Core.Util;
 
 namespace Papyrus.Core
@@ -19,6 +20,7 @@ namespace Papyrus.Core
 	/// A struct-based Read Only collection for Papyrus Records
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
+	[JsonConverter(typeof(Util.JsonConverters.ReadOnlyCollectionConverter))]
 	public struct ReadOnlyCollection<T> : IList<T>, ICollection<T>, ICollection, IEquatable<ReadOnlyCollection<T>>
 	{
 

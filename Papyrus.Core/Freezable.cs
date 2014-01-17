@@ -62,7 +62,7 @@ namespace Papyrus.Core
 		{
 
 			if (IsFrozen)
-				throw new InvalidOperationException("SetProperty called on frozen record.");
+				throw new InvalidOperationException("SetProperty called on frozen object.");
 
 			var properyInfo = member as PropertyInfo;
 
@@ -75,7 +75,11 @@ namespace Papyrus.Core
 
 		}
 
-		protected void OnPropertyChanged(string propName)
+		/// <summary>
+		/// Called when a property on this object is modified
+		/// </summary>
+		/// <param name="propName"></param>
+		protected virtual void OnPropertyChanged(string propName)
 		{
 
 			if(PropertyChanged != null)

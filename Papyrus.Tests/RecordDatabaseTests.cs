@@ -21,7 +21,7 @@ namespace Papyrus.Tests
 			// Test record was overriden correctly
 			var overriden = database.GetRecord<TestRecord>(new RecordKey(0, "Master"));
 
-			Assert.AreEqual(overriden.TestString, "Overwritten");
+			Assert.AreEqual("Overwritten", overriden.TestString);
 
 		}
 

@@ -14,7 +14,7 @@ using System.Text;
 namespace Papyrus.Core.Util
 {
 
-	public struct PropertyDiff
+	internal struct PropertyDiff
 	{
 
 		public PropertyInfo Property;
@@ -25,26 +25,25 @@ namespace Papyrus.Core.Util
 
 	}
 
-	public static class RecordDiffUtil
+	internal static class RecordDiffUtil
 	{
 
 		/// <summary>
 		/// Produce a list of differences between two records of the same type
 		/// </summary>
-		/// <typeparam name="T">Record Type</typeparam>
-		/// <param name="r1">Original Record</param>
-		/// <param name="r2">New Record</param>
+		/// <param name="oldRecord">Original Record</param>
+		/// <param name="newRecord">New Record</param>
 		/// <returns>A list of <c>PropertyDiff</c></returns>
-		public static IList<PropertyDiff> Diff<T>(T r1, T r2) where T : Record
+		public static IList<PropertyDiff> Diff(Record oldRecord, Record newRecord)
 		{
-			
-			if(r1 == r2)
+
+			if (oldRecord == newRecord)
 				throw new InvalidOperationException("Attempted to diff a record with itself");
 
-			if(r1.GetType() != r2.GetType())
+			if (oldRecord.GetType() != newRecord.GetType())
 				throw new InvalidOperationException("Attempted to diff records of different type");
 
-			var properties = RecordReflectionUtil.GetProperties<T>();
+			var properties = RecordReflectionUtil.GetProperties(oldRecord.GetType());
 
 			var differences = new List<PropertyDiff>();
 
@@ -52,9 +51,9 @@ namespace Papyrus.Core.Util
 
 				PropertyDiff? result;
 
-				if(!DiffProperty(property, r1, r2, out result) || !result.HasValue)
+				if (!DiffProperty(property, oldRecord, newRecord, out result) || !result.HasValue)
 					continue;
-				
+
 				differences.Add(result.Value);
 
 			}

@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 namespace Papyrus.Core
 {
 
+	[JsonConverter(typeof(Util.JsonConverters.RecordConverter))]
 	public class Record : Freezable
 	{
 

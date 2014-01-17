@@ -16,6 +16,7 @@ namespace Papyrus.Core
 	/// <summary>
 	/// A collection of RecordList objects with add/remove operations
 	/// </summary>
+	[JsonConverter(typeof(Util.JsonConverters.RecordCollectionConverter))]
 	internal class RecordCollection
 	{
 

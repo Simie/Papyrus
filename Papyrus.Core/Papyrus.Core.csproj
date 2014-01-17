@@ -60,6 +60,7 @@
     <Compile Include="RecordKey.cs" />
     <Compile Include="RecordRef.cs" />
     <Compile Include="RecordRefCollection.cs" />
+    <Compile Include="Util\RecordCollectionSerializer.cs" />
     <Compile Include="Util\EnumerableExtensions.cs" />
     <Compile Include="Util\ExpressionExtensions.cs" />
     <Compile Include="Util\JsonConverters\ReadOnlyCollectionConverter.cs" />
@@ -68,9 +69,11 @@
     <Compile Include="Util\JsonConverters\RecordKeyConverter.cs" />
     <Compile Include="Util\JsonConverters\RecordRefCollectionConverter.cs" />
     <Compile Include="Util\JsonConverters\RecordRefConverter.cs" />
+    <Compile Include="Util\PluginSerializer.cs" />
     <Compile Include="Util\PluginUtil.cs" />
     <Compile Include="Util\RecordDiffUtil.cs" />
     <Compile Include="Util\RecordReflectionUtil.cs" />
+    <Compile Include="Util\RecordSerializer.cs" />
     <Compile Include="Util\RecordUtils.cs" />
     <Compile Include="Util\ReflectionExtensions.cs" />
     <Compile Include="Util\ReflectionUtil.cs" />
@@ -80,8 +83,8 @@
     <None Include="..\Papyrus.licenseheader">
       <Link>Papyrus.licenseheader</Link>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

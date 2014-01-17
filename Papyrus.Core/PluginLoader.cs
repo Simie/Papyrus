@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
+using Papyrus.Core.Util;
 
 namespace Papyrus.Core
 {
@@ -66,7 +67,7 @@ namespace Papyrus.Core
 
 			var jsonText = File.ReadAllText(filePath, Encoding.UTF8);
 
-			return Plugin.FromString(jsonText);
+			return PluginSerializer.FromJson(jsonText);
 
 		}
 
@@ -87,7 +88,7 @@ namespace Papyrus.Core
 			// Ensure the latest dependencies are known
 			plugin.RefreshParents();
 
-			var pluginJson = JsonConvert.SerializeObject(plugin, Util.Serialization.GetJsonSettings());
+			var pluginJson = PluginSerializer.ToJson(plugin);
 
 			File.WriteAllText(savePath, pluginJson, Encoding.UTF8);
 

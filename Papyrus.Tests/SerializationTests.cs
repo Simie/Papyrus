@@ -81,13 +81,11 @@ namespace Papyrus.Tests
 			original.AddRecord(new TestRecordTwo() { InternalKey = new RecordKey(1, "PluginName")});
 			original.AddRecord(new TestRecordCollectionRecord() { InternalKey = new RecordKey(0, "PluginName")});
 
-			var settings = Core.Util.Serialization.GetJsonSettings();
-
-			var json = JsonConvert.SerializeObject(original, settings);
+			var json = RecordCollectionSerializer.ToJson(original).ToString();
 
 			Debug.WriteLine(json);
 
-			var loaded = JsonConvert.DeserializeObject<RecordCollection>(json, settings);
+			var loaded = RecordCollectionSerializer.FromJson(json);
 
 			var originalRecords1 = original.GetRecords<TestRecordOne>();
 			var loadedRecords1 = loaded.GetRecords<TestRecordOne>();
@@ -218,11 +216,9 @@ namespace Papyrus.Tests
 				new Test1()
 			});
 
-			var settings = Serialization.GetJsonSettings();
+			var json = RecordSerializer.ToJson(testRecord);
 
-			var json = JsonConvert.SerializeObject(testRecord, settings);
-
-			var loaded = JsonConvert.DeserializeObject<TestCollectionRecord>(json);
+			var loaded = RecordSerializer.FromJson<TestCollectionRecord>(json);
 
 			Assert.AreEqual(loaded.Entries.Count, testRecord.Entries.Count);
 			Assert.IsTrue(loaded.Entries[0] is Test1);
@@ -248,7 +244,7 @@ namespace Papyrus.Tests
 					""EditorID"": null
 				  }";
 
-			var obj = JsonConvert.DeserializeObject<TestRecord>(json, Serialization.GetJsonSettings());
+			var obj = RecordSerializer.FromJson<TestRecord>(json);
 
 			Assert.AreEqual(obj.TestString, "String Contents");
 

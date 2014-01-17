@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Papyrus.Core
 {
@@ -31,11 +32,13 @@ namespace Papyrus.Core
 		/// <summary>
 		/// Load a plugin from a json string
 		/// </summary>
-		/// <param name="json"></param>
+		/// <param name="json">JSON string</param>
+		/// <param name="existingCollection">Existing collection of records. </param>
 		/// <returns></returns>
-		public static Plugin FromString(string json)
+		[Obsolete("Use Util.PluginSerializer.FromJson instead")]
+		internal static Plugin FromString(string json)
 		{
-			return JsonConvert.DeserializeObject<Plugin>(json, Util.Serialization.GetJsonSettings());
+			return Util.PluginSerializer.FromJson(json, new RecordCollection());
 		}
 
 		[JsonProperty]
@@ -62,7 +65,7 @@ namespace Papyrus.Core
 		internal Plugin(string name)
 		{
 
-			if(!CheckValidName(name))
+			if(!IsValidName(name))
 				throw new ArgumentException("Plugin name is not in valid format. Check with Plugin.CheckPluginName", "name");
 
 			Name = name;
@@ -121,7 +124,7 @@ namespace Papyrus.Core
 					_parents.Add(record.InternalKey.Plugin);
 
 				// Add any non-existing parents which have records referenced to the parent list
-				_parents.AddRange(Util.RecordUtils.GetReferences(record).Select(p => p.Key.Plugin).Where(p => !string.IsNullOrEmpty(p)).Except(_parents));
+				_parents.AddRange(Util.RecordUtils.GetReferences(record).Select(p => p.Key.Plugin).Where(p => p != Name && !string.IsNullOrEmpty(p)).Except(_parents));
 
 			}
 
@@ -135,7 +138,7 @@ namespace Papyrus.Core
 		/// </summary>
 		/// <param name="name"></param>
 		/// <returns></returns>
-		public static bool CheckValidName(string name)
+		public static bool IsValidName(string name)
 		{
 
 			if (name == null)

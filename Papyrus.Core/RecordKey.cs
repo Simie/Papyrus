@@ -8,8 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
+using Newtonsoft.Json;
 
 namespace Papyrus.Core
 {
@@ -17,6 +16,7 @@ namespace Papyrus.Core
 	/// <summary>
 	/// An absolute reference to a record. Used for database lookup
 	/// </summary>
+	[JsonConverter(typeof(Util.JsonConverters.RecordKeyConverter))]
 	public struct RecordKey : IEquatable<RecordKey>
 	{
 
