@@ -87,8 +87,9 @@ namespace Papyrus.Core
 		/// </summary>
 		/// <param name="plugin"></param>
 		/// <param name="directory"></param>
+		/// <param name="parentCollection">Create partial records from this collection</param>
 		/// <returns></returns>
-		public static bool SavePlugin(Plugin plugin, string directory)
+		internal static bool SavePlugin(Plugin plugin, string directory, RecordCollection parentCollection)
 		{
 
 			if (!Directory.Exists(directory))
@@ -99,7 +100,7 @@ namespace Papyrus.Core
 			// Ensure the latest dependencies are known
 			plugin.RefreshParents();
 
-			var pluginJson = PluginSerializer.ToJson(plugin);
+			var pluginJson = PluginSerializer.ToJson(plugin, parentCollection);
 
 			File.WriteAllText(savePath, pluginJson, Encoding.UTF8);
 

@@ -8,6 +8,7 @@
 
 using System;
 using System.Linq;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Papyrus.Core.Util
@@ -89,7 +90,7 @@ namespace Papyrus.Core.Util
 
 			jObj["Records"] = new JRaw(RecordCollectionSerializer.ToJson(plugin.Records, parent));
 
-			return jObj.ToString();
+			return JToken.Parse(jObj.ToString(Formatting.None)).ToString(Formatting.Indented);
 
 		}
 

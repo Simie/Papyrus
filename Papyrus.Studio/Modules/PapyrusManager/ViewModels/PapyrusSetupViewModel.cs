@@ -145,7 +145,7 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 			plugin.Plugin.Author = newPluginWizard.PluginAuthor;
 			plugin.Plugin.Description = newPluginWizard.PluginDescription;
 
-			PluginLoader.SavePlugin(plugin.Plugin, DataDirectory);
+			plugin.SavePlugin(DataDirectory);
 
 			var newPlugin = new PluginViewModel(plugin.Plugin);
 			_plugins.Add(newPlugin);

@@ -126,7 +126,7 @@ namespace Papyrus.Core
 		/// <param name="directory"></param>
 		public void SavePlugin(string directory)
 		{
-			PluginLoader.SavePlugin(Plugin, directory);
+			PluginLoader.SavePlugin(Plugin, directory, GetParentCollection());
 			NeedSaving = false;
 		}
 
@@ -303,10 +303,10 @@ namespace Papyrus.Core
 		}
 
 		/// <summary>
-		/// Create a RecordCollection with all dependencies and the primary plugin merged in order.
+		/// Create a RecordCollection with all parent plugin records
 		/// </summary>
 		/// <returns></returns>
-		private RecordCollection GetMergedCollection()
+		private RecordCollection GetParentCollection()
 		{
 
 			var collection = new RecordCollection();
@@ -315,6 +315,19 @@ namespace Papyrus.Core
 			for (int i = 0; i < _pluginList.Count; i++) {
 				collection.Merge(_pluginList[i].Records);
 			}
+
+			return collection;
+
+		}
+
+		/// <summary>
+		/// Create a RecordCollection with all dependencies and the primary plugin merged in order.
+		/// </summary>
+		/// <returns></returns>
+		private RecordCollection GetMergedCollection()
+		{
+
+			var collection = GetParentCollection();
 
 			// Merge plugin records
 			collection.Merge(Plugin.Records);
