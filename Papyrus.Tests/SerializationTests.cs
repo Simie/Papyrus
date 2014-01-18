@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
+using System.Security.Principal;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Papyrus.Core;
 using Papyrus.Core.Util;
 
@@ -247,6 +250,45 @@ namespace Papyrus.Tests
 			var obj = RecordSerializer.FromJson<TestRecord>(json);
 
 			Assert.AreEqual(obj.TestString, "String Contents");
+
+		}
+
+		/// <summary>
+		/// Test that only modified properties are changed
+		/// </summary>
+		[TestMethod]
+		public void TestPartialSerialization()
+		{
+
+			var id = "TestID";
+			var key = new RecordKey(0, "TestPlugin");
+
+			var r1 = new TestRecord();
+			r1.InternalKey = key;
+			r1.SetProperty(() => r1.EditorID, id);
+			r1.SetProperty(() => r1.TestString, "OriginalString");
+
+			var r2 = new TestRecord();
+			r2.InternalKey = key;
+			r2.SetProperty(() => r2.EditorID, id);
+			r2.SetProperty(() => r2.TestString, "ModifiedString");
+
+			var json = RecordSerializer.ToJson(r2, r1);
+
+			Console.WriteLine("Original Record JSON:");
+			Console.WriteLine(RecordSerializer.ToJson(r1));
+
+			Console.WriteLine("Modified Record Full JSON:");
+			Console.WriteLine(RecordSerializer.ToJson(r2));
+
+			Console.WriteLine("Modified Record Partial JSON:");
+			Console.WriteLine(json);
+
+			var jObj = JObject.Parse(json);
+			Assert.IsTrue(jObj.Count == 2, "Outputted JSON should only have two properties");
+
+			Assert.IsNotNull(jObj["TestString"]);
+			Assert.AreEqual("ModifiedString", jObj["TestString"].Value<string>());
 
 		}
 
