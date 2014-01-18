@@ -78,6 +78,7 @@ namespace Papyrus.Core
 		{
 			Plugin = plugin;
 			_pluginList = new List<Plugin>();
+			Load();
 		}
 
 		PluginComposer(Plugin plugin, IList<Plugin> plugins, bool sort = true)
@@ -89,6 +90,33 @@ namespace Papyrus.Core
 			if(!Plugin.VerifyParents(_pluginList) || !_pluginList.All(p => p.VerifyParents(_pluginList)))
 				throw new MissingPluginException("Missing parent plugins", "Unknown");
 
+			Load();
+
+		}
+
+		/// <summary>
+		/// Ensure all plugins are loaded
+		/// </summary>
+		private void Load()
+		{
+
+			// Create a RecordCollection to resolve all partial records from
+			var records = new RecordCollection();
+
+			// Load all parent plugins (in order)
+			foreach (var plugin in _pluginList) {
+
+				if (!plugin.IsLoaded) {
+					PluginSerializer.LoadRecordsJson(plugin, records);
+				}
+
+				records.Merge(plugin.Records);
+
+			}
+
+			// Load main plugin, using the accumulated record collection to resolve partial records
+			if(!Plugin.IsLoaded)
+				PluginSerializer.LoadRecordsJson(Plugin, records);
 
 		}
 

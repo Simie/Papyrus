@@ -53,7 +53,17 @@ namespace Papyrus.Core
 
 			return plugins;
 
-		} 
+		}
+
+		/// <summary>
+		/// Load a plugin from a JSON string
+		/// </summary>
+		/// <param name="pluginJson"></param>
+		/// <returns></returns>
+		public static Plugin LoadPluginString(string pluginJson)
+		{
+			return PluginSerializer.FromJson(pluginJson, false);
+		}
 
 		/// <summary>
 		/// Load a plugin from the file at filePath
@@ -68,7 +78,7 @@ namespace Papyrus.Core
 
 			var jsonText = File.ReadAllText(filePath, Encoding.UTF8);
 
-			return PluginSerializer.FromJson(jsonText);
+			return LoadPluginString(jsonText);
 
 		}
 

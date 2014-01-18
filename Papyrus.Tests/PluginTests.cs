@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Papyrus.Core;
+using Papyrus.Core.Util;
 
 namespace Papyrus.Tests
 {
@@ -50,7 +51,8 @@ namespace Papyrus.Tests
 		public void TestDeserialization()
 		{
 
-			var plugin = Plugin.FromString(TestPluginJson);
+			var plugin = PluginLoader.LoadPluginString(TestPluginJson);
+			PluginSerializer.LoadRecordsJson(plugin, null);
 
 			var record1 = plugin.Records.GetRecord<TestRecord>(new RecordKey(0, "TestPlugin"));
 			var record2 = plugin.Records.GetRecord<TestRecord>(new RecordKey(1, "TestPlugin"));
@@ -89,7 +91,7 @@ namespace Papyrus.Tests
 
 				plugin.RefreshParents();
 
-				Assert.AreEqual(plugin.Parents.Count, 1);
+				Assert.AreEqual(1, plugin.Parents.Count);
 				Assert.IsTrue(plugin.Parents.Contains("Parent"));
 			}
 
@@ -102,7 +104,7 @@ namespace Papyrus.Tests
 
 				plugin.RefreshParents();
 
-				Assert.AreEqual(plugin.Parents.Count, 2);
+				Assert.AreEqual(2, plugin.Parents.Count);
 				Assert.IsTrue(plugin.Parents.Contains("Parent2"));
 
 			}

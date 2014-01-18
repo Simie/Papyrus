@@ -60,6 +60,9 @@ namespace Papyrus.Core
 		internal void LoadPlugin(Plugin plugin)
 		{
 			
+			if(!plugin.IsLoaded)
+				PluginSerializer.LoadRecordsJson(plugin, _internalCollection);
+
 			// Merge plugin records into internal collection
 			_internalCollection.Merge(plugin.Records);
 

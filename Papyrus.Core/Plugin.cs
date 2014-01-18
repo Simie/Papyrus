@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,8 @@ namespace Papyrus.Core
 {
 
 	/// <summary>
-	/// A collection of record lists, with add/remove operations
+	/// A collection of record lists, with add/remove operations. Will defer loading of records until requested.
 	/// </summary>
-	[JsonObject(MemberSerialization.OptIn)]
 	public class Plugin
 	{
 
@@ -31,51 +31,57 @@ namespace Papyrus.Core
 		public const string Extension = "jpp"; // json-papyrus-plugin
 
 		/// <summary>
-		/// Load a plugin from a json string
+		/// Plugin name. Should never be changed after first set. Is used for record references.
 		/// </summary>
-		/// <param name="json">JSON string</param>
-		/// <param name="existingCollection">Existing collection of records. </param>
-		/// <returns></returns>
-		[Obsolete("Use Util.PluginSerializer.FromJson instead")]
-		internal static Plugin FromString(string json)
-		{
-			return Util.PluginSerializer.FromJson(json, new RecordCollection());
-		}
-
-		[JsonProperty]
 		public string Name { get; private set; }
 
-		public IList<string> Parents { get { return _parents.AsReadOnly(); } }
+		/// <summary>
+		/// Plugins that this plugin depends upon.
+		/// </summary>
+		public IList<string> Parents { get { return InternalParents.AsReadOnly(); } }
 
 		#region Plugin Meta Data
 
-		[JsonProperty]
+		/// <summary>
+		/// Author of the plugin (displayed in Papyrus Studio)
+		/// </summary>
 		public string Author { get; set; }
 
-		[JsonProperty]
+		/// <summary>
+		/// Plugin description (displayed in Papyrus Studio)
+		/// </summary>
 		public string Description { get; set; }
 
 		#endregion
 
-		[JsonProperty]
-		internal RecordCollection Records { get; private set; }
+		/// <summary>
+		/// True if the records in this plugin have been loaded.
+		/// </summary>
+		public bool IsLoaded { get; internal set; }
 
-		[JsonProperty("Parents")]
-		private List<string> _parents = new List<string>(); 
+		/// <summary>
+		/// If plugin is loaded, a RecordCollection object containing all records in this plugin.
+		/// </summary>
+		internal RecordCollection Records { get; set; }
+
+		/// <summary>
+		/// If plugin is not loaded, this will contain the JSON string which should be parsed to load it.
+		/// </summary>
+		internal string RecordJson { get; set; }
+
+		internal List<string> InternalParents = new List<string>(); 
 
 		internal Plugin(string name)
 		{
 
 			if(!IsValidName(name))
-				throw new ArgumentException("Plugin name is not in valid format. Check with Plugin.CheckPluginName", "name");
+				throw new ArgumentException("Plugin name is not in valid format. Check Plugin.IsValidName(string)", "name");
 
 			Name = name;
+			IsLoaded = true;
 			Records = new RecordCollection();
 
 		}
-
-		[JsonConstructor]
-		Plugin() { }
 
 		/// <summary>
 		/// Get a key for the next record
@@ -103,7 +109,7 @@ namespace Papyrus.Core
 		/// <returns></returns>
 		internal bool VerifyParents(IList<Plugin> plugins)
 		{
-			return _parents.All(parent => plugins.Any(p => p.Name == parent));
+			return InternalParents.All(parent => plugins.Any(p => p.Name == parent));
 		}
 
 		/// <summary>
@@ -112,8 +118,12 @@ namespace Papyrus.Core
 		internal void RefreshParents()
 		{
 
+			// Can't refresh if not loaded
+			if (!IsLoaded)
+				return;
+
 			// Clear existing parent list
-			_parents.Clear();
+			InternalParents.Clear();
 
 			// Fetch all records
 			var records = Records.GetAllRecords();
@@ -121,16 +131,19 @@ namespace Papyrus.Core
 			foreach (var record in records) {
 
 				// If this record is overriding a parents record, add that parent to the list
-				if(record.InternalKey.Plugin != Name)
-					_parents.Add(record.InternalKey.Plugin);
+				if(record.InternalKey.Plugin != Name && !InternalParents.Contains(record.InternalKey.Plugin))
+					InternalParents.Add(record.InternalKey.Plugin);
 
 				// Add any non-existing parents which have records referenced to the parent list
-				_parents.AddRange(Util.RecordUtils.GetReferences(record).Select(p => p.Key.Plugin).Where(p => p != Name && !string.IsNullOrEmpty(p)).Except(_parents));
+				InternalParents.AddRange(
+					Util.RecordUtils.GetReferences(record)
+						.Select(p => p.Key.Plugin).Distinct()
+						.Where(p => !InternalParents.Contains(p) && p != Name && !string.IsNullOrEmpty(p)));
 
 			}
 
-			// Don't set self as a parent
-			_parents.Remove(Name);
+			// Don't set self as a parent. Use while loop in case it has somehow been added more than once.
+			while (InternalParents.Remove(Name)) { }
 				
 		} 
 

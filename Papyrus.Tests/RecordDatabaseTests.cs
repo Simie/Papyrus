@@ -13,8 +13,8 @@ namespace Papyrus.Tests
 		public void TestSimpleSetup()
 		{
 
-			var parent = Plugin.FromString(TestPlugins.TestParentPlugin);
-			var child = Plugin.FromString(TestPlugins.TestChildPlugin);
+			var parent = PluginLoader.LoadPluginString(TestPlugins.TestParentPlugin);
+			var child = PluginLoader.LoadPluginString(TestPlugins.TestChildPlugin);
 
 			var database = new RecordDatabase(new List<Plugin>() {child, parent});
 
@@ -29,7 +29,7 @@ namespace Papyrus.Tests
 		public void TestRefGet()
 		{
 
-			var parent = Plugin.FromString(TestPlugins.TestParentPlugin);
+			var parent = PluginLoader.LoadPluginString(TestPlugins.TestParentPlugin);
 
 			var database = new RecordDatabase(new List<Plugin>() { parent });
 
@@ -50,7 +50,7 @@ namespace Papyrus.Tests
 		public void TestPolymorphicReference()
 		{
 
-			var plugin = Plugin.FromString(TestPlugins.TestPolymorphicPlugin);
+			var plugin = PluginLoader.LoadPluginString(TestPlugins.TestPolymorphicPlugin);
 
 			var database = new RecordDatabase(new List<Plugin>() {plugin});
 
@@ -72,7 +72,7 @@ namespace Papyrus.Tests
 		public void TestMissingPlugin()
 		{
 
-			var child = Plugin.FromString(TestPlugins.TestChildPlugin);
+			var child = PluginLoader.LoadPluginString(TestPlugins.TestChildPlugin);
 
 			try {
 				var database = new RecordDatabase(new List<Plugin>() {child});

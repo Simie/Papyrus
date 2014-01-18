@@ -16,7 +16,7 @@ namespace Papyrus.Tests
 		public void TestMissingParent()
 		{
 
-			var testChild = Plugin.FromString(TestPlugins.TestChildPlugin);
+			var testChild = PluginLoader.LoadPluginString(TestPlugins.TestChildPlugin);
 
 			try {
 				var composer = PluginComposer.EditPlugin(testChild, new List<Plugin>());
