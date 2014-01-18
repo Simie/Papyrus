@@ -76,4 +76,38 @@ namespace Papyrus.Tests
 
 	}
 
+	public class TestCollectionEntry
+	{
+
+		//private float _multiply = 1;
+		private bool _isVisible = true;
+
+		public TestCollectionEntry()
+		{
+			Add = 0;
+		}
+
+
+		public float Add { get; set; }
+
+		public bool IsVisible
+		{
+			get { return _isVisible; }
+			set { _isVisible = value; }
+		}
+
+		public override string ToString()
+		{
+			return String.Format("{0}", Add);
+		}
+
+	}
+
+	public class TestCollectionRecord : Record
+	{
+
+		public ReadOnlyCollection<TestCollectionEntry> Attributes { get; private set; } 
+
+	}
+
 }

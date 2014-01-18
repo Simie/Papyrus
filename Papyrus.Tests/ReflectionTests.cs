@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -58,7 +60,135 @@ namespace Papyrus.Tests
 
 		}
 
-		private void TestPropertyDiff(string prop, object oldValue, object newValue)
+		/// <summary>
+		/// Test that null doesn't provide a false positive
+		/// </summary>
+		[TestMethod]
+		public void TestNullComparisonDiff()
+		{
+
+			TestPropertyDiff("TestString", null, "TestString");
+
+		}
+
+
+		/// <summary>
+		/// Test that null doesn't provide a false positive
+		/// </summary>
+		[TestMethod]
+		public void TestCollectionDiff()
+		{
+
+			// Original
+			var c1 = new ReadOnlyCollection<TestCollectionEntry>(new[] {
+				new TestCollectionEntry() { Add = 12, IsVisible = false },
+				new TestCollectionEntry() { Add = 5, IsVisible = true}
+			});
+
+			// New entry
+			var c2 = new ReadOnlyCollection<TestCollectionEntry>(new[] {
+				new TestCollectionEntry() { Add = 12, IsVisible = false },
+				new TestCollectionEntry() { Add = 5, IsVisible = true},
+				new TestCollectionEntry() { Add = 8, IsVisible = true}
+			});
+
+			// Modified entry
+			var c3 = new ReadOnlyCollection<TestCollectionEntry>(new[] {
+				new TestCollectionEntry() { Add = 10, IsVisible = false },
+				new TestCollectionEntry() { Add = 5, IsVisible = true},
+			});
+
+
+			var r1 = new TestCollectionRecord();
+			var r2 = new TestCollectionRecord();
+
+			Assert.AreEqual(0, RecordDiffUtil.Diff(r1, r2).Count, "Should be no differences in freshly created records");
+
+			r1.SetProperty(() => r1.Attributes, c1);
+			r2.SetProperty(() => r2.Attributes, c1);
+
+			Assert.AreEqual(0, RecordDiffUtil.Diff(r1, r2).Count, "Should be no differences");
+
+			{
+
+				r2.SetProperty(() => r2.Attributes, c2);
+
+				var diffs = RecordDiffUtil.Diff(r1, r2);
+
+				Assert.AreEqual(1, diffs.Count, "Should be one difference");
+				Assert.AreEqual("Attributes", diffs[0].Property.Name);
+
+			}
+
+			{
+
+				r2.SetProperty(() => r2.Attributes, c3);
+
+				var diffs = RecordDiffUtil.Diff(r1, r2);
+
+				Assert.AreEqual(1, diffs.Count, "Should be one difference");
+				Assert.AreEqual("Attributes", diffs[0].Property.Name);
+
+			}
+
+		}
+
+		/// <summary>
+		/// Test that null doesn't provide a false positive
+		/// </summary>
+		[TestMethod]
+		public void TestRecordRefCollectionDiff()
+		{
+
+			// Original
+			var c1 = new RecordRefCollection<TestRecordOne>(new[] {
+				new RecordRef<TestRecordOne>(new RecordKey(0, "TestParent")),
+				new RecordRef<TestRecordOne>(new RecordKey(1, "TestParent"))
+			});
+
+			// Added entry
+			var c2 = new RecordRefCollection<TestRecordOne>(new[] {
+				new RecordRef<TestRecordOne>(new RecordKey(0, "TestParent")),
+				new RecordRef<TestRecordOne>(new RecordKey(1, "TestParent")),
+				new RecordRef<TestRecordOne>(new RecordKey(2, "TestParent"))
+			});
+
+			// Modified entry
+			var c3 = new RecordRefCollection<TestRecordOne>(new[] {
+				new RecordRef<TestRecordOne>(new RecordKey(0, "TestParent")),
+				new RecordRef<TestRecordOne>(new RecordKey(2, "TestParent")),
+			});
+
+			var r1 = new TestRecordCollectionRecord();
+			var r2 = new TestRecordCollectionRecord();
+
+			Assert.AreEqual(0, RecordDiffUtil.Diff(r1, r2).Count, "Should be no differences in freshly created records");
+
+			r1.SetProperty(() => r1.TestRecords, c1);
+			r2.SetProperty(() => r2.TestRecords, c1);
+
+			Assert.AreEqual(0, RecordDiffUtil.Diff(r1, r2).Count, "Should be no differences");
+
+			{
+				r2.SetProperty(() => r2.TestRecords, c2);
+
+				var diffs = RecordDiffUtil.Diff(r1, r2);
+
+				Assert.AreEqual(1, diffs.Count, "Should be one difference");
+				Assert.AreEqual("TestRecords", diffs[0].Property.Name);
+			}
+			{
+				r2.SetProperty(() => r2.TestRecords, c3);
+
+				var diffs = RecordDiffUtil.Diff(r1, r2);
+
+				Assert.AreEqual(1, diffs.Count, "Should be one difference");
+				Assert.AreEqual("TestRecords", diffs[0].Property.Name);
+			}
+
+		}
+
+		private void TestPropertyDiff<T>(string prop, T oldValue, T newValue)
 		{
 
 			Debug.WriteLine("Testing {0}", (object)prop);
@@ -71,9 +201,11 @@ namespace Papyrus.Tests
 
 			var differences = Core.Util.RecordDiffUtil.Diff(record1, record2);
 
+			var comparer = EqualityComparer<T>.Default;
+
 			// Check that the difference is correctly detected
 			Assert.IsTrue(
-				differences.Any(p => p.Property.Name == prop && p.OldValue.Equals(oldValue) && p.NewValue.Equals(newValue)),
+				differences.Any(p => p.Property.Name == prop && comparer.Equals(oldValue, (T)p.OldValue) && comparer.Equals((T)p.NewValue, newValue)),
 				"False-negative for property {0} values [{1}], [{2}]", prop, oldValue, newValue);
 
 			record2.SetProperty(prop, oldValue);
