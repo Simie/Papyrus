@@ -69,7 +69,8 @@ namespace Papyrus.Core.Util
 			object v1 = property.GetValue(r1, null);
 			object v2 = property.GetValue(r2, null);
 
-			if (v1 != null && v1.Equals(v2)) {
+
+			if ((v1 == null && v2 == null) || (v1 != null && v1.Equals(v2)) || (v2 != null && v2.Equals(v1))) {
 
 				diff = null;
 				return false;

@@ -21,7 +21,7 @@ namespace Papyrus.Core.Util
 
 
 		/// <summary>
-		/// Get a list of serializable properties in a record
+		/// Get a list of serializable properties in record type
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
@@ -30,6 +30,11 @@ namespace Papyrus.Core.Util
 			return GetProperties(typeof (T));
 		} 
 
+		/// <summary>
+		/// Get list of serializable properties in record type
+		/// </summary>
+		/// <param name="t"></param>
+		/// <returns></returns>
 		public static List<PropertyInfo> GetProperties(Type t)
 		{
 
@@ -97,23 +102,11 @@ namespace Papyrus.Core.Util
 
 			var type = source.GetType();
 
+			// Populate dest record with json properties
+			RecordSerializer.FromJson(RecordSerializer.ToJson(source), type, dest);
 			dest.InternalKey = source.InternalKey;
 
-			var properties = GetProperties(type);
-
-			foreach (var property in properties) {
-
-				dest.SetProperty(property.Name, property.GetValue(source, null));
-
-			}
-
 		}
-
-
-		/*public static T Resolve<T>(this RecordDatabase db, RecordRef<T> recordRef) where T : Record
-		{
-			
-		}*/
 
 		/// <summary>
 		/// Search all loaded assemblies for record types

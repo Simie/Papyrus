@@ -14,7 +14,7 @@ using Papyrus.Core;
 namespace Papyrus.Studio.TestTypes
 {
 
-	public struct TestStuff : IEquatable<TestStuff>
+	public class TestStuff : IEquatable<TestStuff>
 	{
 
 		public string Property { get; set; }
@@ -28,6 +28,10 @@ namespace Papyrus.Studio.TestTypes
 
 		public bool Equals(TestStuff other)
 		{
+			if (ReferenceEquals(null, other))
+				return false;
+			if (ReferenceEquals(this, other))
+				return true;
 			return string.Equals(Property, other.Property) && Property2 == other.Property2;
 		}
 
@@ -35,26 +39,23 @@ namespace Papyrus.Studio.TestTypes
 		{
 			if (ReferenceEquals(null, obj))
 				return false;
-			return obj is TestStuff && Equals((TestStuff) obj);
-		}
-
-		public override int GetHashCode()
-		{
-			unchecked {
-				return ((Property != null ? Property.GetHashCode() : 0)*397) ^ Property2;
-			}
+			if (ReferenceEquals(this, obj))
+				return true;
+			if (obj.GetType() != this.GetType())
+				return false;
+			return Equals((TestStuff) obj);
 		}
 
 		public static bool operator ==(TestStuff left, TestStuff right)
 		{
-			return left.Equals(right);
+			return Equals(left, right);
 		}
 
 		public static bool operator !=(TestStuff left, TestStuff right)
 		{
-			return !left.Equals(right);
+			return !Equals(left, right);
 		}
-		
+
 	}
 
 	public abstract class TestBase { }
@@ -64,22 +65,13 @@ namespace Papyrus.Studio.TestTypes
 	public class SampleRecord : Record
 	{
 
-		private List<TestBase> _testPolyCollection = new List<TestBase>();
-
 		public string TestString { get; private set; }
 
 		public int TestInteger { get; private set; }
 
 		public RecordRef<ParentRecord> TestPolyRef { get; private set; }
 
-		public List<TestStuff> TestCollection { get; private set; }
-
-		[JsonProperty(ItemTypeNameHandling = TypeNameHandling.All)]
-		public List<TestBase> TestPolyCollection
-		{
-			get { return _testPolyCollection; }
-			private set { _testPolyCollection = value; }
-		}
+		public ReadOnlyCollection<TestStuff> TestCollection { get; private set; }
 
 	}
 

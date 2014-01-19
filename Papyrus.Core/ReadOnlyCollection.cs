@@ -100,7 +100,7 @@ namespace Papyrus.Core
 
 		public bool Equals(ReadOnlyCollection<T> other)
 		{
-			return other.List.IsEquivalentTo(List);
+			return this.SequenceEqual(other);
 		}
 
 		public override bool Equals(object obj)

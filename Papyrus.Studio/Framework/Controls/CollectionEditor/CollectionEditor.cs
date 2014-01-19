@@ -44,7 +44,7 @@ namespace Papyrus.Studio.Framework.Controls
 		}
 
 		public static readonly DependencyProperty SelectedItemProperty =
-			DependencyProperty.Register("SelectedItem", typeof (object), typeof (CollectionEditor), new PropertyMetadata(default(object), SelectedItemChanged));
+			DependencyProperty.Register("SelectedItem", typeof (object), typeof (CollectionEditor), new PropertyMetadata(default(object)));
 
 
 		public object SelectedItem
@@ -54,7 +54,7 @@ namespace Papyrus.Studio.Framework.Controls
 		}
 
 		public static readonly DependencyProperty SelectedIndexProperty =
-			DependencyProperty.Register("SelectedIndex", typeof (int), typeof (CollectionEditor), new PropertyMetadata(default(int)));
+			DependencyProperty.Register("SelectedIndex", typeof (int), typeof (CollectionEditor), new PropertyMetadata(default(int), SelectedIndexChanged));
 
 		public int SelectedIndex
 		{
@@ -193,14 +193,15 @@ namespace Papyrus.Studio.Framework.Controls
 				Items.Add(item);
 			}
 
-			SelectedItem = null;
+			SelectedIndex = -1;
+			//SelectedItem = null;
 
 		}
 
 		private bool CanMoveUpExecute()
 		{
 
-			if (SelectedItem != null && SelectedIndex > 0)
+			if (SelectedIndex > 0)
 				return true;
 			return false;
 
@@ -212,21 +213,23 @@ namespace Papyrus.Studio.Framework.Controls
 			if (!CanMoveUpExecute())
 				return;
 
-			var selectedItem = SelectedItem;
+			//var selectedItem = SelectedItem;
+			var item = Items[SelectedIndex];
 			var index = SelectedIndex;
 			Items.RemoveAt(index);
-			Items.Insert(index-1, selectedItem);
+			Items.Insert(index-1, item);
 
 			PersistChanges();
 
-			SelectedItem = selectedItem;
+			SelectedIndex = index - 1;
+			//SelectedItem = selectedItem;
 
 		}
 
 		private bool CanMoveDownExecute()
 		{
 
-			if (SelectedItem != null && SelectedIndex < Items.Count-1)
+			if (Items != null && SelectedIndex < Items.Count-1)
 				return true;
 			return false;
 
@@ -238,20 +241,20 @@ namespace Papyrus.Studio.Framework.Controls
 			if (!CanMoveDownExecute())
 				return;
 
-			var selectedItem = SelectedItem;
+			var item = Items[SelectedIndex];
 			var index = SelectedIndex;
 			Items.RemoveAt(index);
-			Items.Insert(index + 1, selectedItem);
+			Items.Insert(index + 1, item);
 
 			PersistChanges();
 
-			SelectedItem = selectedItem;
+			SelectedIndex = index + 1;
 
 		}
 
 		private bool DeleteCanExecute()
 		{
-			return SelectedItem != null;
+			return SelectedIndex >= 0;
 		}
 
 		private void DeleteCommandExecuted()
@@ -285,9 +288,13 @@ namespace Papyrus.Studio.Framework.Controls
 
 		}
 
-		private static void SelectedItemChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+		private static void SelectedIndexChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
 		{
+
+			var c = (CollectionEditor) dependencyObject;
+			dependencyObject.SetValue(SelectedItemProperty, c.SelectedIndex >= 0 ? c.Items[c.SelectedIndex] : null);
 			CommandManager.InvalidateRequerySuggested();
+
 		}
 
 		private static void ItemsSourceChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)

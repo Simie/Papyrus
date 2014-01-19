@@ -52,7 +52,7 @@
 								</DockPanel>
 
 								<ListBox x:Name="_itemList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="1" MinWidth="150" MinHeight="100" Width="Auto"  Height="Auto" ItemsSource="{Binding Items,RelativeSource={RelativeSource TemplatedParent}}"
-										 SelectionMode="Single" SelectedIndex="{Binding SelectedIndex,RelativeSource={RelativeSource TemplatedParent}}" SelectedItem="{Binding SelectedItem,RelativeSource={RelativeSource TemplatedParent}}"
+										 SelectionMode="Single" SelectedIndex="{Binding SelectedIndex,RelativeSource={RelativeSource TemplatedParent}}"
 										 IsSynchronizedWithCurrentItem="True">
 									<ListBox.ItemTemplate>
 										<DataTemplate>
