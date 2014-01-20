@@ -374,7 +374,7 @@ namespace Papyrus.Core
 		{
 
 			try {
-				return GetRecord(recordRef.Type, recordRef.Key);
+				return GetRecord(recordRef.ValueType, recordRef.Key);
 			} catch {
 				if (throwException)
 					throw;
