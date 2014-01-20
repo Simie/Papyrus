@@ -11,27 +11,49 @@ using System.Runtime.Serialization;
 
 namespace Papyrus.Core
 {
+
+	/// <summary>
+	/// Exception thrown when a plugin cannot be loaded due to missing parent
+	/// </summary>
 	[Serializable]
 	public class MissingPluginException : Exception
 	{
 
+		/// <summary>
+		/// Missing plugin name
+		/// </summary>
 		public string Plugin { get; private set; }
 
+		public override string Message
+		{
+			get { return string.Format("{0} ({1})", base.Message, Plugin); }
+		}
+
+		/// <summary>
+		/// Create MissingPluginException object
+		/// </summary>
 		public MissingPluginException() {}
 
+		/// <summary>
+		/// Create MissingPluginException object with message, and plugin string
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="plugin"></param>
 		public MissingPluginException(string message, string plugin) : base(message)
 		{
 			Plugin = plugin;
 		}
 
+		/// <summary>
+		/// Create MissingPluginException object with message, plugin string and inner exception
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="plugin"></param>
+		/// <param name="inner"></param>
 		public MissingPluginException(string message, string plugin, Exception inner) : base(message, inner)
 		{
 			Plugin = plugin;
 		}
-
-		protected MissingPluginException(
-			SerializationInfo info,
-			StreamingContext context) : base(info, context) {}
 
 	}
 }

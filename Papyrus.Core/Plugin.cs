@@ -121,7 +121,8 @@ namespace Papyrus.Core
 
 					// Add missing parent to output list if provided
 					if (missing != null) {
-						missing.Add(parent);
+						if(!missing.Contains(parent))
+							missing.Add(parent);
 					} else {
 						// Return false immediately otherwise
 						return false;

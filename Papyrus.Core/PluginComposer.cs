@@ -69,6 +69,11 @@ namespace Papyrus.Core
 		public bool NeedSaving { get; private set; }
 
 		/// <summary>
+		/// Simple event when an operation should cause a record list refresh
+		/// </summary>
+		public event EventHandler RecordListChanged;
+
+		/// <summary>
 		/// Additional loaded plugins (read-only)
 		/// </summary>
 		private readonly IList<Plugin> _pluginList;
@@ -78,10 +83,6 @@ namespace Papyrus.Core
 		/// </summary>
 		private RecordCollection _baseRecordCollection;
 
-		/// <summary>
-		/// Simple event when an operation should cause a record list refresh
-		/// </summary>
-		public event EventHandler RecordListChanged;
 
 		PluginComposer(Plugin plugin)
 		{
@@ -96,8 +97,10 @@ namespace Papyrus.Core
 			Plugin = plugin;
 			_pluginList = sort ? PluginUtil.SortPluginList(plugins) : new List<Plugin>(plugins);
 
-			if(!Plugin.VerifyParents(_pluginList) || !_pluginList.All(p => p.VerifyParents(_pluginList)))
-				throw new MissingPluginException("Missing parent plugins", "Unknown");
+			var missing = new List<string>();
+
+			if(!Plugin.VerifyParents(_pluginList, missing) || !_pluginList.All(p => p.VerifyParents(_pluginList, missing)))
+				throw new MissingPluginException("Missing parent plugins", string.Join(", ", missing.ToArray()));
 
 			Load();
 
@@ -108,6 +111,7 @@ namespace Papyrus.Core
 		/// </summary>
 		private void Load()
 		{
+
 			if (_baseRecordCollection != null) {
 				throw new InvalidOperationException("Plugins are already loaded");
 			}
@@ -126,7 +130,7 @@ namespace Papyrus.Core
 
 			}
 
-			// Load main plugin, using the accumulated record collection to resolve partial records
+			// Load active plugin, using the accumulated record collection to resolve partial records
 			if(!Plugin.IsLoaded)
 				PluginSerializer.LoadRecordsJson(Plugin, _baseRecordCollection);
 
@@ -185,7 +189,7 @@ namespace Papyrus.Core
 
 			// Set default editor ID
 			record.SetProperty(() => record.EditorID,
-			                   string.Format("{0}_{1}", type.Name.ToLower(), record.InternalKey.Index.ToString()));
+			                   string.Format("{0}_{1}", type.Name.ToLower(), record.InternalKey.Index));
 
 			// Add to plugin collection
 			Plugin.Records.AddRecord(record);
@@ -209,9 +213,12 @@ namespace Papyrus.Core
 
 			NeedSaving = true; // TODO: Check diff before setting NeedSaving
 
+
 			// Check if this record exists in the current plugin
 			if (Plugin.Records.TryGetRecord(record.GetType(), record.Key, out existing)) {
-				
+
+				// TODO: If no changes from parent plugins, remove from current plugin
+
 				// Copy new values to existing record
 				existing.IsFrozen = false;
 				Util.RecordReflectionUtil.Populate(record, existing);
@@ -220,6 +227,8 @@ namespace Papyrus.Core
 				return;
 
 			}
+
+			// TODO: If no changes, skip adding to plugin
 
 			// Else create a clone and add it to this plugin
 			var ourClone = Util.RecordReflectionUtil.Clone(record);
@@ -233,11 +242,23 @@ namespace Papyrus.Core
 
 		}
 
+		/// <summary>
+		/// Get record of type T with key
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="key"></param>
+		/// <returns></returns>
 		public T GetRecord<T>(RecordKey key) where T : Record, new()
 		{
 			return (T) GetRecord(typeof (T), key);
 		}
 
+		/// <summary>
+		/// Get record of type with key
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="key"></param>
+		/// <returns></returns>
 		public Record GetRecord(Type type, RecordKey key)
 		{
 
