@@ -232,7 +232,7 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 		public override void CanClose(Action<bool> callback)
 		{
 
-			if (_pluginComposer == null/* || !_pluginComposer.NeedsSaving*/) {
+			if (_pluginComposer == null || !_pluginComposer.NeedSaving) {
 				callback(true);
 				return;
 			}
