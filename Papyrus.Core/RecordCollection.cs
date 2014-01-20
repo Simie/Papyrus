@@ -41,6 +41,15 @@ namespace Papyrus.Core
 		}
 
 		/// <summary>
+		/// Create a new RecordCollection with the contents of another
+		/// </summary>
+		/// <param name="other"></param>
+		public RecordCollection(RecordCollection other) : this()
+		{
+			Merge(other);
+		}
+
+		/// <summary>
 		/// Retrieve record from the collection. Throws exception if not found.
 		/// </summary>
 		/// <param name="recordType">Record Type</param>

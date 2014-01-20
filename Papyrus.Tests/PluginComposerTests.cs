@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Papyrus.Core;
@@ -69,6 +71,51 @@ namespace Papyrus.Tests
 			Assert.IsTrue(called);
 
 			//composer.DeleteRecord(record.GetType(), record.Key);
+
+		}
+
+		/// <summary>
+		/// Test creating records, then cloning a few for editing, then saving.
+		/// </summary>
+		[TestMethod]
+		public void TestChildCreateCloneSave()
+		{
+
+			Plugin parentPlugin;
+
+			{
+				// Create a parent plugin
+				var composer = PluginComposer.CreateBlank("TestParent");
+
+				// Create a few records
+				composer.CreateRecord<TestRecord>();
+				composer.CreateRecord<TestRecord>();
+				composer.CreateRecord<TestRecord>();
+
+				StringBuilder json = new StringBuilder();
+				using (var s = new StringWriter(json))
+					composer.SavePlugin(s);
+
+				parentPlugin = PluginLoader.LoadPluginString(json.ToString());
+
+			}
+
+			var child = PluginComposer.CreateChild("TestChild", new List<Plugin> {parentPlugin});
+
+			var rec = child.GetEditableRecord<TestRecord>(new RecordKey(0, "TestParent"));
+
+			rec.SetProperty(() => rec.TestString, "TestValue");
+
+			child.SaveRecord(rec);
+
+			// Force GetMergedCollection() to be called
+			child.GetRecords<TestRecord>();
+
+			var cJson = new StringBuilder();
+			using (var s = new StringWriter(cJson))
+				child.SavePlugin(s);
+
+			Console.WriteLine(cJson);
 
 		}
 

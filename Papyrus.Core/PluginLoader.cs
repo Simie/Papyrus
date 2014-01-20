@@ -108,6 +108,27 @@ namespace Papyrus.Core
 
 		}
 
+		/// <summary>
+		/// Save plugin to stream
+		/// </summary>
+		/// <param name="plugin"></param>
+		/// <param name="writer"></param>
+		/// <param name="parentCollection">Create partial records from this collection</param>
+		/// <returns></returns>
+		internal static bool SavePlugin(Plugin plugin, TextWriter writer, RecordCollection parentCollection)
+		{
+
+			// Ensure the latest dependencies are known
+			plugin.RefreshParents();
+
+			var pluginJson = PluginSerializer.ToJson(plugin, parentCollection);
+
+			writer.Write(pluginJson);
+
+			return true;
+
+		}
+
 	}
 
 }

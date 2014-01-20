@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Papyrus.Core.Util;
@@ -62,12 +63,20 @@ namespace Papyrus.Core
 		/// </summary>
 		public Plugin Plugin { get; private set; }
 
+		/// <summary>
+		/// True when there are changes to the Plugin which need to be saved
+		/// </summary>
 		public bool NeedSaving { get; private set; }
 
 		/// <summary>
 		/// Additional loaded plugins (read-only)
 		/// </summary>
 		private readonly IList<Plugin> _pluginList;
+
+		/// <summary>
+		/// RecordCollection object created from all parent plugins
+		/// </summary>
+		private RecordCollection _baseRecordCollection;
 
 		/// <summary>
 		/// Simple event when an operation should cause a record list refresh
@@ -99,24 +108,27 @@ namespace Papyrus.Core
 		/// </summary>
 		private void Load()
 		{
+			if (_baseRecordCollection != null) {
+				throw new InvalidOperationException("Plugins are already loaded");
+			}
 
 			// Create a RecordCollection to resolve all partial records from
-			var records = new RecordCollection();
+			_baseRecordCollection = new RecordCollection();
 
 			// Load all parent plugins (in order)
 			foreach (var plugin in _pluginList) {
 
 				if (!plugin.IsLoaded) {
-					PluginSerializer.LoadRecordsJson(plugin, records);
+					PluginSerializer.LoadRecordsJson(plugin, _baseRecordCollection);
 				}
 
-				records.Merge(plugin.Records);
+				_baseRecordCollection.Merge(plugin.Records);
 
 			}
 
 			// Load main plugin, using the accumulated record collection to resolve partial records
 			if(!Plugin.IsLoaded)
-				PluginSerializer.LoadRecordsJson(Plugin, records);
+				PluginSerializer.LoadRecordsJson(Plugin, _baseRecordCollection);
 
 		}
 
@@ -127,6 +139,16 @@ namespace Papyrus.Core
 		public void SavePlugin(string directory)
 		{
 			PluginLoader.SavePlugin(Plugin, directory, GetParentCollection());
+			NeedSaving = false;
+		}
+
+		/// <summary>
+		/// Thin wrapper around PluginLoader.SavePlugin, sets NeedSaving when complete.
+		/// </summary>
+		/// <param name="writer">TextWriter to write output</param>
+		internal void SavePlugin(TextWriter writer)
+		{
+			PluginLoader.SavePlugin(Plugin, writer, GetParentCollection());
 			NeedSaving = false;
 		}
 
@@ -265,11 +287,21 @@ namespace Papyrus.Core
 
 		}
 
+		/// <summary>
+		/// Get all records of type T
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
 		public ICollection<T> GetRecords<T>() where T : Record
 		{
 			return GetMergedCollection().GetRecords<T>();
 		}
 
+		/// <summary>
+		/// Get all records of type
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
 		public ICollection<Record> GetRecords(Type type)
 		{
 			return GetMergedCollection().GetRecords(type);
@@ -302,21 +334,12 @@ namespace Papyrus.Core
 		}
 
 		/// <summary>
-		/// Create a RecordCollection with all parent plugin records
+		/// Get a RecordCollection with all parent plugin records
 		/// </summary>
 		/// <returns></returns>
 		private RecordCollection GetParentCollection()
 		{
-
-			var collection = new RecordCollection();
-
-			// Merge all plugin record collections
-			for (int i = 0; i < _pluginList.Count; i++) {
-				collection.Merge(_pluginList[i].Records);
-			}
-
-			return collection;
-
+			return new RecordCollection(_baseRecordCollection);
 		}
 
 		/// <summary>
