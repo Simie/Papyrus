@@ -34,28 +34,7 @@ namespace Papyrus.Studio.TestTypes
 				return true;
 			return string.Equals(Property, other.Property) && Property2 == other.Property2;
 		}
-
-		public override bool Equals(object obj)
-		{
-			if (ReferenceEquals(null, obj))
-				return false;
-			if (ReferenceEquals(this, obj))
-				return true;
-			if (obj.GetType() != this.GetType())
-				return false;
-			return Equals((TestStuff) obj);
-		}
-
-		public static bool operator ==(TestStuff left, TestStuff right)
-		{
-			return Equals(left, right);
-		}
-
-		public static bool operator !=(TestStuff left, TestStuff right)
-		{
-			return !Equals(left, right);
-		}
-
+		
 	}
 
 	public abstract class TestBase { }
