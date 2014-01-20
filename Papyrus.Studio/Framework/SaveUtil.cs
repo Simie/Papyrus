@@ -53,7 +53,7 @@ namespace Papyrus.Studio.Framework
 			_saveOperationDefault = SaveDialogResult.Invalid;
 		}
 
-		public static SaveDialogResult ShowSaveDialog(string fileName)
+		public static SaveDialogResult ShowSaveDialog(string fileName, string fileType)
 		{
 
 			if (_inSaveOperation && _saveOperationDefault != SaveDialogResult.Invalid)
@@ -75,7 +75,7 @@ namespace Papyrus.Studio.Framework
 			taskDialog.Buttons.Add(noButton);
 			taskDialog.Buttons.Add(cancelButton);
 
-			taskDialog.MainInstruction = "Save Record";
+			taskDialog.MainInstruction = string.Format("Save {0}", fileType);
 			taskDialog.Content = message;
 
 			taskDialog.MainIcon = TaskDialogIcon.Warning;

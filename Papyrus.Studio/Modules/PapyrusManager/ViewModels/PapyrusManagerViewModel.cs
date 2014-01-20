@@ -177,7 +177,7 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 
 			if (PluginComposer != null && PluginComposer.NeedSaving) {
 
-				var result = SaveUtil.ShowSaveDialog("Plugin");
+				var result = SaveUtil.ShowSaveDialog("Plugin", "Plugin");
 
 				if(result == SaveUtil.SaveDialogResult.Cancel)
 					yield break;
@@ -237,7 +237,7 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 				return;
 			}
 
-			var result = SaveUtil.ShowSaveDialog(string.Format("Plugin {0}", _pluginComposer.Plugin.Name));
+			var result = SaveUtil.ShowSaveDialog(string.Format("Plugin {0}", _pluginComposer.Plugin.Name), "Plugin");
 
 			switch (result) {
 				case SaveUtil.SaveDialogResult.Cancel:

@@ -51,7 +51,7 @@ namespace Papyrus.Studio.Modules.GenericRecordEditor.ViewModels
 
 			}
 
-			var result = SaveUtil.ShowSaveDialog(RecordModel.RecordID);
+			var result = SaveUtil.ShowSaveDialog(RecordModel.RecordID, "Record");
 
 			if (result == SaveUtil.SaveDialogResult.Cancel) {
 				callback(false);
