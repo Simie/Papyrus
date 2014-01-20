@@ -198,7 +198,7 @@ namespace Papyrus.Core
 			NeedSaving = true;
 
 			// Return editable clone
-			return Util.RecordReflectionUtil.Clone(record);
+			return record.Clone();
 
 		}
 
@@ -209,36 +209,53 @@ namespace Papyrus.Core
 		public void SaveRecord(Record record)
 		{
 
+			var recordType = record.GetType();
 			Record existing;
 
-			NeedSaving = true; // TODO: Check diff before setting NeedSaving
-
-
 			// Check if this record exists in the current plugin
-			if (Plugin.Records.TryGetRecord(record.GetType(), record.Key, out existing)) {
+			if (Plugin.Records.TryGetRecord(recordType, record.Key, out existing)) {
 
-				// TODO: If no changes from parent plugins, remove from current plugin
+				if (RecordDiffUtil.Diff(existing, record).Count == 0)
+					return; // No changes
+
+				// TODO: Check diff with parent plugin record collection, remove from active plugin if no changes
 
 				// Copy new values to existing record
 				existing.IsFrozen = false;
-				Util.RecordReflectionUtil.Populate(record, existing);
+				RecordReflectionUtil.Populate(record, existing);
 				existing.IsFrozen = true;
+
+				NeedSaving = true;
 
 				return;
 
 			}
 
-			// TODO: If no changes, skip adding to plugin
+			// Record is not currently present in plugin
 
-			// Else create a clone and add it to this plugin
-			var ourClone = Util.RecordReflectionUtil.Clone(record);
-			ourClone.IsFrozen = true;
+			// Apply changes to the existing Record object in parent plugin, so that any Record objects
+			// retrived with GetRecord have the most up-to-date values.
+			existing = _baseRecordCollection.GetRecord(recordType, record.InternalKey);
+
+			// Replace the existing record in parent collection with a copy. We now have ownership of the original record in the active plugin
+			{
+				var oldRecord = existing.Clone();
+				// Overwrite existing record with the clone
+				_baseRecordCollection.AddRecord(oldRecord, true);
+			}
+
+			// Populate existing record with new data
+			existing.IsFrozen = false;
+			RecordReflectionUtil.Populate(record, existing);
+			existing.IsFrozen = true;
 
 			// Add record to active plugin
-			Plugin.Records.AddRecord(ourClone);
+			Plugin.Records.AddRecord(existing);
 
 			// Editor record list needs updating as a result
 			OnRecordListChanged();
+
+			NeedSaving = true;
 
 		}
 
@@ -262,19 +279,15 @@ namespace Papyrus.Core
 		public Record GetRecord(Type type, RecordKey key)
 		{
 
-			// Check if the active plugin contains this key
 			Record record;
 
+			// Check if the active plugin contains this key
 			if (Plugin.Records.TryGetRecord(type, key, out record))
 				return record;
 
-			// Check the dependency list (in reverse) for the key
-			for (int i = _pluginList.Count - 1; i >= 0; i--) {
-
-				if (_pluginList[i].Records.TryGetRecord(type, key, out record))
-					return record;
-
-			}
+			// Check if parent plugins record collection contains this key
+			if (GetParentCollection().TryGetRecord(type, key, out record))
+				return record;
 
 			throw new KeyNotFoundException("Record with key not found");
 
@@ -348,10 +361,16 @@ namespace Papyrus.Core
 		/// <returns></returns>
 		public Record Get(IRecordRef recordRef, bool throwException = false)
 		{
-			Record rec;
-			if (!GetMergedCollection().TryGetRecord(recordRef.ValueType, recordRef.Key, out rec) && throwException)
-				throw new KeyNotFoundException("No record with key found");
-			return rec;
+
+			try {
+				return GetRecord(recordRef.Type, recordRef.Key);
+			} catch {
+				if (throwException)
+					throw;
+			}
+
+			return null;
+
 		}
 
 		/// <summary>

@@ -119,5 +119,36 @@ namespace Papyrus.Tests
 
 		}
 
+		/// <summary>
+		/// Test that changes to a record object are applied to any publicly retreived record objects
+		/// </summary>
+		[TestMethod]
+		public void TestRecordSavePropagation()
+		{
+
+			var parentPlugin = PluginLoader.LoadPluginString(TestPlugins.TestParentPlugin);
+			var childPlugin = PluginLoader.LoadPluginString(TestPlugins.TestChildPlugin);
+
+			var composer = PluginComposer.EditPlugin(childPlugin, new[] {parentPlugin});
+			var key = new RecordKey("Master/000001");
+
+			// Retrieve record from composer. This should be fetching the record from the Master plugin
+			var masterRecord = composer.GetRecord<TestRecord>(key);
+
+			Assert.AreEqual("Test String Value", masterRecord.TestString);
+
+			// Now make a change to the record in the active plugin
+			{
+				var childRecord = composer.GetEditableRecord<TestRecord>(key);
+				childRecord.SetProperty(() => childRecord.TestString, "Modified String Value");
+				composer.SaveRecord(childRecord);
+			}
+
+			// Check that the modified value is correctly applied to the existing object
+			Assert.AreEqual("Modified String Value", masterRecord.TestString);
+
+
+		}
+
 	}
 }
