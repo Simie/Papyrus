@@ -77,7 +77,9 @@ namespace Papyrus.Tests
 			try {
 				var database = new RecordDatabase(new List<Plugin>() {child});
 				Assert.Fail("Didn't throw exception with missing plugin");
-			} catch (MissingPluginException) {}
+			} catch (MissingPluginException e) {
+				Assert.IsTrue(e.Plugin == "Master", "Missing plugin name was incorrect");
+			}
 			
 
 		}

@@ -41,9 +41,12 @@ namespace Papyrus.Core
 		public RecordDatabase(IList<Plugin> plugins, bool sort = true) : this()
 		{
 
+			IList<string> missing = new List<string>();
+
 			// Check all parents are present
-			if(!plugins.All(p => p.VerifyParents(plugins)))
-				throw new MissingPluginException("Not all plugin parents can be resolved.", "Unknown"); // TODO: Report missing plugins
+			if (!plugins.All(p => p.VerifyParents(plugins, missing))) {
+				throw new MissingPluginException("Not all plugin parents can be resolved.", string.Join(", ", missing.ToArray()));
+			}
 
 			// Sort plugins
 			if (sort) {

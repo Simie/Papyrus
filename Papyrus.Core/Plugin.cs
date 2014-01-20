@@ -106,10 +106,33 @@ namespace Papyrus.Core
 		/// Verify that the plugin list provided contains all the parents of this plugin.
 		/// </summary>
 		/// <param name="plugins"></param>
-		/// <returns></returns>
-		internal bool VerifyParents(IList<Plugin> plugins)
+		/// <param name="missing">Missing plugin names will be added to this list</param>
+		/// <returns>True if parents are verified</returns>
+		internal bool VerifyParents(IList<Plugin> plugins, ICollection<string> missing = null)
 		{
-			return InternalParents.All(parent => plugins.Any(p => p.Name == parent));
+
+			bool isMissing = false;
+
+			foreach (var parent in InternalParents) {
+
+				if (plugins.All(p => p.Name != parent)) {
+
+					isMissing = true;
+
+					// Add missing parent to output list if provided
+					if (missing != null) {
+						missing.Add(parent);
+					} else {
+						// Return false immediately otherwise
+						return false;
+					}
+
+				}
+
+			}
+
+			return !isMissing;
+
 		}
 
 		/// <summary>
