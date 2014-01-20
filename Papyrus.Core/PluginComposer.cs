@@ -300,7 +300,7 @@ namespace Papyrus.Core
 				return record;
 
 			// Check if parent plugins record collection contains this key
-			if (GetParentCollection().TryGetRecord(type, key, out record))
+			if (_baseRecordCollection.TryGetRecord(type, key, out record))
 				return record;
 
 			throw new KeyNotFoundException("Record with key not found");
