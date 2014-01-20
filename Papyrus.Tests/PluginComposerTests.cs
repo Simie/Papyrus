@@ -150,5 +150,47 @@ namespace Papyrus.Tests
 
 		}
 
+		/// <summary>
+		/// Test that a Record saved with no changes from parent will not be added to the active plugin (and will be removed)
+		/// </summary>
+		[TestMethod]
+		public void TestNoDiffRecordSave()
+		{
+
+			var parentPlugin = PluginLoader.LoadPluginString(TestPlugins.TestParentPlugin);
+			var childPlugin = PluginLoader.LoadPluginString(TestPlugins.TestChildPlugin);
+
+			var composer = PluginComposer.EditPlugin(childPlugin, new[] { parentPlugin });
+			var key = new RecordKey("Master/000001");
+
+			// Internal functions ahead
+
+			Record rec;
+
+			// Test that plugin does not contain the parent record
+			Assert.IsFalse(composer.Plugin.Records.TryGetRecord(typeof(TestRecord), key, out rec));
+
+			// Make a change which should cause the record to be added to the active plugin
+			{
+				var edit = composer.GetEditableRecord<TestRecord>(key);
+				edit.SetProperty(() => edit.TestString, "Modified String Value");
+				composer.SaveRecord(edit);
+			}
+
+			// Test that plugin does contain the parent record
+			Assert.IsTrue(composer.Plugin.Records.TryGetRecord(typeof(TestRecord), key, out rec));
+
+			// Revert the change, which should cause the record to be removed from the active plugin
+			{
+				var edit = composer.GetEditableRecord<TestRecord>(key);
+				edit.SetProperty(() => edit.TestString, "Test String Value");
+				composer.SaveRecord(edit);
+			}
+
+			// Test that plugin does not contain the parent record
+			Assert.IsFalse(composer.Plugin.Records.TryGetRecord(typeof(TestRecord), key, out rec));
+
+		}
+
 	}
 }

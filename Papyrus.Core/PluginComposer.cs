@@ -210,15 +210,30 @@ namespace Papyrus.Core
 		{
 
 			var recordType = record.GetType();
+
 			Record existing;
+
+			// Check for existing record in parent
+			Record existingParent;
+			_baseRecordCollection.TryGetRecord(recordType, record.InternalKey, out existingParent);
 
 			// Check if this record exists in the current plugin
 			if (Plugin.Records.TryGetRecord(recordType, record.Key, out existing)) {
 
+				// If no changes from parent, move the existing record into parent plugin
+				// and remove from child plugin. (Ensures that all records retrived with GetRecord will
+				// reference the same object)
+				if (existingParent != null && RecordDiffUtil.Diff(existingParent, record).Count == 0) {
+
+					Plugin.Records.RemoveRecord(recordType, existing.InternalKey);
+					_baseRecordCollection.AddRecord(existing, true);
+					NeedSaving = true;
+					return;
+
+				}
+
 				if (RecordDiffUtil.Diff(existing, record).Count == 0)
 					return; // No changes
-
-				// TODO: Check diff with parent plugin record collection, remove from active plugin if no changes
 
 				// Copy new values to existing record
 				existing.IsFrozen = false;
@@ -231,26 +246,22 @@ namespace Papyrus.Core
 
 			}
 
-			// Record is not currently present in plugin
-
-			// Apply changes to the existing Record object in parent plugin, so that any Record objects
-			// retrived with GetRecord have the most up-to-date values.
-			existing = _baseRecordCollection.GetRecord(recordType, record.InternalKey);
-
-			// Replace the existing record in parent collection with a copy. We now have ownership of the original record in the active plugin
+			// Replace the existing record in parent collection with a copy. We now have ownership of the original record object in the active plugin
 			{
-				var oldRecord = existing.Clone();
+				var oldRecord = existingParent.Clone();
 				// Overwrite existing record with the clone
 				_baseRecordCollection.AddRecord(oldRecord, true);
 			}
 
-			// Populate existing record with new data
-			existing.IsFrozen = false;
-			RecordReflectionUtil.Populate(record, existing);
-			existing.IsFrozen = true;
+
+			// Apply changes to the existing Record object in parent plugin, so that any Record objects
+			// retrived with GetRecord have the most up-to-date values.
+			existingParent.IsFrozen = false;
+			RecordReflectionUtil.Populate(record, existingParent);
+			existingParent.IsFrozen = true;
 
 			// Add record to active plugin
-			Plugin.Records.AddRecord(existing);
+			Plugin.Records.AddRecord(existingParent);
 
 			// Editor record list needs updating as a result
 			OnRecordListChanged();
