@@ -19,7 +19,7 @@ namespace Papyrus.Core
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	[JsonArray(ItemTypeNameHandling = TypeNameHandling.Auto)]
-	public class PapyrusList<T> : List<T>
+	internal class PapyrusList<T> : List<T>
 	{
 
 		/// <summary>

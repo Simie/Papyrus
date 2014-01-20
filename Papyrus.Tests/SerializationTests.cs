@@ -198,9 +198,9 @@ namespace Papyrus.Tests
 		private class TestCollectionRecord : Record
 		{
 
-			private PapyrusList<TestBase> _entries = new PapyrusList<TestBase>();
+			private ReadOnlyCollection<TestBase> _entries = new ReadOnlyCollection<TestBase>();
 
-			public PapyrusList<TestBase> Entries
+			public ReadOnlyCollection<TestBase> Entries
 			{
 				get { return _entries; }
 				private set { _entries = value; }
@@ -213,7 +213,7 @@ namespace Papyrus.Tests
 		{
 
 			var testRecord = new TestCollectionRecord();
-			testRecord.SetProperty(() => testRecord.Entries, new PapyrusList<TestBase>() {
+			testRecord.SetProperty(() => testRecord.Entries, new ReadOnlyCollection<TestBase>() {
 				new Test1(),
 				new Test2(),
 				new Test1()
