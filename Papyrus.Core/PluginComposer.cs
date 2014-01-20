@@ -253,8 +253,8 @@ namespace Papyrus.Core
 		/// Get an editable copy of a record. SaveRecord must be called with this copy
 		/// to save changes.
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="key"></param>
+		/// <param name="type">Record type</param>
+		/// <param name="key">Record key</param>
 		/// <returns></returns>
 		public Record GetEditableRecord(Type type, RecordKey key)
 		{
@@ -290,7 +290,6 @@ namespace Papyrus.Core
 		/// <summary>
 		/// Get record from a reference.
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
 		/// <param name="recordRef"></param>
 		/// <param name="throwException">True to throw an exception if not found. Defaults to false</param>
 		/// <returns></returns>

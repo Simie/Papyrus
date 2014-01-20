@@ -16,6 +16,9 @@ using Newtonsoft.Json;
 namespace Papyrus.Core.Util
 {
 
+	/// <summary>
+	/// Utilities related to reflection
+	/// </summary>
 	public static class RecordReflectionUtil
 	{
 

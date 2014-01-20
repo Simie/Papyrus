@@ -16,15 +16,28 @@ using Newtonsoft.Json;
 namespace Papyrus.Core
 {
 
+	/// <summary>
+	/// Non-generic interface for a RecordRefCollection
+	/// </summary>
 	public interface IRecordRefCollection : IEnumerable
 	{
 
+		/// <summary>
+		/// Type object of the record type being references by objects in this list
+		/// </summary>
 		Type RecordType { get; }
 
+		/// <summary>
+		/// Read-only list of record references
+		/// </summary>
 		IList<IRecordRef> References { get; } 
 
 	}
 
+	/// <summary>
+	/// A collection of RecordRef objects
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
 	[JsonObject()]
 	[JsonConverter(typeof(Util.JsonConverters.RecordRefCollectionConverter))]
 	public struct RecordRefCollection<T> : IRecordRefCollection, IEnumerable<RecordRef<T>>, IEquatable<RecordRefCollection<T>> where T : Record
@@ -32,6 +45,9 @@ namespace Papyrus.Core
 
 		private readonly List<RecordRef<T>> _internalList;
 			
+		/// <summary>
+		/// Type object of the record type being references by objects in this list
+		/// </summary>
 		[JsonIgnore]
 		public Type RecordType { get { return typeof (T); } }
 
@@ -96,11 +112,23 @@ namespace Papyrus.Core
 			return (_internalList != null ? _internalList.GetHashCode() : 0);
 		}
 
+		/// <summary>
+		/// Compare two record ref collections
+		/// </summary>
+		/// <param name="left"></param>
+		/// <param name="right"></param>
+		/// <returns></returns>
 		public static bool operator ==(RecordRefCollection<T> left, RecordRefCollection<T> right)
 		{
 			return left.Equals(right);
 		}
 
+		/// <summary>
+		/// Compare two record ref collections
+		/// </summary>
+		/// <param name="left"></param>
+		/// <param name="right"></param>
+		/// <returns></returns>
 		public static bool operator !=(RecordRefCollection<T> left, RecordRefCollection<T> right)
 		{
 			return !left.Equals(right);

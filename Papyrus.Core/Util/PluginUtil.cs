@@ -13,9 +13,17 @@ using System.Text;
 
 namespace Papyrus.Core.Util
 {
+	/// <summary>
+	/// Plugin related utilities
+	/// </summary>
 	public static class PluginUtil
 	{
 
+		/// <summary>
+		/// Sort a plugin list, ensuring that parent plugins load before child plugins
+		/// </summary>
+		/// <param name="plugins"></param>
+		/// <returns></returns>
 		public static IList<Plugin> SortPluginList(IList<Plugin> plugins)
 		{
 			// Sort plugins by dependencies
@@ -26,6 +34,13 @@ namespace Papyrus.Core.Util
 
 		} 
 		
+		/// <summary>
+		/// Sort list of T using the same plugin sorting algorithm as non-generic version, but allow for a selector to provide the plugin name.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="list"></param>
+		/// <param name="selector"></param>
+		/// <returns></returns>
 		public static IList<T> SortPluginList<T>(IList<T> list, Func<T, Plugin> selector)
 		{
 			// Sort plugins by dependencies

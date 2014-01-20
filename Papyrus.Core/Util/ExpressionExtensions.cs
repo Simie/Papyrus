@@ -12,6 +12,9 @@ using System.Reflection;
 namespace Papyrus.Core.Util
 {
 
+	/// <summary>
+	/// Extension methods for handling expression trees
+	/// </summary>
 	public static class ExpressionExtensions
 	{
 
