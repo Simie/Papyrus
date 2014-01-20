@@ -59,6 +59,36 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 		private void Init()
 		{
 
+		}
+
+		public void LoadPreviousSession()
+		{
+
+			var activePluginName = Settings.Default.PreviousActivePlugin;
+			var parentPluginNames = new List<string>();
+
+			foreach (var selectedMaster in Settings.Default.SelectedMasters) {
+				parentPluginNames.Add(selectedMaster);
+			}
+
+			try {
+
+				var plugins = PluginLoader.ScanDirectory(DataPath);
+
+				var activePlugin = plugins.FirstOrDefault(p => p.Name == activePluginName);
+				var masters = parentPluginNames.Select(p => plugins.FirstOrDefault(q => q.Name == p)).ToList();
+				masters.RemoveAll(p => p == null);
+
+
+
+				LoadPlugin(activePlugin, masters.ToList());
+
+			} catch (Exception e) {
+
+				MessageBox.Show("Error loading previous active plugin", "Error");
+				MessageBox.Show(e.Message, "Exception");
+
+			}
 
 		}
 

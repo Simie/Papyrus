@@ -16,6 +16,7 @@ using Caliburn.Micro;
 using Gemini.Framework;
 using Gemini.Modules.MainMenu.Models;
 using Papyrus.Studio.Framework.Results;
+using Papyrus.Studio.Modules.PapyrusManager.ViewModels;
 using Papyrus.Studio.Properties;
 
 namespace Papyrus.Studio.Modules.PapyrusManager
@@ -55,6 +56,10 @@ namespace Papyrus.Studio.Modules.PapyrusManager
 
 				menuItem.Children.Insert(0, new MenuItem("View Active Plugin Summary", _papyrusManager.ViewActivePluginSummary));
 
+			}
+
+			if (Settings.Default.LoadPreviousSession && !string.IsNullOrWhiteSpace(Settings.Default.PreviousActivePlugin)) {
+				((PapyrusManagerViewModel)_papyrusManager).LoadPreviousSession();
 			}
 
 			/*Exception error = null;
