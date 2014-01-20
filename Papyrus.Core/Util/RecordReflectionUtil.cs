@@ -97,7 +97,8 @@ namespace Papyrus.Core.Util
 		/// </summary>
 		/// <param name="source">Copy source</param>
 		/// <param name="dest">Copy destination</param>
-		internal static void Populate(Record source, Record dest)
+		/// <param name="autoUnfreeze">Automatically set IsFrozen to allow the populate to succeed</param>
+		internal static void Populate(Record source, Record dest, bool autoUnfreeze = false)
 		{
 
 			if (source.GetType() != dest.GetType()) 
@@ -105,9 +106,16 @@ namespace Papyrus.Core.Util
 
 			var type = source.GetType();
 
+			var origFreeze = dest.IsFrozen;
+
+			if (autoUnfreeze)
+				dest.IsFrozen = false;
+
 			// Populate dest record with json properties
 			RecordSerializer.FromJson(RecordSerializer.ToJson(source), type, dest);
 			dest.InternalKey = source.InternalKey;
+
+			dest.IsFrozen = origFreeze;
 
 		}
 

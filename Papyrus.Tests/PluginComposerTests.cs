@@ -179,6 +179,7 @@ namespace Papyrus.Tests
 
 			// Test that plugin does contain the parent record
 			Assert.IsTrue(composer.Plugin.Records.TryGetRecord(typeof(TestRecord), key, out rec));
+			Assert.AreEqual("Modified String Value", composer.GetRecord<TestRecord>(key).TestString);
 
 			// Revert the change, which should cause the record to be removed from the active plugin
 			{
@@ -189,6 +190,18 @@ namespace Papyrus.Tests
 
 			// Test that plugin does not contain the parent record
 			Assert.IsFalse(composer.Plugin.Records.TryGetRecord(typeof(TestRecord), key, out rec));
+			Assert.AreEqual("Test String Value", composer.GetRecord<TestRecord>(key).TestString);
+
+			// Make a change which should cause the record to be added to the active plugin
+			{
+				var edit = composer.GetEditableRecord<TestRecord>(key);
+				edit.SetProperty(() => edit.TestString, "Modified String Value");
+				composer.SaveRecord(edit);
+			}
+
+			// Test that plugin does contain the parent record
+			Assert.IsTrue(composer.Plugin.Records.TryGetRecord(typeof(TestRecord), key, out rec));
+			Assert.AreEqual("Modified String Value", composer.GetRecord<TestRecord>(key).TestString);
 
 		}
 

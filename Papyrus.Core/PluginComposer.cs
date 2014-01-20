@@ -211,39 +211,44 @@ namespace Papyrus.Core
 
 			var recordType = record.GetType();
 
-			Record existing;
-
 			// Check for existing record in parent
 			Record existingParent;
 			_baseRecordCollection.TryGetRecord(recordType, record.InternalKey, out existingParent);
 
-			// Check if this record exists in the current plugin
-			if (Plugin.Records.TryGetRecord(recordType, record.Key, out existing)) {
+			{
+				Record existing;
 
-				// If no changes from parent, move the existing record into parent plugin
-				// and remove from child plugin. (Ensures that all records retrived with GetRecord will
-				// reference the same object)
-				if (existingParent != null && RecordDiffUtil.Diff(existingParent, record).Count == 0) {
+				// Check if this record exists in the current plugin
+				if (Plugin.Records.TryGetRecord(recordType, record.Key, out existing)) {
 
-					Plugin.Records.RemoveRecord(recordType, existing.InternalKey);
-					_baseRecordCollection.AddRecord(existing, true);
+					// If no changes from parent, move the existing record into parent plugin
+					// and remove from child plugin. (Ensures that all records retrived with GetRecord will
+					// reference the same object)
+					if (existingParent != null && RecordDiffUtil.Diff(existingParent, record).Count == 0) {
+
+						// Remove from active plugin
+						Plugin.Records.RemoveRecord(recordType, existing.InternalKey);
+
+						// Copy original property values from existing parent
+						RecordReflectionUtil.Populate(existingParent, existing, true);
+
+						_baseRecordCollection.AddRecord(existing, true);
+						NeedSaving = true;
+						return;
+
+					}
+
+					if (RecordDiffUtil.Diff(existing, record).Count == 0)
+						return; // No changes
+
+					// Copy new values to existing record
+					RecordReflectionUtil.Populate(record, existing, true);
+
 					NeedSaving = true;
+
 					return;
 
 				}
-
-				if (RecordDiffUtil.Diff(existing, record).Count == 0)
-					return; // No changes
-
-				// Copy new values to existing record
-				existing.IsFrozen = false;
-				RecordReflectionUtil.Populate(record, existing);
-				existing.IsFrozen = true;
-
-				NeedSaving = true;
-
-				return;
-
 			}
 
 			// Replace the existing record in parent collection with a copy. We now have ownership of the original record object in the active plugin
@@ -256,9 +261,7 @@ namespace Papyrus.Core
 
 			// Apply changes to the existing Record object in parent plugin, so that any Record objects
 			// retrived with GetRecord have the most up-to-date values.
-			existingParent.IsFrozen = false;
-			RecordReflectionUtil.Populate(record, existingParent);
-			existingParent.IsFrozen = true;
+			RecordReflectionUtil.Populate(record, existingParent, true);
 
 			// Add record to active plugin
 			Plugin.Records.AddRecord(existingParent);
