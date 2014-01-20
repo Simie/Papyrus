@@ -71,6 +71,8 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 				parentPluginNames.Add(selectedMaster);
 			}
 
+			Exception error = null;
+
 			try {
 
 				var plugins = PluginLoader.ScanDirectory(DataPath);
@@ -79,16 +81,26 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 				var masters = parentPluginNames.Select(p => plugins.FirstOrDefault(q => q.Name == p)).ToList();
 				masters.RemoveAll(p => p == null);
 
-
+				if(activePlugin == null)
+					throw new Exception(string.Format("Master plugin {0} not found", activePluginName));
 
 				LoadPlugin(activePlugin, masters.ToList());
 
 			} catch (Exception e) {
 
-				MessageBox.Show("Error loading previous active plugin", "Error");
-				MessageBox.Show(e.Message, "Exception");
+				error = e;
 
 			}
+
+			if (error != null) {
+
+				Execute.OnUIThreadAsync(() => {
+					MessageBox.Show("Error loading previous active plugin", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+					Coroutine.BeginExecute(ShowExt.Exception(error).AsCoroutine());
+				});
+
+			}
+
 
 		}
 
