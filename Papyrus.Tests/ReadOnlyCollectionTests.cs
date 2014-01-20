@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Papyrus.Core;
@@ -65,6 +66,32 @@ namespace Papyrus.Tests
 			var restored = JsonConvert.DeserializeObject<ReadOnlyCollection<int>>(json, settings);
 
 			Assert.IsTrue(restored.SequenceEqual(list));
+
+		}
+
+		[TestMethod]
+		public void TestPolymorphicDeserialization()
+		{
+
+			var readOnlyList = new ReadOnlyCollection<TestParentClass>(new List<TestParentClass>() {
+				new TestChildClass1(),
+				new TestChildClass1(),
+				new TestChildClass2()
+			});
+
+			var json = JsonConvert.SerializeObject(readOnlyList, Core.Util.Serialization.GetJsonSettings());
+
+			Console.WriteLine(json);
+
+			var reconstructedList = JsonConvert.DeserializeObject<ReadOnlyCollection<TestParentClass>>(json,
+				Core.Util.Serialization.GetJsonSettings());
+
+			Assert.AreEqual(readOnlyList.Count, reconstructedList.Count);
+
+			for (int i = 0; i < reconstructedList.Count; i++) {
+				Assert.IsTrue(readOnlyList[i].GetType() == reconstructedList[i].GetType());
+			}
+
 
 		}
 

@@ -22,10 +22,10 @@ namespace Papyrus.Core
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	[JsonConverter(typeof(Util.JsonConverters.ReadOnlyCollectionConverter))]
-	public struct ReadOnlyCollection<T> : IList<T>, ICollection<T>, ICollection, IEquatable<ReadOnlyCollection<T>>
+	public struct ReadOnlyCollection<T> : IList<T>, ICollection, IEquatable<ReadOnlyCollection<T>>
 	{
 
-		private List<T> _internalList;
+		private PapyrusList<T> _internalList;
 
 		/// <summary>
 		/// Access the collection
@@ -34,9 +34,8 @@ namespace Papyrus.Core
 
 			get {
 
-				if(_internalList == null)
-					return new T[0];
-				return _internalList.AsReadOnly();
+				if(_internalList == null) _internalList = new PapyrusList<T>(0);
+				return _internalList;
 
 			}
 
@@ -48,7 +47,7 @@ namespace Papyrus.Core
 		/// <param name="items"></param>
 		public ReadOnlyCollection(IEnumerable<T> items)
 		{
-			_internalList = new List<T>(items);
+			_internalList = new PapyrusList<T>(items);
 		}
 
 		public IEnumerator<T> GetEnumerator()

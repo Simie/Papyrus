@@ -110,4 +110,15 @@ namespace Papyrus.Tests
 
 	}
 
+	public abstract class TestParentClass
+	{
+
+		
+
+	}
+
+	public class TestChildClass1 : TestParentClass {}
+
+	public class TestChildClass2 : TestParentClass {}
+
 }
