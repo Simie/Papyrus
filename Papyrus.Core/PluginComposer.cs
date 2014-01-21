@@ -211,7 +211,7 @@ namespace Papyrus.Core
 
 			var recordType = record.GetType();
 
-			// Check for existing record in parent
+			// Get existing record in parent (if it exists)
 			Record existingParent;
 			_baseRecordCollection.TryGetRecord(recordType, record.InternalKey, out existingParent);
 
@@ -238,8 +238,9 @@ namespace Papyrus.Core
 
 					}
 
+					// Ignore if no changes
 					if (RecordDiffUtil.Diff(existing, record).Count == 0)
-						return; // No changes
+						return;
 
 					// Copy new values to existing record
 					RecordReflectionUtil.Populate(record, existing, true);
@@ -251,13 +252,16 @@ namespace Papyrus.Core
 				}
 			}
 
+			// Check for changes between record and existingParent
+			if (RecordDiffUtil.Diff(existingParent, record).Count == 0)
+				return;
+
 			// Replace the existing record in parent collection with a copy. We now have ownership of the original record object in the active plugin
 			{
 				var oldRecord = existingParent.Clone();
 				// Overwrite existing record with the clone
 				_baseRecordCollection.AddRecord(oldRecord, true);
 			}
-
 
 			// Apply changes to the existing Record object in parent plugin, so that any Record objects
 			// retrived with GetRecord have the most up-to-date values.

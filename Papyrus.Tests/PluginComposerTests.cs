@@ -170,6 +170,15 @@ namespace Papyrus.Tests
 			// Test that plugin does not contain the parent record
 			Assert.IsFalse(composer.Plugin.Records.TryGetRecord(typeof(TestRecord), key, out rec));
 
+			// Save unchanged record
+			{
+				var edit = composer.GetEditableRecord<TestRecord>(key);
+				composer.SaveRecord(edit);
+			}
+
+			// Test that plugin does not contain the parent record
+			Assert.IsFalse(composer.Plugin.Records.TryGetRecord(typeof(TestRecord), key, out rec));
+
 			// Make a change which should cause the record to be added to the active plugin
 			{
 				var edit = composer.GetEditableRecord<TestRecord>(key);
@@ -205,6 +214,26 @@ namespace Papyrus.Tests
 
 		}
 
+		/// <summary>
+		/// Test that an unchanged record from a parent plugin being saved does not get cause it to be added to the active plugin
+		/// </summary>
+		[TestMethod]
+		public void TestUnchangedRecordSave()
+		{
+
+			var parentPlugin = PluginLoader.LoadPluginString(TestPlugins.TestParentPlugin);
+
+			var composer = PluginComposer.CreateChild("Child", new[] { parentPlugin });
+			var key = new RecordKey("Master/000001");
+
+			var orig = composer.GetRecord<TestRecord>(key);
+
+			composer.SaveRecord(composer.GetEditableRecord<TestRecord>(key));
+
+			Record rec;
+			Assert.IsFalse(composer.Plugin.Records.TryGetRecord(typeof(TestRecord), key, out rec));
+
+		}
 
 		[TestMethod]
 		public void TestPolymorphicReference()
