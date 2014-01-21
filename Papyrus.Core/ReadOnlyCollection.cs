@@ -62,12 +62,12 @@ namespace Papyrus.Core
 
 		public void Add(T item)
 		{
-			throw new NotSupportedException();
+			throw new InvalidOperationException("Add called on ReadOnly collection");
 		}
 
 		public void Clear()
 		{
-			throw new NotSupportedException();
+			throw new InvalidOperationException("Clear called on ReadOnly collection");
 		}
 
 		public bool Contains(T item)
@@ -82,7 +82,7 @@ namespace Papyrus.Core
 
 		public bool Remove(T item)
 		{
-			throw new NotSupportedException();
+			throw new InvalidOperationException("Remove called on ReadOnly collection");
 		}
 
 		public void CopyTo(Array array, int index)
@@ -132,12 +132,12 @@ namespace Papyrus.Core
 
 		public void Insert(int index, T item)
 		{
-			throw new NotSupportedException();
+			throw new InvalidOperationException("Insert called on ReadOnly collection");
 		}
 
 		public void RemoveAt(int index)
 		{
-			throw new NotSupportedException();
+			throw new InvalidOperationException("RemoveAt called on ReadOnly collection");
 		}
 
 		public T this[int index]
