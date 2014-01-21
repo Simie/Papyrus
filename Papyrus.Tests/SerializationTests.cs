@@ -213,11 +213,11 @@ namespace Papyrus.Tests
 		{
 
 			var testRecord = new TestCollectionRecord();
-			testRecord.SetProperty(() => testRecord.Entries, new ReadOnlyCollection<TestBase>() {
+			testRecord.SetProperty(() => testRecord.Entries, new ReadOnlyCollection<TestBase>(new TestBase[] {
 				new Test1(),
 				new Test2(),
 				new Test1()
-			});
+			}));
 
 			var json = RecordSerializer.ToJson(testRecord);
 
