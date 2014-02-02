@@ -44,6 +44,9 @@ namespace Papyrus.Studio.TestTypes
 	public class SampleRecord : Record
 	{
 
+		[PropertyTools.DataAnnotations.Comment]
+		public string ShouldIgnore {get { return "ShouldIgnore!"; }}
+
 		public string TestString { get; private set; }
 
 		public int TestInteger { get; private set; }

@@ -10,6 +10,7 @@ namespace Papyrus.Tests
 	class TestRecord : Record
 	{
 
+
 		public bool TestBoolean { get; private set; }
 
 		public string TestString { get; private set; }
@@ -20,6 +21,8 @@ namespace Papyrus.Tests
 			
 		[Newtonsoft.Json.JsonIgnore]
 		public int ShouldIgnore { get; set; }
+
+		public string ShouldIgnoreReadOnlyString { get { return "Test"; } }
 
 
 	}

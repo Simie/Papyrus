@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -28,16 +29,68 @@ namespace Papyrus.Tests
 			var properties = Core.Util.RecordReflectionUtil.GetProperties<TestRecord>();
 
 			// Test inherited property
-			Assert.IsTrue(properties.Any(p => p.Name == "EditorID"));
+			Assert.IsTrue(properties.Count(p => p.Name == "EditorID") == 1);
 
-			Assert.IsTrue(properties.Any(p => p.Name == "TestBoolean"));
-			Assert.IsTrue(properties.Any(p => p.Name == "TestString"));
-			Assert.IsTrue(properties.Any(p => p.Name == "TestInteger"));
-			Assert.IsTrue(properties.Any(p => p.Name == "TestReference"));
+			Assert.IsTrue(properties.Count(p => p.Name == "TestBoolean") == 1);
+			Assert.IsTrue(properties.Count(p => p.Name == "TestString") == 1);
+			Assert.IsTrue(properties.Count(p => p.Name == "TestInteger") == 1);
+			Assert.IsTrue(properties.Count(p => p.Name == "TestReference") == 1);
 
-			Assert.IsFalse(properties.Any(p => p.Name == "ShouldIgnore"));
+			Assert.IsTrue(properties.Count(p => p.Name == "ShouldIgnoreReadOnlyString") == 0);
+
+			Assert.IsTrue(properties.Count(p => p.Name == "ShouldIgnore") == 0);
 
 			Assert.AreEqual(properties.Count, 5);
+
+		}
+
+
+		[TestMethod]
+		public void TestPropertyDetectionUnique()
+		{
+
+			var properties = Core.Util.RecordReflectionUtil.GetProperties<TestChild1>();
+
+			// Test inherited property
+			Assert.IsTrue(properties.Count(p => p.Name == "EditorID") == 1);
+			Assert.IsTrue(properties.Count(p => p.Name == "TestFloat") == 1);
+			Assert.IsTrue(properties.Count(p => p.Name == "TestChildProperty1") == 1);
+
+			Assert.AreEqual(properties.Count, 3);
+
+		}	
+		
+		[TestMethod]
+		public void TestPropertyDetectionReadOnly()
+		{
+
+			var properties = Core.Util.RecordReflectionUtil.GetProperties<TestRecord>(true);
+
+			// Test inherited property
+			Assert.IsTrue(properties.Count(p => p.Name == "EditorID") == 1);
+
+			Assert.IsTrue(properties.Count(p => p.Name == "TestBoolean") == 1);
+			Assert.IsTrue(properties.Count(p => p.Name == "TestString") == 1);
+			Assert.IsTrue(properties.Count(p => p.Name == "TestInteger") == 1);
+			Assert.IsTrue(properties.Count(p => p.Name == "TestReference") == 1);
+
+			Assert.IsTrue(properties.Count(p => p.Name == "ShouldIgnoreReadOnlyString") == 1);
+
+			Assert.IsTrue(properties.Count(p => p.Name == "ShouldIgnore") == 0);
+
+			Assert.AreEqual(properties.Count, 6);
+
+		}	
+		
+		[TestMethod]
+		public void TestGenericPropertyDetection()
+		{
+
+			var p1 = Core.Util.RecordReflectionUtil.GetProperties<TestRecord>();
+
+			var p2 = Core.Util.RecordReflectionUtil.GetProperties(typeof(TestRecord));
+
+			CollectionAssert.AreEquivalent(p1, p2);
 
 		}
 
@@ -80,20 +133,20 @@ namespace Papyrus.Tests
 		{
 
 			// Original
-			var c1 = new ReadOnlyCollection<TestCollectionEntry>(new[] {
+			var c1 = new Core.ReadOnlyCollection<TestCollectionEntry>(new[] {
 				new TestCollectionEntry() { Add = 12, IsVisible = false },
 				new TestCollectionEntry() { Add = 5, IsVisible = true}
 			});
 
 			// New entry
-			var c2 = new ReadOnlyCollection<TestCollectionEntry>(new[] {
+			var c2 = new Core.ReadOnlyCollection<TestCollectionEntry>(new[] {
 				new TestCollectionEntry() { Add = 12, IsVisible = false },
 				new TestCollectionEntry() { Add = 5, IsVisible = true},
 				new TestCollectionEntry() { Add = 8, IsVisible = true}
 			});
 
 			// Modified entry
-			var c3 = new ReadOnlyCollection<TestCollectionEntry>(new[] {
+			var c3 = new Core.ReadOnlyCollection<TestCollectionEntry>(new[] {
 				new TestCollectionEntry() { Add = 10, IsVisible = false },
 				new TestCollectionEntry() { Add = 5, IsVisible = true},
 			});

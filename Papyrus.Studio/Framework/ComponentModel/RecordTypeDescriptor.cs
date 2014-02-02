@@ -24,7 +24,7 @@ namespace Papyrus.Studio.Framework.ComponentModel
 		{
 			_recordType = recordType;
 
-			var properties = RecordReflectionUtil.GetProperties(_recordType);
+			var properties = RecordReflectionUtil.GetProperties(_recordType, true);
 
 			_propertyDescriptors = properties.Select(p => new PapyrusPropertyDescriptor(_recordType, p.Name, p.PropertyType)).Cast<PropertyDescriptor>().ToArray();
 

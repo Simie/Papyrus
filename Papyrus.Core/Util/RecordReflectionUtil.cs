@@ -8,9 +8,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace Papyrus.Core.Util
@@ -22,28 +22,36 @@ namespace Papyrus.Core.Util
 	public static class RecordReflectionUtil
 	{
 
-
 		/// <summary>
 		/// Get a list of serializable properties in record type
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
+		/// <param name="includeReadOnly"></param>
+		/// <typeparam name="T">Include properties which cannot be written to (used in editor for comments)</typeparam>
 		/// <returns></returns>
-		public static List<PropertyInfo> GetProperties<T>() where T : Record
+		public static List<PropertyInfo> GetProperties<T>(bool includeReadOnly = false) where T : Record
 		{
-			return GetProperties(typeof (T));
-		} 
+			return GetProperties(typeof (T), includeReadOnly);
+		}
 
 		/// <summary>
 		/// Get list of serializable properties in record type
 		/// </summary>
 		/// <param name="t"></param>
+		/// <param name="includeReadOnly">Include properties which cannot be written to (used in editor for comments)</param>
 		/// <returns></returns>
-		public static List<PropertyInfo> GetProperties(Type t)
+		public static List<PropertyInfo> GetProperties(Type t, bool includeReadOnly = false)
 		{
 
-			var props = t.GetProperties().Where(p => !p.HasAttribute<JsonIgnoreAttribute>());
+			// Check base class first, since calling GetProperties() on child class doesn't return setter
+			var properties = t.BaseType != null ? GetProperties(t.BaseType) : new List<PropertyInfo>();
 
-			return props.ToList();
+			properties.AddRange(
+				t.GetProperties()
+					.Where(p => (includeReadOnly || p.CanWrite) && !p.HasAttribute<JsonIgnoreAttribute>())
+					// Ensure unique properties only
+					.Except(properties, PropertyInfoNameEqualityComparer.Instance));
+
+			return properties;
 
 		}
 
@@ -134,6 +142,24 @@ namespace Papyrus.Core.Util
 			       ).ToList();
 
 		}
+
+		private class PropertyInfoNameEqualityComparer : EqualityComparer<PropertyInfo>
+		{
+
+			public static readonly PropertyInfoNameEqualityComparer Instance = new PropertyInfoNameEqualityComparer();
+
+			public override int GetHashCode(PropertyInfo obj)
+			{
+				return obj == null ? 0 : obj.Name.GetHashCode();
+			}
+
+			public override bool Equals(PropertyInfo x, PropertyInfo y)
+			{
+				return x.Name.Equals(y.Name);
+			}
+
+		}
+
 
 	}
 
