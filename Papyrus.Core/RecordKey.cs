@@ -24,9 +24,9 @@ namespace Papyrus.Core
 		/// <summary>
 		/// A blank record key
 		/// </summary>
-		public static readonly RecordKey Identity = new RecordKey(-1);
+		public static readonly RecordKey Identity = new RecordKey();
 
-		public const char Seperator = '/';
+		internal const char Seperator = '/';
 
 		/// <summary>
 		/// Name of plugin the key is referencing
@@ -49,12 +49,21 @@ namespace Papyrus.Core
 		private string _plugin;
 		private int _index;
 
-		public RecordKey(int index, string plugin = null) : this()
+		/// <summary>
+		/// Create new RecordRef from an index and plugin identifier.
+		/// </summary>
+		/// <param name="index"></param>
+		/// <param name="plugin"></param>
+		public RecordKey(int index, string plugin = "") : this()
 		{
 			Index = index;
 			Plugin = plugin;
 		}
 
+		/// <summary>
+		/// Create RecordRef object from string representation (e.g. 00000F/PluginName)
+		/// </summary>
+		/// <param name="str"></param>
 		public RecordKey(string str)
 		{
 			this = FromString(str);

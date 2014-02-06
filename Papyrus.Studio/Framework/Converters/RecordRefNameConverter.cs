@@ -39,12 +39,14 @@ namespace Papyrus.Studio.Framework.Converters
 			if (recordRef.Key == RecordKey.Identity)
 				return "Empty";
 
-
 			try {
 
 				var papyrusManager = IoC.Get<IPapyrusManager>();
 
 				var record = papyrusManager.PluginComposer.Get(recordRef);
+
+				if (record == null)
+					return string.Format("ERROR: Broken Ref ({0})", recordRef);
 
 				return string.Format("{0} ({1})", record.EditorID, recordRef);
 
