@@ -54,7 +54,13 @@ namespace Papyrus.Studio.Modules.PapyrusManager
 		/// <param name="provider">EditorProvider to open the record in, or null to display a list.</param>
 		/// <returns></returns>
 		IEnumerable<IResult> OpenRecordWith(Papyrus.Core.Record record, IRecordEditorProvider provider = null);
-			
+
+		/// <summary>
+		/// Delete given record from plugin
+		/// </summary>
+		/// <param name="record"></param>
+		IEnumerable<IResult> DeleteRecord(Core.Record record);
+
 		/// <summary>
 		/// Saves the plugin being edited.
 		/// </summary>

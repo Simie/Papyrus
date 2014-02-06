@@ -367,13 +367,36 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 
 			if (error != null) {
 				yield return ShowExt.Exception(error);
-				MessageBox.Show("Error Opening Record", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				MessageBoxEx.ShowInfo("Error", "Error Opening Record", "Ok");
 				yield break;
 			}
 
 			yield return Show.Document(document);
 
-		} 
+		}
+
+
+		public IEnumerable<IResult> DeleteRecord(Record r)
+		{
+
+			if (r.Key.Plugin != PluginComposer.Plugin.Name) {
+				MessageBoxEx.ShowInfo("Delete Record", "This record can not be deleted. This plugin is not the root source for this record", "Ok");
+				yield break;
+			}
+
+			if(MessageBoxEx.ShowConfirm("Delete Record", "Are you sure you want to delete this record? This can cause problems if child plugins are modifying this record.", "Yes", "No", "Cancel", "I Understand The Risks") != MessageBoxEx.MessageBoxResult.Yes)
+				yield break;
+
+			var editor = FindExistingEditor(r);
+
+			if (editor != null) {
+				editor.TryClose();
+			}
+
+			PluginComposer.DeleteRecord(r);
+
+		}
+
 
 		public IEnumerable<IResult> ViewActivePluginSummary()
 		{

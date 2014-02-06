@@ -185,7 +185,7 @@ namespace Papyrus.Studio.Modules.RecordBrowser.ViewModels
 		public IEnumerable<IResult> DeleteRecord(Record record)
 		{
 
-			yield break;
+			yield return new SequentialResult(_papyrusManager.DeleteRecord(record).GetEnumerator());
 
 		} 
 

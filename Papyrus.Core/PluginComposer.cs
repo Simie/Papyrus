@@ -49,10 +49,11 @@ namespace Papyrus.Core
 		/// Edit a plugin. Provide a list of dependencies to load from.
 		/// </summary>
 		/// <param name="plugin">Plugin to edit</param>
-		/// <param name="dependencies">List of plugins to load dependencies from</param>
+		/// <param name="dependencies">List of plugins to load dependencies from (if any)</param>
 		/// <returns></returns>
-		public static PluginComposer EditPlugin(Plugin plugin, IList<Plugin> dependencies)
+		public static PluginComposer EditPlugin(Plugin plugin, IList<Plugin> dependencies = null)
 		{
+			if(dependencies == null) dependencies = new Plugin[0];
 			return new PluginComposer(plugin, dependencies);
 		}
 
@@ -271,6 +272,31 @@ namespace Papyrus.Core
 			Plugin.Records.AddRecord(existingParent);
 
 			// Editor record list needs updating as a result
+			OnRecordListChanged();
+
+			NeedSaving = true;
+
+		}
+
+		/// <summary>
+		/// Delete record from plugin. Records can only be deleted from the plugin they are first created in (child plugins cannot delete parent plugin records)
+		/// </summary>
+		/// <remarks>
+		/// NOTE: This can cause serious problems when this record is being references from other records, or in child plugins.
+		/// Only delete a record if you are sure it is not referenced.
+		/// </remarks>
+		/// <exception cref="InvalidOperationException">Thrown if record did not originate in this plugin.</exception>
+		/// <param name="record"></param>
+		public void DeleteRecord(Record record)
+		{
+
+			if (record.Key.Plugin != Plugin.Name) {
+				throw new InvalidOperationException("Plugin is not root for Record");
+			}
+
+			var type = record.GetType();
+			Plugin.Records.RemoveRecord(type, record.Key);
+
 			OnRecordListChanged();
 
 			NeedSaving = true;

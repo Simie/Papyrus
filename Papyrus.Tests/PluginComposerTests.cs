@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
@@ -254,6 +255,65 @@ namespace Papyrus.Tests
 
 			Assert.IsTrue(record1 is TestChild1);
 			Assert.IsTrue(record2 is TestChild2);
+
+		}
+
+		[TestMethod]
+		public void TestRemoveRecord()
+		{
+
+			var plugin = PluginLoader.LoadPluginString(TestPlugins.TestParentPlugin);
+
+			bool eventFired = false;
+
+			var composer = PluginComposer.EditPlugin(plugin);
+			composer.RecordListChanged += (sender, args) => {
+				eventFired = true;
+			};
+
+			var records = composer.GetRecords<TestRecord>().ToList();
+
+			composer.DeleteRecord(records[0]);
+
+			Assert.IsFalse(composer.GetRecords<TestRecord>().Contains(records[0]),
+				"Deleted Record should not be returned by GetRecords");	
+			
+			Assert.IsTrue(composer.GetRecords<TestRecord>().Contains(records[1]),
+				"Non-Deleted Record should be returned by GetRecords");
+
+			Assert.IsTrue(eventFired, "RecordListchanged event should fire");
+
+		}
+
+
+		[TestMethod]
+		public void TestRemoveRecordFromParent()
+		{
+
+			var parentPlugin = PluginLoader.LoadPluginString(TestPlugins.TestParentPlugin);
+			var childPlugin = PluginLoader.LoadPluginString(TestPlugins.TestChildPlugin);
+
+			var composer = PluginComposer.EditPlugin(childPlugin, new[] {parentPlugin});
+
+			var records = composer.GetRecords<TestRecord>().ToList();
+
+			try {
+
+				composer.DeleteRecord(records[0]);
+				Assert.Fail("DeleteRecord should have thrown an exception");
+
+			} catch (InvalidOperationException e) {
+				// OK
+			} catch {
+				Assert.Fail("DeleteRecord should throw InvalidOperationException");
+			}
+
+
+			Assert.IsTrue(composer.GetRecords<TestRecord>().Contains(records[0]),
+				"Non-Deleted Record should be returned by GetRecords");			
+			
+			Assert.IsTrue(composer.GetRecords<TestRecord>().Contains(records[1]),
+				"Non-Deleted Record should be returned by GetRecords");
 
 		}
 

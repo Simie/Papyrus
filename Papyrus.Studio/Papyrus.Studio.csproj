@@ -118,6 +118,7 @@
     <Compile Include="Framework\Converters\RecordRefNameConverter.cs" />
     <Compile Include="Framework\IRecordViewModel.cs" />
     <Compile Include="Framework\ISaveAware.cs" />
+    <Compile Include="Framework\MessageBoxEx.cs" />
     <Compile Include="Framework\PapyrusPropertyControlFactory.cs" />
     <Compile Include="Framework\ComponentModel\PapyrusPropertyDescriptor.cs" />
     <Compile Include="Framework\RecordViewModel.cs" />
