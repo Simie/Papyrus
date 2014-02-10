@@ -95,8 +95,20 @@ namespace Papyrus.Core
 
 			var nextIndex = 0;
 
-			if(records.Any())
-				nextIndex = records.Max(p => p.InternalKey.Index)+1;
+			if (records.Any()) {
+
+				foreach (var record in records) {
+
+					var index = record.Key.Index;
+
+					if (index > nextIndex)
+						nextIndex = index;
+
+				}
+
+				nextIndex++;
+
+			}
 
 			return new RecordKey(nextIndex, Name);
 
