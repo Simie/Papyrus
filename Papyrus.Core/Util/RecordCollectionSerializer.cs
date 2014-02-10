@@ -41,6 +41,9 @@ namespace Papyrus.Core.Util
 
 				var recordType = ReflectionUtil.ResolveRecordType(typeName);
 
+				if(recordType == null)
+					throw new Exception("Unknown record type " + typeName);
+
 				// Iterate over each record in list
 				foreach (var record in recordList.Value) {
 
