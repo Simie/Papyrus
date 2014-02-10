@@ -99,7 +99,23 @@ namespace Papyrus.Core
 
 		public bool Equals(ReadOnlyCollection<T> other)
 		{
-			return this.SequenceEqual(other);
+
+			if (other._internalList == null && _internalList == null)
+				return true;
+
+			if (other._internalList == null || _internalList == null)
+				return false;
+
+			if (_internalList.Count != other._internalList.Count)
+				return false;
+
+			for (var i = 0; i < _internalList.Count; i++) {
+				if (!_internalList[i].Equals(other._internalList[i]))
+					return false;
+			}
+
+			return true;
+
 		}
 
 		public override bool Equals(object obj)
