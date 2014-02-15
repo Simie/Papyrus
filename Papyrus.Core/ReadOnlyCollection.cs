@@ -110,7 +110,7 @@ namespace Papyrus.Core
 				return false;
 
 			for (var i = 0; i < _internalList.Count; i++) {
-				if (!_internalList[i].Equals(other._internalList[i]))
+				if (!EqualityComparer<T>.Default.Equals(_internalList[i], other._internalList[i]))
 					return false;
 			}
 
