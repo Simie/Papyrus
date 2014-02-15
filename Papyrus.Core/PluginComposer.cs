@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,7 @@ namespace Papyrus.Core
 	/// Loads a selection of plugins and allows edit operations. The resulting changes can be saved
 	/// to a new plugin. Slow read performance compared to <c>RecordDatabase</c>.
 	/// </summary>
-	public sealed class PluginComposer
+	public sealed class PluginComposer : INotifyPropertyChanged
 	{
 
 		#region Static Factory Methods
@@ -67,12 +68,27 @@ namespace Papyrus.Core
 		/// <summary>
 		/// True when there are changes to the Plugin which need to be saved
 		/// </summary>
-		public bool NeedSaving { get; private set; }
+		public bool NeedSaving
+		{
+			get { return _needSaving; }
+			private set
+			{
+				if (value == _needSaving)
+					return;
+				_needSaving = value;
+				OnPropertyChanged("NeedSaving");
+			}
+		}
 
 		/// <summary>
 		/// Simple event when an operation should cause a record list refresh
 		/// </summary>
 		public event EventHandler RecordListChanged;
+
+		/// <summary>
+		/// Invoked when a property has changed
+		/// </summary>
+		public event PropertyChangedEventHandler PropertyChanged;
 
 		/// <summary>
 		/// Additional loaded plugins (read-only)
@@ -83,6 +99,8 @@ namespace Papyrus.Core
 		/// RecordCollection object created from all parent plugins
 		/// </summary>
 		private RecordCollection _baseRecordCollection;
+
+		private bool _needSaving;
 
 
 		PluginComposer(Plugin plugin)
@@ -245,6 +263,9 @@ namespace Papyrus.Core
 
 					// Copy new values to existing record
 					RecordReflectionUtil.Populate(record, existing, true);
+
+					// Editor record list needs updating as a result
+					OnRecordListChanged();
 
 					NeedSaving = true;
 
@@ -449,6 +470,15 @@ namespace Papyrus.Core
 
 			if (handler != null)
 				handler(this, EventArgs.Empty);
+
+		}
+
+		private void OnPropertyChanged(string propName)
+		{
+
+			if (PropertyChanged != null) {
+				PropertyChanged(this, new PropertyChangedEventArgs(propName));
+			}
 
 		}
 
