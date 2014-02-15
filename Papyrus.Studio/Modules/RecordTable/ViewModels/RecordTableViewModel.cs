@@ -76,8 +76,14 @@ namespace Papyrus.Studio.Modules.RecordTable.ViewModels
 
 		public void OpenSelectedRecord()
 		{
-			if(SelectedRecord != null)
-				Coroutine.BeginExecute(_papyrusManager.OpenRecord(SelectedRecord).GetEnumerator());
+			if (SelectedRecord != null) {
+				OpenRecord(SelectedRecord);
+			}
+		}
+
+		public void OpenRecord(Record record)
+		{
+			Coroutine.BeginExecute(_papyrusManager.OpenRecord(record).GetEnumerator());
 		}
 
 	}

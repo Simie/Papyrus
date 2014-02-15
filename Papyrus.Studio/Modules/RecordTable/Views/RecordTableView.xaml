@@ -11,9 +11,14 @@
              <Label DockPanel.Dock="Left">Record Type: </Label>
              <ComboBox ItemsSource="{Binding RecordTypes}" SelectedItem="{Binding SelectedRecordType}" ItemStringFormat="{}{0}"></ComboBox>
         </DockPanel>
-        <xcdg:DataGridControl SelectedItem="{Binding SelectedRecord}" Name="DataGrid" ItemsSource="{Binding Records}" SelectionMode="Single" AutoCreateColumns="False" IsCopyCommandEnabled="False" NavigationBehavior="RowOnly" ReadOnly="True" MouseDoubleClick="DataGrid_MouseDoubleClick">
+        <xcdg:DataGridControl SelectedItem="{Binding SelectedRecord}" Name="DataGrid" ItemsSource="{Binding Records}" SelectionMode="Single" AutoCreateColumns="False" IsCopyCommandEnabled="False" NavigationBehavior="RowOnly" ReadOnly="True">
+            <xcdg:DataGridControl.Resources>
+                <Style TargetType="{x:Type xcdg:DataRow}">
+                    <EventSetter Event="MouseDoubleClick" Handler="RowDoubleClickHandler" />
+                </Style>
+            </xcdg:DataGridControl.Resources>
             <xcdg:DataGridControl.View>
-                <xcdg:TableflowView ColumnStretchMode="Last">
+                <xcdg:TableflowView ColumnStretchMode="Last" HorizontalGridLineBrush="White">
                 </xcdg:TableflowView>
             </xcdg:DataGridControl.View>
         </xcdg:DataGridControl>

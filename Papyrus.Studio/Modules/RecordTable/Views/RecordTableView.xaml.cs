@@ -102,9 +102,20 @@ namespace Papyrus.Studio.Modules.RecordTable.Views
 
 		}
 
-		private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+		private void RowDoubleClickHandler(object sender, MouseButtonEventArgs e)
 		{
-			ViewModel.OpenSelectedRecord();
+
+			var row = e.Source as DataRow;
+
+			if (row == null) {
+				ViewModel.OpenSelectedRecord();
+				return;
+			}
+
+			var record = row.DataContext as Record;
+
+			ViewModel.OpenRecord(record);
+
 		}
 
 	}
