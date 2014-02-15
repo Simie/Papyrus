@@ -32,6 +32,11 @@ namespace Papyrus.Studio.Modules.RecordBrowser.ViewModels
 			get { return PaneLocation.Left; }
 		}
 
+		public override double PreferredWidth
+		{
+			get { return 250; }
+		}
+
 		public override Uri IconSource
 		{
 			get { return new Uri("pack://application:,,,/Papyrus.Studio;component/Resources/Icons/Database.png"); }
