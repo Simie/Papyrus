@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="Papyrus.Studio.Modules.RecordTable.Views.RecordTableView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="600" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top" Margin="5">
+             <Label DockPanel.Dock="Left">Record Type: </Label>
+             <ComboBox ItemsSource="{Binding RecordTypes}" SelectedItem="{Binding SelectedRecordType}" ItemStringFormat="{}{0}"></ComboBox>
+        </DockPanel>
+        <xcdg:DataGridControl SelectedItem="{Binding SelectedRecord}" Name="DataGrid" ItemsSource="{Binding Records}" SelectionMode="Single" AutoCreateColumns="False" IsCopyCommandEnabled="False" NavigationBehavior="RowOnly" ReadOnly="True" MouseDoubleClick="DataGrid_MouseDoubleClick">
+            <xcdg:DataGridControl.View>
+                <xcdg:TableflowView ColumnStretchMode="Last">
+                </xcdg:TableflowView>
+            </xcdg:DataGridControl.View>
+        </xcdg:DataGridControl>
+    </DockPanel>
+</UserControl>
