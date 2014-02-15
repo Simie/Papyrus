@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Papyrus.Core;
 using Papyrus.Studio.Modules.RecordTable.ViewModels;
 using Xceed.Wpf.DataGrid;
 
@@ -48,6 +49,21 @@ namespace Papyrus.Studio.Modules.RecordTable.Views
 
 		}
 
+		private static readonly ICollection<Type> PermittedSortTypes = new[] {
+			typeof(string),
+			typeof(int),
+			typeof(double),
+			typeof(float),
+			typeof(Enum)
+		};
+
+		private static readonly ICollection<Type> ExcludedTypes = new[] {
+			typeof (RecordRefCollection<>),
+			typeof (ReadOnlyCollection<>),
+			typeof(ICollection<>),
+			typeof(IList<>)
+		};
+
 		void UpdateColumns(Type recordType)
 		{
 
@@ -61,13 +77,23 @@ namespace Papyrus.Studio.Modules.RecordTable.Views
 			DataGrid.Columns.Clear();
 
 			DataGrid.Columns.Add(new Column() {
-				FieldName = "Key", Title = "Key", ReadOnly = true, IsMainColumn = true
+				FieldName = "Key", Title = "Key", ReadOnly = true, IsMainColumn = true, AllowSort = false
 			});
 
 			foreach (var p in props) {
 
+				if(ExcludedTypes.Any(q => q.IsAssignableFrom(p.PropertyType)))
+					continue;
+
+				if (p.PropertyType.IsGenericType) {
+					if(ExcludedTypes.Any(q => q.IsAssignableFrom(p.PropertyType.GetGenericTypeDefinition())))
+						continue;
+				}
+
+				var canSort = PermittedSortTypes.Contains(p.PropertyType);
+
 				DataGrid.Columns.Add(new Column() {
-					FieldName = p.Name, Title = p.Name, ReadOnly = true
+					FieldName = p.Name, Title = p.Name, ReadOnly = true, AllowSort = canSort
 				});
 
 			}
