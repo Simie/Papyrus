@@ -6,6 +6,7 @@
  * of the license can be found at https://github.com/stompyrobot/Papyrus/wiki/License.
  */
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
@@ -47,7 +48,8 @@ namespace Papyrus.Studio.Modules.Startup
 
 			TypeDescriptor.AddProvider(new RecordTypeProvider(), typeof(Core.Record));
 
-			_shell.Title = Title;
+			MainWindow.Title = Title;
+			MainWindow.WindowState = WindowState.Maximized;
 
 			if (_papyrusManager.PluginComposer != null)
 			{
@@ -172,51 +174,58 @@ namespace Papyrus.Studio.Modules.Startup
 		private void WireDatabase()
 		{
 
-			//_pluginComposer.PropertyChanged += RecordDatabaseOnPropertyChanged;
+			_pluginComposer.RecordListChanged += PluginComposerOnRecordListChanged;
+			_pluginComposer.PropertyChanged += PluginComposerOnPropertyChanged;
 			UpdateTitle();
 
 		}
 
+
+
 		void UpdateTitle()
 		{
 
-
-
 			if (_pluginComposer == null) {
-				Shell.Title = Title;
+				MainWindow.Title = Title;
 				return;
 			}
 
-			Shell.Title = _pluginComposer.Plugin.Name;
+			var title = _pluginComposer.Plugin.Name;
 
-			//if (_pluginComposer.NeedsSaving)
-			//	Shell.Title += "*";
+			if (_pluginComposer.NeedSaving)
+				title += "*";
 
-			Shell.Title += " - " + Title;
+			title += " - " + Title;
 
+			MainWindow.Title = title;
 
 		}
 
 		void UnwireDatabase()
 		{
+
 			if (_pluginComposer == null)
 				return;
 
-			//_pluginComposer.PropertyChanged += RecordDatabaseOnPropertyChanged;
+			_pluginComposer.PropertyChanged -= PluginComposerOnPropertyChanged;
+			_pluginComposer.RecordListChanged -= PluginComposerOnRecordListChanged;
 
 		}
 
-		private void RecordDatabaseOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+		private void PluginComposerOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
 		{
-			
 			UpdateTitle();
+		}
 
+		private void PluginComposerOnRecordListChanged(object sender, EventArgs eventArgs)
+		{
+			UpdateTitle();
 		}
 
 		private void PapyrusManagerOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
 		{
 
-			if (propertyChangedEventArgs.PropertyName == "RecordDatabase") {
+			if (propertyChangedEventArgs.PropertyName == "PluginComposer") {
 				
 				UnwireDatabase();
 				_pluginComposer = _papyrusManager.PluginComposer;
