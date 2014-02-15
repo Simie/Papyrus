@@ -94,19 +94,31 @@ namespace Papyrus.Core.Util
 			var type = record.GetType();
 			var clone = (Record)Activator.CreateInstance(type);
 
-			Populate(record, clone);
+			Populate(record, clone, true, true);
 
 			return clone;
 
 		}
 
 		/// <summary>
-		/// Populate dest with the property values from source
+		/// Populate destination record with values from source
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="dest"></param>
+		public static void Populate(Record source, Record dest)
+		{
+			Populate(source, dest, false, false);
+		}
+
+		/// <summary>
+		/// Populate dest with the property values from source. This method is internal as it allows the unfreezing of a record.
+		///  A safe public version is above.
 		/// </summary>
 		/// <param name="source">Copy source</param>
 		/// <param name="dest">Copy destination</param>
 		/// <param name="autoUnfreeze">Automatically set IsFrozen to allow the populate to succeed</param>
-		internal static void Populate(Record source, Record dest, bool autoUnfreeze = false)
+		/// <param name="copyKey">Copy Key property (disallowed in public code)</param>
+		internal static void Populate(Record source, Record dest, bool autoUnfreeze, bool copyKey)
 		{
 
 			if (source.GetType() != dest.GetType()) 
@@ -115,13 +127,15 @@ namespace Papyrus.Core.Util
 			var type = source.GetType();
 
 			var origFreeze = dest.IsFrozen;
+			var origKey = dest.InternalKey;
 
 			if (autoUnfreeze)
 				dest.IsFrozen = false;
 
 			// Populate dest record with json properties
 			RecordSerializer.FromJson(RecordSerializer.ToJson(source), type, dest);
-			dest.InternalKey = source.InternalKey;
+
+			dest.InternalKey = copyKey ? source.InternalKey : origKey;
 
 			dest.IsFrozen = origFreeze;
 

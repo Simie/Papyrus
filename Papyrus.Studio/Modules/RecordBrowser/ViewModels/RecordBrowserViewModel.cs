@@ -168,7 +168,15 @@ namespace Papyrus.Studio.Modules.RecordBrowser.ViewModels
 			if (SelectedRecord == null)
 				return;
 
-			var newRecord = _papyrusManager.PluginComposer.GetEditableRecord(SelectedRecord.GetType(), SelectedRecord.Key);
+			var existing = SelectedRecord;
+
+			var newRecord = _papyrusManager.PluginComposer.CreateRecord(existing.GetType());
+			Core.Util.RecordReflectionUtil.Populate(existing, newRecord);
+
+			newRecord.SetProperty(() => newRecord.EditorID, string.Format("{0} copy", existing.EditorID));
+
+			_papyrusManager.PluginComposer.SaveRecord(newRecord);
+
 			Coroutine.BeginExecute(_papyrusManager.OpenRecord(newRecord).GetEnumerator());
 
 		}

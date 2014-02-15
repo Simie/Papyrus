@@ -249,7 +249,7 @@ namespace Papyrus.Core
 						Plugin.Records.RemoveRecord(recordType, existing.InternalKey);
 
 						// Copy original property values from existing parent
-						RecordReflectionUtil.Populate(existingParent, existing, true);
+						RecordReflectionUtil.Populate(existingParent, existing, true, true);
 
 						_baseRecordCollection.AddRecord(existing, true);
 						NeedSaving = true;
@@ -262,7 +262,7 @@ namespace Papyrus.Core
 						return;
 
 					// Copy new values to existing record
-					RecordReflectionUtil.Populate(record, existing, true);
+					RecordReflectionUtil.Populate(record, existing, true, true);
 
 					// Editor record list needs updating as a result
 					OnRecordListChanged();
@@ -287,7 +287,7 @@ namespace Papyrus.Core
 
 			// Apply changes to the existing Record object in parent plugin, so that any Record objects
 			// retrived with GetRecord have the most up-to-date values.
-			RecordReflectionUtil.Populate(record, existingParent, true);
+			RecordReflectionUtil.Populate(record, existingParent, true, true);
 
 			// Add record to active plugin
 			Plugin.Records.AddRecord(existingParent);

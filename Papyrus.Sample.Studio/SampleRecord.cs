@@ -49,7 +49,11 @@ namespace Papyrus.Studio.TestTypes
 
 		public string TestString { get; private set; }
 
+		[PropertyTools.DataAnnotations.Spinnable]
 		public int TestInteger { get; private set; }
+
+		[PropertyTools.DataAnnotations.Spinnable]
+		public float TestFloat { get; private set; }
 
 		public RecordRef<ParentRecord> TestPolyRef { get; private set; }
 
