@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Papyrus.Core;
+using Papyrus.Studio.Framework.Converters;
 using Papyrus.Studio.Modules.RecordTable.ViewModels;
 using Xceed.Wpf.DataGrid;
 
@@ -24,6 +25,8 @@ namespace Papyrus.Studio.Modules.RecordTable.Views
 	public partial class RecordTableView : UserControl
 	{
 
+		private RecordRefNameConverter _nameConverter;
+
 		RecordTableViewModel ViewModel {get { return DataContext as RecordTableViewModel; }}
 
 		private Type _previousRecordType;
@@ -32,6 +35,7 @@ namespace Papyrus.Studio.Modules.RecordTable.Views
 		{
 			InitializeComponent();
 			Loaded += OnLoaded;
+			_nameConverter = new RecordRefNameConverter();
 		}
 
 		private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
@@ -92,9 +96,20 @@ namespace Papyrus.Studio.Modules.RecordTable.Views
 
 				var canSort = PermittedSortTypes.Contains(p.PropertyType);
 
-				DataGrid.Columns.Add(new Column() {
+				var column = new Column() {
 					FieldName = p.Name, Title = p.Name, ReadOnly = true, AllowSort = canSort
-				});
+				};
+
+				if (p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof (RecordRef<>)) {
+					
+					column.DisplayMemberBindingInfo = new DataGridBindingInfo() {
+						Path = new PropertyPath(p.Name),
+						Converter = _nameConverter, ReadOnly = true
+					};
+
+				}
+
+				DataGrid.Columns.Add(column);
 
 			}
 

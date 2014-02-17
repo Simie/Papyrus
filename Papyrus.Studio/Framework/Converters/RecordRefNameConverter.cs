@@ -29,7 +29,10 @@ namespace Papyrus.Studio.Framework.Converters
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			
+
+			if (!targetType.IsAssignableFrom(typeof (string)))
+				return Binding.DoNothing;
+
 			var recordRef = value as IRecordRef;
 
 			if (recordRef == null) {
