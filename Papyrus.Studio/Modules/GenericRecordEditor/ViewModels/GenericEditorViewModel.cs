@@ -6,12 +6,14 @@
  * of the license can be found at https://github.com/stompyrobot/Papyrus/wiki/License.
  */
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Caliburn.Micro;
 using Papyrus.Core;
 using Papyrus.Studio.Framework;
 using Gemini.Framework;
+using Papyrus.Studio.Properties;
 
 namespace Papyrus.Studio.Modules.GenericRecordEditor.ViewModels
 {
@@ -73,7 +75,7 @@ namespace Papyrus.Studio.Modules.GenericRecordEditor.ViewModels
 			var baseName = string.IsNullOrEmpty(RecordModel.RecordID) ? "[Unnamed]" : RecordModel.RecordID;
 
 			if (IsDirty)
-				baseName = baseName + "*";
+				baseName = baseName + Resources.IsDirtyIndicatorString;
 
 			DisplayName = baseName;
 

@@ -20,6 +20,7 @@ using Gemini.Modules.MainMenu.Models;
 using Papyrus.Studio.Framework;
 using Papyrus.Studio.Framework.ComponentModel;
 using Papyrus.Studio.Modules.PapyrusManager;
+using Papyrus.Studio.Properties;
 
 namespace Papyrus.Studio.Modules.Startup
 {
@@ -193,7 +194,7 @@ namespace Papyrus.Studio.Modules.Startup
 			var title = _pluginComposer.Plugin.Name;
 
 			if (_pluginComposer.NeedSaving)
-				title += "*";
+				title += Resources.IsDirtyIndicatorString;
 
 			title += " - " + Title;
 

@@ -11,7 +11,8 @@ using Caliburn.Micro;
 
 namespace Papyrus.Studio.Framework
 {
-	public interface ISaveAware {
+	public interface ISaveAware
+	{
 
 		/// <summary>
 		/// Save the record

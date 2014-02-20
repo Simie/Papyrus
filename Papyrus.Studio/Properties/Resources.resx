@@ -117,4 +117,8 @@
 	<data name="Select_Data_Directory">
 		<value xml:space="preserve">Select Data Directory</value>
 	</data>
+	<data name="IsDirtyIndicatorString" xml:space="preserve">
+    <value>&#8226;</value>
+    <comment>String appended to tab title if it needs saving</comment>
+  </data>
 </root>
