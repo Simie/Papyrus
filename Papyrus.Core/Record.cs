@@ -16,8 +16,11 @@ using Newtonsoft.Json;
 namespace Papyrus.Core
 {
 
+	/// <summary>
+	/// Base class for all serializable records.
+	/// </summary>
 	[JsonConverter(typeof(Util.JsonConverters.RecordConverter))]
-	public class Record : Freezable
+	public abstract class Record : Freezable
 	{
 
 		// Store the key in an internal field to prevent user setting it from SetProperty (IFreezable)
