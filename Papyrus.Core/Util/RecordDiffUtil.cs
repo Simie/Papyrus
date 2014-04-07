@@ -15,18 +15,46 @@ using System.Text;
 namespace Papyrus.Core.Util
 {
 
-	internal struct PropertyDiff
+	/// <summary>
+	/// Represents a difference between values
+	/// </summary>
+	public struct PropertyDiff
 	{
 
-		public PropertyInfo Property;
+		/// <summary>
+		/// Property that changed
+		/// </summary>
+		public readonly PropertyInfo Property;
 
-		public object OldValue;
+		/// <summary>
+		/// Value before change
+		/// </summary>
+		public readonly object OldValue;
 
-		public object NewValue;
+		/// <summary>
+		/// Value after change
+		/// </summary>
+		public readonly object NewValue;
+
+		/// <summary>
+		/// Construct new PropertyDiff
+		/// </summary>
+		/// <param name="p"></param>
+		/// <param name="o"></param>
+		/// <param name="n"></param>
+		public PropertyDiff(PropertyInfo p, object o, object n)
+		{
+			Property = p;
+			OldValue = o;
+			NewValue = n;
+		}
 
 	}
 
-	internal static class RecordDiffUtil
+	/// <summary>
+	/// Utilies for compararing records and record properties
+	/// </summary>
+	public static class RecordDiffUtil
 	{
 
 		/// <summary>
@@ -63,7 +91,16 @@ namespace Papyrus.Core.Util
 
 		} 
 
-		private static bool DiffProperty(PropertyInfo property, object r1, object r2, out PropertyDiff? diff)
+
+		/// <summary>
+		/// Check for difference between property values
+		/// </summary>
+		/// <param name="property">Property to check</param>
+		/// <param name="r1">'old' object</param>
+		/// <param name="r2">'new' object</param>
+		/// <param name="diff"></param>
+		/// <returns>False if the properties are identical</returns>
+		public static bool DiffProperty(PropertyInfo property, object r1, object r2, out PropertyDiff? diff)
 		{
 
 			object v1 = property.GetValue(r1, null);
@@ -77,7 +114,7 @@ namespace Papyrus.Core.Util
 
 			}
 
-			diff = new PropertyDiff {OldValue = v1, NewValue = v2, Property = property};
+			diff = new PropertyDiff(property, v1, v2);
 
 			return true;
 
