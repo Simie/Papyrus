@@ -9,10 +9,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
+using Caliburn.Micro;
 using Papyrus.Core;
 using Papyrus.Studio.Framework.Controls;
+using Papyrus.Studio.Framework.Services;
 using PropertyTools.Wpf;
 using Xceed.Wpf.Toolkit;
 
@@ -37,75 +40,13 @@ namespace Papyrus.Studio.Framework
 		public override System.Windows.FrameworkElement CreateControl(PropertyItem property, PropertyControlFactoryOptions options)
 		{
 
-			if (typeof(IRecordRef).IsAssignableFrom(property.ActualPropertyType)) {
+			var factories = IoC.GetAll<IPropertyControlProvider>();
 
-				return CreateRecordReferenceControl(property);
+			FrameworkElement e = null;
 
-			}
-
-
-			if (typeof (IRecordRefCollection).IsAssignableFrom(property.ActualPropertyType)) {
-
-				return CreateRecordReferenceListControl(property);
-
-			}
-
-			if (property.ActualPropertyType.IsGenericType &&
-			    property.ActualPropertyType.GetGenericTypeDefinition() == typeof (ReadOnlyCollection<>)) {
-
-				return CreateCollectionControl(property);
-
-			}
-
-			if (typeof(ICollection).IsAssignableFrom(property.ActualPropertyType)) {
-				return CreateCollectionControl(property);
-			}
-
-			/*if (typeof (Papyrus.DataTypes.Color) == property.ActualPropertyType) {
-
-				return CreatePapyrusColorControl(property);
-
-			}*/
-
-			return base.CreateControl(property, options);
+			return factories.Any(factory => (e = factory.CreateControl(property, options)) != null) ? e : base.CreateControl(property, options);
 
 		}
-
-		public FrameworkElement CreateRecordReferenceControl(PropertyItem item)
-		{
-
-			var c = new RecordReferenceItem();
-			c.SetBinding(RecordReferenceItem.RecordReferenceProperty, item.CreateBinding());
-			return c;
-
-		}
-
-		public FrameworkElement CreateRecordReferenceListControl(PropertyItem item)
-		{
-
-			var c = new RecordList();
-			c.SetBinding(RecordList.SourceListProperty, item.CreateBinding());
-			return c;
-
-		}
-
-		public FrameworkElement CreateCollectionControl(PropertyItem item)
-		{
-
-			var c = new CollectionEditor();
-			c.SetBinding(CollectionEditor.ItemsSourceProperty, item.CreateBinding());
-			return c;
-
-		}
-
-		/*public FrameworkElement CreatePapyrusColorControl(PropertyItem item)
-		{
-			var c = new ColorPicker2();
-			var binding = item.CreateBinding();
-			binding.Converter = new PapyrusColorConverter();
-			c.SetBinding(ColorPicker2.SelectedColorProperty, binding);
-			return c;
-		}*/
 
 	}
 

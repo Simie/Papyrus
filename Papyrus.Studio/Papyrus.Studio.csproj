@@ -141,6 +141,7 @@
     <Compile Include="Framework\Results\ShowModalResult.cs" />
     <Compile Include="Framework\SaveUtil.cs" />
     <Compile Include="Framework\Services\IExceptionHandler.cs" />
+    <Compile Include="Framework\Services\IPropertyControlProvider.cs" />
     <Compile Include="Framework\Services\ResultExtensions.cs" />
     <Compile Include="Framework\UIHelper.cs" />
     <Compile Include="Modules\ExceptionHandler\Module.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="Modules\GenericRecordEditor\Views\GenericRecordView.xaml.cs">
       <DependentUpon>GenericRecordView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Modules\PapyrusManager\ViewModels\PapyrusPropertyControlFactoryImpl.cs" />
     <Compile Include="Modules\PapyrusManager\ViewModels\PluginViewModel.cs" />
     <Compile Include="Modules\RecordBrowser\IRecordBrowser.cs" />
     <Compile Include="Modules\RecordBrowser\Module.cs" />
