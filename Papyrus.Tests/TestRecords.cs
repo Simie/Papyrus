@@ -10,6 +10,18 @@ namespace Papyrus.Tests
 	class TestRecord : Record
 	{
 
+		[Flags]
+		public enum FlagsTest
+		{
+
+			None = 0,
+			One = 1 << 0,
+			Two = 1 << 1,
+			Three = 1 << 2,
+
+			All = One | Two | Three
+
+		}
 
 		public bool TestBoolean { get; private set; }
 
@@ -24,6 +36,7 @@ namespace Papyrus.Tests
 
 		public string ShouldIgnoreReadOnlyString { get { return "Test"; } }
 
+		public FlagsTest EnumFlagsTest { get; private set; }
 
 	}
 

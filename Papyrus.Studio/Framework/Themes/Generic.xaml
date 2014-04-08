@@ -10,6 +10,7 @@
 		<ResourceDictionary Source="/Papyrus.Studio;component/Framework/Controls/RecordReferenceItem/Generic.xaml" />
 		<ResourceDictionary Source="/Papyrus.Studio;component/Framework/Controls/RecordList/Generic.xaml" />
 		<ResourceDictionary Source="/Papyrus.Studio;component/Framework/Controls/CollectionEditor/Generic.xaml" />
+		<ResourceDictionary Source="/Papyrus.Studio;component/Framework/Controls/EnumFlagsControl/Generic.xaml" />
 		
 	</ResourceDictionary.MergedDictionaries>
 	

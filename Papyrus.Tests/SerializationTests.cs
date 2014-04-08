@@ -72,6 +72,33 @@ namespace Papyrus.Tests
 		}
 
 		[TestMethod]
+		public void TestEnumFlagsSerialization()
+		{
+
+			var record = new TestRecord();
+
+			record.SetProperty(() => record.EnumFlagsTest, TestRecord.FlagsTest.One | TestRecord.FlagsTest.Two);
+
+			var json = Core.Util.RecordSerializer.ToJson(record);
+		
+			Debug.WriteLine(json);
+
+			var deserRecord = (TestRecord)RecordSerializer.FromJson(json, typeof (TestRecord), null);
+			Assert.AreEqual(record.EnumFlagsTest, deserRecord.EnumFlagsTest);
+
+
+			record.SetProperty(() => record.EnumFlagsTest, TestRecord.FlagsTest.All);
+
+			json = RecordSerializer.ToJson(record);
+			Debug.WriteLine(json);
+
+			deserRecord = (TestRecord)RecordSerializer.FromJson(json, typeof(TestRecord), null);
+
+			Assert.AreEqual(record.EnumFlagsTest, deserRecord.EnumFlagsTest);
+
+		}
+
+		[TestMethod]
 		public void TestRecordCollectionSerialization()
 		{
 

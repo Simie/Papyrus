@@ -59,6 +59,7 @@
     <Reference Include="Ookii.Dialogs.Wpf">
       <HintPath>..\packages\Ookii.Dialogs.1.0\lib\net35\Ookii.Dialogs.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="PropertyTools">
       <HintPath>..\Lib\PropertyTools.dll</HintPath>
@@ -115,6 +116,7 @@
     <Compile Include="Framework\Controls\ContextMenuButton.xaml.cs">
       <DependentUpon>ContextMenuButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Framework\Controls\EnumFlagsControl\EnumFlagsControl.cs" />
     <Compile Include="Framework\Controls\LongMessageBox.xaml.cs">
       <DependentUpon>LongMessageBox.xaml</DependentUpon>
     </Compile>
@@ -126,7 +128,9 @@
       <DependentUpon>RecordPicker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Framework\Controls\RecordReferenceItem\RecordReferenceItem.cs" />
+    <Compile Include="Framework\Converters\EnumTypeConverter.cs" />
     <Compile Include="Framework\Converters\RecordRefNameConverter.cs" />
+    <Compile Include="Framework\DefaultPropertyControlProvider.cs" />
     <Compile Include="Framework\IRecordViewModel.cs" />
     <Compile Include="Framework\ISaveAware.cs" />
     <Compile Include="Framework\MessageBoxEx.cs" />
@@ -232,6 +236,10 @@
     <Page Include="Framework\Controls\ContextMenuButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Framework\Controls\EnumFlagsControl\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Framework\Controls\LongMessageBox.xaml">
       <Generator>MSBuild:Compile</Generator>

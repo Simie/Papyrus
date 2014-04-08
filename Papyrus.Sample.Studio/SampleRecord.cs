@@ -44,6 +44,22 @@ namespace Papyrus.Studio.TestTypes
 	public class SampleRecord : Record
 	{
 
+		private FlagsTest _enumFlags = FlagsTest.Four;
+
+		[Flags]
+		public enum FlagsTest
+		{
+
+			None = 0,
+			One = 1 << 0,
+			Two = 1 << 1,
+			Three = 1 << 2,
+			Four = 1 << 3,
+
+			All = One | Two | Three | Four
+
+		}
+
 		[PropertyTools.DataAnnotations.Comment]
 		public string ShouldIgnore {get { return "ShouldIgnore!"; }}
 
@@ -58,6 +74,12 @@ namespace Papyrus.Studio.TestTypes
 		public RecordRef<ParentRecord> TestPolyRef { get; private set; }
 
 		public ReadOnlyCollection<TestStuff> TestCollection { get; private set; }
+
+		public FlagsTest EnumFlags
+		{
+			get { return _enumFlags; }
+			private set { _enumFlags = value; }
+		}
 
 	}
 

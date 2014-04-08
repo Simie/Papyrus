@@ -21,7 +21,6 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 
 			}
 
-
 			if (typeof(IRecordRefCollection).IsAssignableFrom(property.ActualPropertyType)) {
 
 				return CreateRecordReferenceListControl(property);
@@ -33,10 +32,6 @@ namespace Papyrus.Studio.Modules.PapyrusManager.ViewModels
 
 				return CreateCollectionControl(property);
 
-			}
-
-			if (typeof(ICollection).IsAssignableFrom(property.ActualPropertyType)) {
-				return CreateCollectionControl(property);
 			}
 
 			return null;
