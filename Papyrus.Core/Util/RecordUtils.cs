@@ -14,10 +14,37 @@ using System.Text;
 namespace Papyrus.Core.Util
 {
 
-	internal static class RecordUtils
+	/// <summary>
+	/// Collection of general utilities for Records
+	/// </summary>
+	public static class RecordUtils
 	{
 
-		public static ICollection<IRecordRef> GetReferences(Record rec)
+		/// <summary>
+		/// Return a string representation of the record
+		/// </summary>
+		/// <param name="rec"></param>
+		/// <returns></returns>
+		public static string GetDebugString(Record rec)
+		{
+
+			var props = RecordReflectionUtil.GetProperties(rec.GetType());
+			var o = new StringBuilder();
+
+			var length = props.Max(p => p.Name.Length);
+
+			foreach (var propertyInfo in props) {
+
+				o.AppendFormat("{0, "+length+"}: {1}", propertyInfo.Name, propertyInfo.GetValue(rec, null));
+				o.AppendLine();
+
+			}
+
+			return o.ToString();
+
+		}
+
+		internal static ICollection<IRecordRef> GetReferences(Record rec)
 		{
 
 			var basicReferences = RecordReflectionUtil.GetReferenceProperties(rec.GetType()).Select(p => (IRecordRef) p.GetValue(rec, null));

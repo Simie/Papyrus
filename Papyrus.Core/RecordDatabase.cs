@@ -20,7 +20,7 @@ namespace Papyrus.Core
 	/// compiling the plugins does not maintain the plugin structure. Use this for production, and <c>PluginComposer</c> for composing
 	/// a plugin.
 	/// </summary>
-	public sealed class RecordDatabase
+	public sealed class RecordDatabase : IRecordDatabase
 	{
 
 		/// <summary>

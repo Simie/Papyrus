@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Freezable.cs" />
+    <Compile Include="IRecordDatabase.cs" />
     <Compile Include="MissingPluginException.cs" />
     <Compile Include="PapyrusList.cs" />
     <Compile Include="Plugin.cs" />

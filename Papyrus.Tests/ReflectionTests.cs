@@ -40,7 +40,7 @@ namespace Papyrus.Tests
 
 			Assert.IsTrue(properties.Count(p => p.Name == "ShouldIgnore") == 0);
 
-			Assert.AreEqual(properties.Count, 5);
+			Assert.AreEqual(properties.Count, 6);
 
 		}
 

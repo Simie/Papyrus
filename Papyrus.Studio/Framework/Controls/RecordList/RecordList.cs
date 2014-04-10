@@ -136,6 +136,10 @@ namespace Papyrus.Studio.Framework.Controls
 				ListCopy = new BindableCollection<IRecordRef>();
 
 			ListCopy.Clear();
+
+			if (SourceList == null)
+				return;
+
 			ListCopy.AddRange(SourceList.References);
 
 		}

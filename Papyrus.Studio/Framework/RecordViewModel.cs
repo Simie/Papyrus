@@ -79,7 +79,7 @@ namespace Papyrus.Studio.Framework
 
 		}
 
-		protected void CheckIsDirty()
+		public void CheckIsDirty()
 		{
 
 			IsDirty = !Core.Record.PropertyComparer.Equals(OriginalRecord, Record);

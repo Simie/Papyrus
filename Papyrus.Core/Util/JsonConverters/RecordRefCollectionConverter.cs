@@ -25,7 +25,7 @@ namespace Papyrus.Core.Util.JsonConverters
 
 			var recordType = type.GetGenericArguments()[0];
 
-			writer.WriteComment(string.Format("{0} Collection", recordType.Name));
+			//writer.WriteComment(string.Format("{0} Collection", recordType.Name));
 
 			var collection = (IRecordRefCollection) value;
 

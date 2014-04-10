@@ -45,6 +45,8 @@ namespace Papyrus.Studio.Modules.GenericRecordEditor.ViewModels
 
 		public override void CanClose(System.Action<bool> callback)
 		{
+			
+			RecordModel.CheckIsDirty();
 
 			if (!IsDirty) {
 

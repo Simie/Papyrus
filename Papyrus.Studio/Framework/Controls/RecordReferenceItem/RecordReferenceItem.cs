@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -72,10 +73,14 @@ namespace Papyrus.Studio.Framework.Controls
 
 		public RecordReferenceItem()
 		{
+
 			BrowseCommand = new DelegateCommand(Browse);
 			OpenCommand = new DelegateCommand(Open, () => RecordReference != null && RecordReference.Key != RecordKey.Identity);
 			ClearCommand = new DelegateCommand(Clear);
-			_papyrusManager = IoC.Get<IPapyrusManager>();
+
+			if(!DesignerProperties.GetIsInDesignMode(this))
+				_papyrusManager = IoC.Get<IPapyrusManager>();
+
 		}
 
 		private void Browse()

@@ -21,7 +21,7 @@ namespace Papyrus.Core
 	/// Loads a selection of plugins and allows edit operations. The resulting changes can be saved
 	/// to a new plugin. Slow read performance compared to <c>RecordDatabase</c>.
 	/// </summary>
-	public sealed class PluginComposer : INotifyPropertyChanged
+	public sealed class PluginComposer : IRecordDatabase, INotifyPropertyChanged
 	{
 
 		#region Static Factory Methods

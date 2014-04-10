@@ -40,7 +40,7 @@ namespace Papyrus.Core
 	/// <typeparam name="T"></typeparam>
 	[JsonObject()]
 	[JsonConverter(typeof(Util.JsonConverters.RecordRefCollectionConverter))]
-	public struct RecordRefCollection<T> : IRecordRefCollection, IEnumerable<RecordRef<T>>, IEquatable<RecordRefCollection<T>> where T : Record
+	public struct RecordRefCollection<T> : IRecordRefCollection, IEquatable<RecordRefCollection<T>>, ICollection<RecordRef<T>> where T : Record
 	{
 
 		private readonly List<RecordRef<T>> _internalList;
@@ -149,6 +149,50 @@ namespace Papyrus.Core
 		{
 			return !left.Equals(right);
 		}
+
+		/// <summary>
+		/// Create a string representation of this RecordRefCollection
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString()
+		{
+
+			return string.Format("RecordRefCollection<{0}> ({1})", RecordType.Name,
+				string.Join(", ", References.Select(p => p.ToString()).ToArray()));
+
+		}
+
+		#region ICollection
+
+		public void Add(RecordRef<T> item)
+		{
+			throw new NotSupportedException();
+		}
+
+		public void Clear()
+		{
+			throw new NotSupportedException();	
+		}
+
+		public bool Contains(RecordRef<T> item)
+		{
+			return References.Contains(item);
+		}
+
+		public void CopyTo(RecordRef<T>[] array, int arrayIndex)
+		{
+			References.CopyTo(array, arrayIndex);
+		}
+
+		public bool Remove(RecordRef<T> item)
+		{
+			throw new NotSupportedException();
+		}
+
+		public int Count { get { return References.Count; } }
+		public bool IsReadOnly { get { return true; } }
+
+		#endregion
 
 	}
 
