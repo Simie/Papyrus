@@ -37,8 +37,8 @@ namespace Papyrus.Tests
 			Assert.IsFalse(plugin.NeedSaving);
 
 			var testRecord = plugin.CreateRecord<TestRecord>();
-			testRecord.SetProperty(() => testRecord.TestBoolean, true);
-			testRecord.SetProperty(() => testRecord.TestString, null);
+			testRecord.TestBoolean = true;
+			testRecord.TestString = null;
 
 			plugin.SaveRecord(testRecord);
 
@@ -105,7 +105,7 @@ namespace Papyrus.Tests
 
 			var rec = child.GetEditableRecord<TestRecord>(new RecordKey(0, "TestParent"));
 
-			rec.SetProperty(() => rec.TestString, "TestValue");
+			rec.TestString = "TestValue";
 
 			child.SaveRecord(rec);
 
@@ -141,7 +141,7 @@ namespace Papyrus.Tests
 			// Now make a change to the record in the active plugin
 			{
 				var childRecord = composer.GetEditableRecord<TestRecord>(key);
-				childRecord.SetProperty(() => childRecord.TestString, "Modified String Value");
+				childRecord.TestString = "Modified String Value";
 				composer.SaveRecord(childRecord);
 			}
 
@@ -183,7 +183,7 @@ namespace Papyrus.Tests
 			// Make a change which should cause the record to be added to the active plugin
 			{
 				var edit = composer.GetEditableRecord<TestRecord>(key);
-				edit.SetProperty(() => edit.TestString, "Modified String Value");
+				edit.TestString = "Modified String Value";
 				composer.SaveRecord(edit);
 			}
 
@@ -194,7 +194,7 @@ namespace Papyrus.Tests
 			// Revert the change, which should cause the record to be removed from the active plugin
 			{
 				var edit = composer.GetEditableRecord<TestRecord>(key);
-				edit.SetProperty(() => edit.TestString, "Test String Value");
+				edit.TestString = "Test String Value";
 				composer.SaveRecord(edit);
 			}
 
@@ -205,7 +205,7 @@ namespace Papyrus.Tests
 			// Make a change which should cause the record to be added to the active plugin
 			{
 				var edit = composer.GetEditableRecord<TestRecord>(key);
-				edit.SetProperty(() => edit.TestString, "Modified String Value");
+				edit.TestString = "Modified String Value";
 				composer.SaveRecord(edit);
 			}
 

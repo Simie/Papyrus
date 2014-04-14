@@ -84,6 +84,10 @@ namespace Papyrus.Core
 			_internalList = new List<RecordRef<T>>(recordRefs);
 		}
 
+		/// <summary>
+		/// Enumerate this collection
+		/// </summary>
+		/// <returns></returns>
 		public IEnumerator<RecordRef<T>> GetEnumerator()
 		{
 			return _internalList.GetEnumerator();
@@ -95,6 +99,11 @@ namespace Papyrus.Core
 		}
 
 
+		/// <summary>
+		/// Check elements of both collections for equality
+		/// </summary>
+		/// <param name="other"></param>
+		/// <returns></returns>
 		public bool Equals(RecordRefCollection<T> other)
 		{
 
@@ -116,6 +125,11 @@ namespace Papyrus.Core
 
 		}
 
+		/// <summary>
+		/// Check if collection is equal to obj
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(null, obj))
@@ -123,6 +137,10 @@ namespace Papyrus.Core
 			return obj is RecordRefCollection<T> && Equals((RecordRefCollection<T>) obj);
 		}
 
+		/// <summary>
+		/// Get a hash-code to identify this collection
+		/// </summary>
+		/// <returns></returns>
 		public override int GetHashCode()
 		{
 			return (_internalList != null ? _internalList.GetHashCode() : 0);
@@ -164,32 +182,62 @@ namespace Papyrus.Core
 
 		#region ICollection
 
+		/// <summary>
+		/// Add item to collection (not supported)
+		/// </summary>
+		/// <param name="item"></param>
 		public void Add(RecordRef<T> item)
 		{
 			throw new NotSupportedException();
 		}
 
+		/// <summary>
+		/// Clear collection (not supported)
+		/// </summary>
 		public void Clear()
 		{
 			throw new NotSupportedException();	
 		}
 
+		/// <summary>
+		/// Does this collection contain item
+		/// </summary>
+		/// <param name="item"></param>
+		/// <returns></returns>
 		public bool Contains(RecordRef<T> item)
 		{
 			return References.Contains(item);
 		}
 
+		/// <summary>
+		/// Copy elements from collection to array
+		/// </summary>
+		/// <param name="array"></param>
+		/// <param name="arrayIndex"></param>
 		public void CopyTo(RecordRef<T>[] array, int arrayIndex)
 		{
 			References.CopyTo(array, arrayIndex);
 		}
 
+		/// <summary>
+		/// Remove item from collection. Not Supported
+		/// </summary>
+		/// <param name="item"></param>
+		/// <returns></returns>
+		/// <exception cref="NotSupportedException"></exception>
 		public bool Remove(RecordRef<T> item)
 		{
 			throw new NotSupportedException();
 		}
 
+		/// <summary>
+		/// Number of items in this collection
+		/// </summary>
 		public int Count { get { return References.Count; } }
+
+		/// <summary>
+		/// Yes
+		/// </summary>
 		public bool IsReadOnly { get { return true; } }
 
 		#endregion

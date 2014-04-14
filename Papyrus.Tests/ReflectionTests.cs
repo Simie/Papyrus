@@ -160,14 +160,14 @@ namespace Papyrus.Tests
 
 			Assert.AreEqual(0, RecordDiffUtil.Diff(r1, r2).Count, "Should be no differences in freshly created records");
 
-			r1.SetProperty(() => r1.Attributes, c1);
-			r2.SetProperty(() => r2.Attributes, c1);
+			r1.Attributes = c1;
+			r2.Attributes = c1;
 
 			Assert.AreEqual(0, RecordDiffUtil.Diff(r1, r2).Count, "Should be no differences");
 
 			{
 
-				r2.SetProperty(() => r2.Attributes, c2);
+				r2.Attributes = c2;
 
 				var diffs = RecordDiffUtil.Diff(r1, r2);
 
@@ -178,7 +178,7 @@ namespace Papyrus.Tests
 
 			{
 
-				r2.SetProperty(() => r2.Attributes, c3);
+				r2.Attributes = c3;
 
 				var diffs = RecordDiffUtil.Diff(r1, r2);
 
@@ -220,13 +220,13 @@ namespace Papyrus.Tests
 
 			Assert.AreEqual(0, RecordDiffUtil.Diff(r1, r2).Count, "Should be no differences in freshly created records");
 
-			r1.SetProperty(() => r1.TestRecords, c1);
-			r2.SetProperty(() => r2.TestRecords, c1);
+			r1.TestRecords = c1;
+			r2.TestRecords = c1;
 
 			Assert.AreEqual(0, RecordDiffUtil.Diff(r1, r2).Count, "Should be no differences");
 
 			{
-				r2.SetProperty(() => r2.TestRecords, c2);
+				r2.TestRecords = c2;
 
 				var diffs = RecordDiffUtil.Diff(r1, r2);
 
@@ -234,7 +234,7 @@ namespace Papyrus.Tests
 				Assert.AreEqual("TestRecords", diffs[0].Property.Name);
 			}
 			{
-				r2.SetProperty(() => r2.TestRecords, c3);
+				r2.TestRecords = c3;
 
 				var diffs = RecordDiffUtil.Diff(r1, r2);
 
@@ -312,10 +312,10 @@ namespace Papyrus.Tests
 		{
 
 			var record = new TestRecord();
-			record.SetProperty(() => record.TestBoolean, true);
-			record.SetProperty(() => record.TestInteger, 10);
-			record.SetProperty(() => record.TestString, "Test String");
-			record.SetProperty(() => record.TestReference, new RecordRef<TestRecordOne>(new RecordKey(1337, "TestPlugin")));
+			record.TestBoolean = true;
+			record.TestInteger = 10;
+			record.TestString = "Test String";
+			record.TestReference = new RecordRef<TestRecordOne>(new RecordKey(1337, "TestPlugin"));
 			record.ShouldIgnore = 122;
 
 			var clone = (TestRecord)record.Clone();
@@ -358,7 +358,7 @@ namespace Papyrus.Tests
 			var testRecord = new TestRecord();
 
 			var reference = new RecordRef<TestRecordOne>(new RecordKey(1337, "TestPlugin"));
-			testRecord.SetProperty(() => testRecord.TestReference, reference);
+			testRecord.TestReference = reference;
 
 			var references = RecordUtils.GetReferences(testRecord);
 
@@ -375,11 +375,11 @@ namespace Papyrus.Tests
 
 			var refOne = new RecordRef<TestRecordOne>(new RecordKey(1337, "TestPlugin"));
 			var refTwo = new RecordRef<TestRecordOne>(new RecordKey(1338, "TestPlugin"));
-			testRecord.SetProperty(() => testRecord.TestRecords, new RecordRefCollection<TestRecordOne>(new [] {refOne, refTwo}));
+			testRecord.TestRecords = new RecordRefCollection<TestRecordOne>(new [] {refOne, refTwo});
 
 			var references = RecordUtils.GetReferences(testRecord);
 
-			Assert.AreEqual(references.Count, 2);
+			Assert.AreEqual(2, references.Count);
 			Assert.IsTrue(references.Contains(refOne));
 			Assert.IsTrue(references.Contains(refTwo));
 

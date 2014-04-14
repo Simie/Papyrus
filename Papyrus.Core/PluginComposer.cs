@@ -207,8 +207,7 @@ namespace Papyrus.Core
 			record.InternalKey = Plugin.NextKey(type);
 
 			// Set default editor ID
-			record.SetProperty(() => record.EditorID,
-			                   string.Format("{0}_{1}", type.Name.ToLower(), record.InternalKey.Index));
+			record.EditorID = string.Format("{0}_{1}", type.Name.ToLower(), record.InternalKey.Index);
 
 			// Add to plugin collection
 			Plugin.Records.AddRecord(record);

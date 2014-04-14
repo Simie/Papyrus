@@ -173,7 +173,7 @@ namespace Papyrus.Studio.Modules.RecordBrowser.ViewModels
 			var newRecord = _papyrusManager.PluginComposer.CreateRecord(existing.GetType());
 			Core.Util.RecordReflectionUtil.Populate(existing, newRecord);
 
-			newRecord.SetProperty(() => newRecord.EditorID, string.Format("{0} copy", existing.EditorID));
+			newRecord.EditorID = string.Format("{0} copy", existing.EditorID);
 
 			_papyrusManager.PluginComposer.SaveRecord(newRecord);
 

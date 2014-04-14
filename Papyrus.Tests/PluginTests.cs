@@ -98,7 +98,7 @@ namespace Papyrus.Tests
 			{
 				// Test that adding a record with a reference to a plugin is detected correctly
 				var testRecord = new TestRecord() { InternalKey = new RecordKey(0, "TestPlugin") };
-				testRecord.SetProperty(() => testRecord.TestReference, new RecordRef<TestRecordOne>(new RecordKey(0, "Parent2")));
+				testRecord.TestReference = new RecordRef<TestRecordOne>(new RecordKey(0, "Parent2"));
 
 				plugin.Records.AddRecord(testRecord);
 
@@ -114,12 +114,12 @@ namespace Papyrus.Tests
 				// Test that RecordRefCollection references are detected correctly
 				var testCollection = new TestRecordCollectionRecord() {InternalKey = new RecordKey(0, "TestPlugin")};
 
-				testCollection.SetProperty(() => testCollection.TestRecords, new RecordRefCollection<TestRecordOne>(new[] {
+				testCollection.TestRecords = new RecordRefCollection<TestRecordOne>(new[] {
 					new RecordRef<TestRecordOne>(new RecordKey(0, "CollectionParent")),
 					new RecordRef<TestRecordOne>(new RecordKey(1, "CollectionParent")),
 					new RecordRef<TestRecordOne>(new RecordKey(2, "CollectionParent")),
 					new RecordRef<TestRecordOne>(new RecordKey(0, "CollectionParent2")),
-				}));
+				});
 
 				plugin.Records.AddRecord(testCollection);
 				plugin.RefreshParents();
@@ -140,7 +140,7 @@ namespace Papyrus.Tests
 			var plugin = new Plugin("TestPlugin");
 
 			var testRecord = new TestRecord();
-			testRecord.SetProperty(() => testRecord.TestReference, new RecordRef<TestRecordOne>(new RecordKey(0, "TestPlugin")));
+			testRecord.TestReference = new RecordRef<TestRecordOne>(new RecordKey(0, "TestPlugin"));
 			testRecord.InternalKey = new RecordKey(0, "TestPlugin");
 
 			plugin.Records.AddRecord(testRecord);

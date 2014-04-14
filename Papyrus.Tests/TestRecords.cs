@@ -122,7 +122,7 @@ namespace Papyrus.Tests
 	public class TestCollectionRecord : Record
 	{
 
-		public ReadOnlyCollection<TestCollectionEntry> Attributes { get; private set; } 
+		public ReadOnlyCollection<TestCollectionEntry> Attributes { get; set; } 
 
 	}
 

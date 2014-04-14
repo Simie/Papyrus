@@ -8,6 +8,10 @@ using Afterthought;
 namespace Papyrus.Core.Build
 {
 
+	/// <summary>
+	/// Methods called by amended properties
+	/// </summary>
+	/// <typeparam name="TAmended"></typeparam>
 	public static class FreezableAmendMethods<TAmended> where TAmended : Freezable
 	{
 

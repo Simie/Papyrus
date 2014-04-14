@@ -77,7 +77,7 @@ namespace Papyrus.Tests
 
 			var record = new TestRecord();
 
-			record.SetProperty(() => record.EnumFlagsTest, TestRecord.FlagsTest.One | TestRecord.FlagsTest.Two);
+			record.EnumFlagsTest = TestRecord.FlagsTest.One | TestRecord.FlagsTest.Two;
 
 			var json = Core.Util.RecordSerializer.ToJson(record);
 		
@@ -87,7 +87,7 @@ namespace Papyrus.Tests
 			Assert.AreEqual(record.EnumFlagsTest, deserRecord.EnumFlagsTest);
 
 
-			record.SetProperty(() => record.EnumFlagsTest, TestRecord.FlagsTest.All);
+			record.EnumFlagsTest = TestRecord.FlagsTest.All;
 
 			json = RecordSerializer.ToJson(record);
 			Debug.WriteLine(json);
@@ -230,7 +230,7 @@ namespace Papyrus.Tests
 			public ReadOnlyCollection<TestBase> Entries
 			{
 				get { return _entries; }
-				private set { _entries = value; }
+				set { _entries = value; }
 			}
 
 		}
@@ -240,11 +240,11 @@ namespace Papyrus.Tests
 		{
 
 			var testRecord = new TestCollectionRecord();
-			testRecord.SetProperty(() => testRecord.Entries, new ReadOnlyCollection<TestBase>(new TestBase[] {
+			testRecord.Entries = new ReadOnlyCollection<TestBase>(new TestBase[] {
 				new Test1(),
 				new Test2(),
 				new Test1()
-			}));
+			});
 
 			var json = RecordSerializer.ToJson(testRecord);
 
@@ -292,13 +292,13 @@ namespace Papyrus.Tests
 
 			var r1 = new TestRecord();
 			r1.InternalKey = key;
-			r1.SetProperty(() => r1.EditorID, id);
-			r1.SetProperty(() => r1.TestString, "OriginalString");
+			r1.EditorID = id;
+			r1.TestString = "OriginalString";
 
 			var r2 = new TestRecord();
 			r2.InternalKey = key;
-			r2.SetProperty(() => r2.EditorID, id);
-			r2.SetProperty(() => r2.TestString, "ModifiedString");
+			r2.EditorID = id;
+			r2.TestString = "ModifiedString";
 
 			var json = RecordSerializer.ToJson(r2, r1);
 

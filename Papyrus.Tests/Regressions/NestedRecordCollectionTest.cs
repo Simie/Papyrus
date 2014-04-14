@@ -37,7 +37,7 @@ namespace Papyrus.Tests.Regressions
 
 			var r = new TestRecord();
 
-			r.SetProperty(() => r.TestCollection, new ReadOnlyCollection<TestCollectionEntry>(new TestCollectionEntry[] {
+			r.TestCollection = new ReadOnlyCollection<TestCollectionEntry>(new [] {
 				new TestCollectionEntry() {
 					NestedCollection =
 						new RecordRefCollection<TestNestedRecord>(new[]
@@ -48,7 +48,7 @@ namespace Papyrus.Tests.Regressions
 						new RecordRefCollection<TestNestedRecord>(new[]
 						{new RecordRef<TestNestedRecord>(), new RecordRef<TestNestedRecord>(),})
 				}
-			}));
+			});
 
 			var json = RecordSerializer.ToJson(r);
 			Debug.WriteLine(json);
