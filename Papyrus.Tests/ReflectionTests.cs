@@ -66,6 +66,8 @@ namespace Papyrus.Tests
 
 			var properties = Core.Util.RecordReflectionUtil.GetProperties<TestRecord>(true);
 
+			Debug.WriteLine(string.Join(", ", properties.Select(p => p.Name)));
+
 			// Test inherited property
 			Assert.IsTrue(properties.Count(p => p.Name == "EditorID") == 1);
 
@@ -73,12 +75,13 @@ namespace Papyrus.Tests
 			Assert.IsTrue(properties.Count(p => p.Name == "TestString") == 1);
 			Assert.IsTrue(properties.Count(p => p.Name == "TestInteger") == 1);
 			Assert.IsTrue(properties.Count(p => p.Name == "TestReference") == 1);
+			Assert.IsTrue(properties.Count(p => p.Name == "EnumFlagsTest") == 1);
 
 			Assert.IsTrue(properties.Count(p => p.Name == "ShouldIgnoreReadOnlyString") == 1);
 
 			Assert.IsTrue(properties.Count(p => p.Name == "ShouldIgnore") == 0);
 
-			Assert.AreEqual(properties.Count, 6);
+			Assert.AreEqual(7, properties.Count);
 
 		}	
 		

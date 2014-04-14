@@ -23,20 +23,20 @@ namespace Papyrus.Tests
 
 		}
 
-		public bool TestBoolean { get; private set; }
+		public bool TestBoolean { get; set; }
 
-		public string TestString { get; private set; }
+		public string TestString { get; set; }
 
-		public int TestInteger { get; private set; }
+		public int TestInteger { get; set; }
 
-		public RecordRef<TestRecordOne> TestReference { get; private set; }
+		public RecordRef<TestRecordOne> TestReference { get; set; }
 			
 		[Newtonsoft.Json.JsonIgnore]
 		public int ShouldIgnore { get; set; }
 
 		public string ShouldIgnoreReadOnlyString { get { return "Test"; } }
 
-		public FlagsTest EnumFlagsTest { get; private set; }
+		public FlagsTest EnumFlagsTest { get; set; }
 
 	}
 
@@ -57,38 +57,38 @@ namespace Papyrus.Tests
 	class TestRecordCollectionRecord : Record
 	{
 
-		public RecordRefCollection<TestRecordOne> TestRecords { get; private set; }
+		public RecordRefCollection<TestRecordOne> TestRecords { get; set; }
 
 	}
 
 	public abstract class TestRecordParent : Record
 	{
 
-		public float TestFloat { get; private set; }
+		public float TestFloat { get; set; }
 
 	}
 
 	public class TestChild1 : TestRecordParent
 	{
 
-		public int TestChildProperty1 { get; private set; }
+		public int TestChildProperty1 { get; set; }
 
 	}
 
 	public class TestChild2 : TestRecordParent
 	{
 
-		public string TestChildProperty2 { get; private set; }
+		public string TestChildProperty2 { get; set; }
 		
 	}
 
 	public class TestPolymorphicRecord : Record
 	{
 
-		public RecordRef<TestRecordParent> TestRef1 { get; private set; } 
-		public RecordRef<TestRecordParent> TestRef2 { get; private set; }
+		public RecordRef<TestRecordParent> TestRef1 { get; set; } 
+		public RecordRef<TestRecordParent> TestRef2 { get; set; }
 
-		public RecordRefCollection<TestRecordParent> TestReferenceList { get; private set; } 
+		public RecordRefCollection<TestRecordParent> TestReferenceList { get; set; } 
 
 	}
 

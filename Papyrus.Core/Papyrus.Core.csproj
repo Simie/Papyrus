@@ -11,7 +11,8 @@
     <AssemblyName>Papyrus.Core</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,6 +36,10 @@
     <DocumentationFile>bin\Release\Papyrus.Core.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Afterthought, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Afterthought.1.0.8\lib\Afterthought.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\Newtonsoft.Json.dll</HintPath>
@@ -46,10 +51,11 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Build\FreezableAmendment.cs" />
+    <Compile Include="Build\PapyrusAmenderAttribute.cs" />
     <Compile Include="Freezable.cs" />
     <Compile Include="IRecordDatabase.cs" />
     <Compile Include="MissingPluginException.cs" />
-    <Compile Include="PapyrusList.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="PluginComposer.cs" />
     <Compile Include="PluginLoader.cs" />
@@ -84,9 +90,13 @@
     <None Include="..\Papyrus.licenseheader">
       <Link>Papyrus.licenseheader</Link>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>$(SolutionDir)packages\Afterthought.1.0.8\tools\Afterthought.Amender.exe "$(TargetPath)"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

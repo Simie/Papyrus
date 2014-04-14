@@ -25,7 +25,7 @@ namespace Papyrus.Core
 	public struct ReadOnlyCollection<T> : IList<T>, ICollection, IEquatable<ReadOnlyCollection<T>>
 	{
 
-		private PapyrusList<T> _internalList;
+		private List<T> _internalList;
 
 		/// <summary>
 		/// Access the collection
@@ -34,7 +34,7 @@ namespace Papyrus.Core
 
 			get {
 
-				if(_internalList == null) _internalList = new PapyrusList<T>(0);
+				if (_internalList == null) _internalList = new List<T>(0);
 				return _internalList;
 
 			}
@@ -47,7 +47,7 @@ namespace Papyrus.Core
 		/// <param name="items"></param>
 		public ReadOnlyCollection(IEnumerable<T> items)
 		{
-			_internalList = new PapyrusList<T>(items);
+			_internalList = new List<T>(items);
 		}
 
 		public IEnumerator<T> GetEnumerator()

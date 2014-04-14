@@ -16,7 +16,7 @@ namespace Papyrus.Tests
 			record.IsFrozen = false;
 
 			try {
-				record.SetProperty(() => record.TestBoolean, true);
+				record.TestBoolean = true;
 			} catch (InvalidOperationException) {
 				Assert.Fail("Threw exception when record was not frozen.");
 			}
@@ -24,7 +24,7 @@ namespace Papyrus.Tests
 			record.IsFrozen = true;
 	
 			try {
-				record.SetProperty(() => record.TestBoolean, true);
+				record.TestBoolean = true;
 				Assert.Fail("Didn't throw exception when record was frozen.");
 			} catch (InvalidOperationException) {}
 

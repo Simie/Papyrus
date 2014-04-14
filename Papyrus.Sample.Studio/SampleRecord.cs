@@ -75,6 +75,8 @@ namespace Papyrus.Studio.TestTypes
 
 		public ReadOnlyCollection<TestStuff> TestCollection { get; private set; }
 
+		public ReadOnlyCollection<string> PrimitiveCollectionTest { get; private set; } 
+
 		public FlagsTest EnumFlags
 		{
 			get { return _enumFlags; }

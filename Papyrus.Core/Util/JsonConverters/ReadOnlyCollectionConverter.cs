@@ -36,7 +36,7 @@ namespace Papyrus.Core.Util.JsonConverters
 
 			var valueType = objectType.GetGenericArguments()[0];
 
-			var list = serializer.Deserialize(reader, typeof (PapyrusList<>).MakeGenericType(valueType));
+			var list = serializer.Deserialize(reader, typeof (List<>).MakeGenericType(valueType));
 
 			return Activator.CreateInstance(objectType, list);
 

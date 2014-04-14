@@ -37,15 +37,21 @@ namespace Papyrus.Core
 	public class Freezable : IFreezable
 	{
 
+		/// <summary>
+		/// If true, attempting to change a value on this record will result in an InvalidOperationException being thrown.
+		/// </summary>
 		[Newtonsoft.Json.JsonIgnore]
 		public bool IsFrozen { get; internal set; }
 
-
+		/// <summary>
+		/// Invoked whenever a property is changed (usually only when editing records)
+		/// </summary>
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		/// <summary>
 		/// Set property value. Throws <c>InvalidOperationException</c> when called on a frozen object.
 		/// </summary>
+		[Obsolete("Set property directly")]
 		public void SetProperty(string name, object value)
 		{
 			SetPropertyInternal(ReflectionUtil.GetWritablePropertyInfo(GetType(), name), value);
@@ -54,6 +60,7 @@ namespace Papyrus.Core
 		/// <summary>
 		/// Set property value. Throws <c>InvalidOperationException</c> when called on a frozen object.
 		/// </summary>
+		[Obsolete("Set property directly")]
 		public void SetProperty<T>(Expression<Func<T>> property, T value)
 		{
 			SetPropertyInternal(property.GetMemberInfo(), value);
@@ -80,7 +87,7 @@ namespace Papyrus.Core
 		/// Called when a property on this object is modified
 		/// </summary>
 		/// <param name="propName"></param>
-		protected virtual void OnPropertyChanged(string propName)
+		public virtual void OnPropertyChanged(string propName)
 		{
 
 			if(PropertyChanged != null)

@@ -31,6 +31,8 @@ namespace Papyrus.Core.Util
 
 			_settingsInstance = new JsonSerializerSettings();
 
+			_settingsInstance.TypeNameHandling = TypeNameHandling.Auto;
+
 			// Default to indented, for easy user-editing
 			_settingsInstance.Formatting = Formatting.Indented;
 

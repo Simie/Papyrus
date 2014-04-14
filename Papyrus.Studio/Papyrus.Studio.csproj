@@ -42,6 +42,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
+    <Reference Include="Afterthought, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Afterthought.1.0.8\lib\Afterthought.dll</HintPath>
+    </Reference>
     <Reference Include="AvalonWizard, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AvalonWizard.1.2.0\lib\net40\AvalonWizard.dll</HintPath>
     </Reference>
@@ -129,6 +133,7 @@
     </Compile>
     <Compile Include="Framework\Controls\RecordReferenceItem\RecordReferenceItem.cs" />
     <Compile Include="Framework\Converters\EnumTypeConverter.cs" />
+    <Compile Include="Framework\Converters\ReadOnlyCollectionConverter.cs" />
     <Compile Include="Framework\Converters\RecordRefNameConverter.cs" />
     <Compile Include="Framework\DefaultPropertyControlProvider.cs" />
     <Compile Include="Framework\IRecordViewModel.cs" />
@@ -327,6 +332,9 @@
     <Resource Include="Resources\Icons\x_28x28.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+	<PropertyGroup>
+		<PostBuildEvent>$(SolutionDir)packages\Afterthought.1.0.8\tools\Afterthought.Amender.exe "$(TargetPath)"</PostBuildEvent>
+	</PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
