@@ -52,7 +52,6 @@ namespace Papyrus.Core
 		/// <summary>
 		/// Set property value. Throws <c>InvalidOperationException</c> when called on a frozen object.
 		/// </summary>
-		[Obsolete("Set property directly")]
 		public void SetProperty(string name, object value)
 		{
 			SetPropertyInternal(ReflectionUtil.GetWritablePropertyInfo(GetType(), name), value);
@@ -60,8 +59,9 @@ namespace Papyrus.Core
 
 		/// <summary>
 		/// Set property value. Throws <c>InvalidOperationException</c> when called on a frozen object.
+		/// Deprecated, strongly typed property setting can now use normal property setter syntax
 		/// </summary>
-		[Obsolete("Set property directly")]
+		[Obsolete("Set property directly.")]
 		public void SetProperty<T>(Expression<Func<T>> property, T value)
 		{
 			SetPropertyInternal(property.GetMemberInfo(), value);
