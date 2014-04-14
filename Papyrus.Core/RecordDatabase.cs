@@ -28,6 +28,9 @@ namespace Papyrus.Core
 		/// </summary>
 		private RecordCollection _internalCollection;
 
+		/// <summary>
+		/// Create an empty RecordDatabase
+		/// </summary>
 		public RecordDatabase()
 		{
 			_internalCollection = new RecordCollection();

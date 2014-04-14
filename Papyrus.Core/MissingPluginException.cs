@@ -24,6 +24,9 @@ namespace Papyrus.Core
 		/// </summary>
 		public string Plugin { get; private set; }
 
+		/// <summary>
+		/// Exception message, with plugin name appended
+		/// </summary>
 		public override string Message
 		{
 			get { return string.Format("{0} ({1})", base.Message, Plugin); }

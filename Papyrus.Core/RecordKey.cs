@@ -69,6 +69,11 @@ namespace Papyrus.Core
 			this = FromString(str);
 		}
 
+		/// <summary>
+		/// Check if this Key equals other key
+		/// </summary>
+		/// <param name="other"></param>
+		/// <returns></returns>
 		public bool Equals(RecordKey other)
 		{
 			return string.Equals(Plugin, other.Plugin) && Index == other.Index;
@@ -103,6 +108,10 @@ namespace Papyrus.Core
 
 		}
 
+		/// <summary>
+		/// Return string-form of this key. Will be the plugin name followed by the hexidecimal form of the index
+		/// </summary>
+		/// <returns></returns>
 		public override string ToString()
 		{
 			if(Plugin != null)
@@ -110,6 +119,11 @@ namespace Papyrus.Core
 			return string.Format("{0:X6}", Index);
 		}
 
+		/// <summary>
+		/// Compare this key to another object
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(null, obj))
@@ -117,6 +131,10 @@ namespace Papyrus.Core
 			return obj is RecordKey && Equals((RecordKey)obj);
 		}
 
+		/// <summary>
+		/// Get this keys hash code
+		/// </summary>
+		/// <returns></returns>
 		public override int GetHashCode()
 		{
 			unchecked {
@@ -124,11 +142,23 @@ namespace Papyrus.Core
 			}
 		}
 
+		/// <summary>
+		/// Compare two RecordKey objects for equality
+		/// </summary>
+		/// <param name="left"></param>
+		/// <param name="right"></param>
+		/// <returns></returns>
 		public static bool operator ==(RecordKey left, RecordKey right)
 		{
 			return left.Equals(right);
 		}
 
+		/// <summary>
+		/// Compare two RecordKey objects for inequality
+		/// </summary>
+		/// <param name="left"></param>
+		/// <param name="right"></param>
+		/// <returns></returns>
 		public static bool operator !=(RecordKey left, RecordKey right)
 		{
 			return !left.Equals(right);
@@ -156,6 +186,9 @@ namespace Papyrus.Core
 
 		private static readonly IEqualityComparer<RecordKey> ComparerInstance = new EqualityComparer();
 
+		/// <summary>
+		/// Instance of a comparer which can compare record keys
+		/// </summary>
 		public static IEqualityComparer<RecordKey> Comparer
 		{
 			get { return ComparerInstance; }

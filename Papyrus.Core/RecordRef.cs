@@ -13,6 +13,9 @@ using Newtonsoft.Json;
 namespace Papyrus.Core
 {
 
+	/// <summary>
+	/// A reference to another Record object.
+	/// </summary>
 	public interface IRecordRef
 	{
 
@@ -33,6 +36,10 @@ namespace Papyrus.Core
 
 	}
 	
+	/// <summary>
+	/// A serializable reference to another Record object.
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
 	[JsonConverter(typeof(Util.JsonConverters.RecordRefConverter))]
 	public struct RecordRef<T> : IEquatable<IRecordRef>, IRecordRef where T : Record
 	{
@@ -127,6 +134,10 @@ namespace Papyrus.Core
 
 		}
 
+		/// <summary>
+		/// Return string format of this RecordRef. Will include type information if this is a polymorphic reference.
+		/// </summary>
+		/// <returns></returns>
 		public override string ToString()
 		{
 
@@ -150,6 +161,11 @@ namespace Papyrus.Core
 			return Key.Equals(other.Key) && ValueType == other.ValueType;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(null, obj))
@@ -157,16 +173,32 @@ namespace Papyrus.Core
 			return obj is IRecordRef && Equals((IRecordRef) obj);
 		}
 
+		/// <summary>
+		/// Return hash code
+		/// </summary>
+		/// <returns></returns>
 		public override int GetHashCode()
 		{
 			return Key.GetHashCode();
 		}
 
+		/// <summary>
+		/// Compare two RecordRef objects for equality
+		/// </summary>
+		/// <param name="left"></param>
+		/// <param name="right"></param>
+		/// <returns></returns>
 		public static bool operator ==(RecordRef<T> left, RecordRef<T> right)
 		{
 			return left.Equals(right);
 		}
 
+		/// <summary>
+		/// Compare two RecordRef objects for inequality
+		/// </summary>
+		/// <param name="left"></param>
+		/// <param name="right"></param>
+		/// <returns></returns>
 		public static bool operator !=(RecordRef<T> left, RecordRef<T> right)
 		{
 			return !left.Equals(right);

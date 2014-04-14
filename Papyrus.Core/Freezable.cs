@@ -17,9 +17,15 @@ using Papyrus.Core.Util;
 namespace Papyrus.Core
 {
 
+	/// <summary>
+	/// Represents an object which can be frozen (properties made read-only)
+	/// </summary>
 	public interface IFreezable
 	{
 
+		/// <summary>
+		/// If true, attempting to change a value on this record will result in an InvalidOperationException being thrown.
+		/// </summary>
 		bool IsFrozen { get; }
 
 		/// <summary>
@@ -30,10 +36,13 @@ namespace Papyrus.Core
 		/// <summary>
 		/// Set property value. Throws <c>InvalidOperationException</c> when called on a frozen object.
 		/// </summary>
+		[Obsolete]
 		void SetProperty<T>(Expression<Func<T>> property, T value);
 
 	}
-
+	/// <summary>
+	/// Base class for an object which can be frozen (properties made read-only)
+	/// </summary>
 	public class Freezable : IFreezable
 	{
 
