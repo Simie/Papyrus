@@ -18,7 +18,6 @@ using Gemini.Framework;
 using Gemini.Framework.Services;
 using Gemini.Modules.MainMenu.Models;
 using Papyrus.Studio.Framework;
-using Papyrus.Studio.Framework.ComponentModel;
 using Papyrus.Studio.Modules.PapyrusManager;
 using Papyrus.Studio.Properties;
 
@@ -46,8 +45,6 @@ namespace Papyrus.Studio.Modules.Startup
 
 		public override void Initialize()
 		{
-
-			TypeDescriptor.AddProvider(new RecordTypeProvider(), typeof(Core.Record));
 
 			MainWindow.Title = Title;
 			MainWindow.WindowState = WindowState.Maximized;

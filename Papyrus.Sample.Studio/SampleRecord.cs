@@ -63,24 +63,24 @@ namespace Papyrus.Studio.TestTypes
 		[PropertyTools.DataAnnotations.Comment]
 		public string ShouldIgnore {get { return "ShouldIgnore!"; }}
 
-		public string TestString { get; private set; }
+		public string TestString { get; set; }
 
 		[PropertyTools.DataAnnotations.Spinnable]
-		public int TestInteger { get; private set; }
+		public int TestInteger { get; set; }
 
 		[PropertyTools.DataAnnotations.Spinnable]
-		public float TestFloat { get; private set; }
+		public float TestFloat { get; set; }
 
-		public RecordRef<ParentRecord> TestPolyRef { get; private set; }
+		public RecordRef<ParentRecord> TestPolyRef { get; set; }
 
-		public ReadOnlyCollection<TestStuff> TestCollection { get; private set; }
+		public ReadOnlyCollection<TestStuff> TestCollection { get; set; }
 
-		public ReadOnlyCollection<string> PrimitiveCollectionTest { get; private set; } 
+		public ReadOnlyCollection<string> PrimitiveCollectionTest { get; set; } 
 
 		public FlagsTest EnumFlags
 		{
 			get { return _enumFlags; }
-			private set { _enumFlags = value; }
+			set { _enumFlags = value; }
 		}
 
 	}
@@ -88,46 +88,46 @@ namespace Papyrus.Studio.TestTypes
 	public class SampleRecord2 : Record
 	{
 
-		public string TestierString { get; private set; }
+		public string TestierString { get; set; }
 
-		public int TestierInteger { get; private set; }
+		public int TestierInteger { get; set; }
 
-		public RecordRef<SampleRecord> TestReference { get; private set; } 
+		public RecordRef<SampleRecord> TestReference { get; set; } 
 
 	}
 	
 	public class SampleRecord4 : Record
 	{
 
-		public RecordRefCollection<SampleRecord> TestReferences { get; private set; } 
+		public RecordRefCollection<SampleRecord> TestReferences { get; set; } 
 
 	}
 
 	public abstract class ParentRecord : Record
 	{
 
-		public string ParentProperty { get; private set; }
+		public string ParentProperty { get; set; }
 
 	}
 
 	public class ChildRecord1 : ParentRecord
 	{
 
-		public bool ChildProperty1 { get; private set; }
+		public bool ChildProperty1 { get; set; }
 
 	}
 	
 	public class ChildRecord2 : ParentRecord
 	{
 
-		public int ChildProperty2 { get; private set; }
+		public int ChildProperty2 { get; set; }
 
 	}
 	
 	public class ChildRecord3 : ParentRecord
 	{
 
-		public string ChildProperty3 { get; private set; }
+		public string ChildProperty3 { get; set; }
 
 	}
 

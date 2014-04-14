@@ -114,8 +114,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EditorBootstrapper.cs" />
-    <Compile Include="Framework\ComponentModel\RecordTypeDescriptor.cs" />
-    <Compile Include="Framework\ComponentModel\RecordTypeProvider.cs" />
     <Compile Include="Framework\Controls\CollectionEditor\CollectionEditor.cs" />
     <Compile Include="Framework\Controls\ContextMenuButton.xaml.cs">
       <DependentUpon>ContextMenuButton.xaml</DependentUpon>
@@ -140,7 +138,6 @@
     <Compile Include="Framework\ISaveAware.cs" />
     <Compile Include="Framework\MessageBoxEx.cs" />
     <Compile Include="Framework\PapyrusPropertyControlFactory.cs" />
-    <Compile Include="Framework\ComponentModel\PapyrusPropertyDescriptor.cs" />
     <Compile Include="Framework\RecordViewModel.cs" />
     <Compile Include="Framework\Results\Close.cs" />
     <Compile Include="Framework\Results\CloseDocumentResult.cs" />
@@ -332,9 +329,9 @@
     <Resource Include="Resources\Icons\x_28x28.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-	<PropertyGroup>
-		<PostBuildEvent>$(SolutionDir)packages\Afterthought.1.0.8\tools\Afterthought.Amender.exe "$(TargetPath)"</PostBuildEvent>
-	</PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>$(SolutionDir)packages\Afterthought.1.0.8\tools\Afterthought.Amender.exe "$(TargetPath)"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

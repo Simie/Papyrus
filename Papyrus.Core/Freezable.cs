@@ -41,6 +41,7 @@ namespace Papyrus.Core
 		/// If true, attempting to change a value on this record will result in an InvalidOperationException being thrown.
 		/// </summary>
 		[Newtonsoft.Json.JsonIgnore]
+		[Browsable(false)]
 		public bool IsFrozen { get; internal set; }
 
 		/// <summary>
@@ -78,9 +79,7 @@ namespace Papyrus.Core
 				throw new ArgumentException("Expected member to be property.");
 
 			properyInfo.SetValue(this, value, null);
-
-			OnPropertyChanged(member.Name);
-
+			
 		}
 
 		/// <summary>

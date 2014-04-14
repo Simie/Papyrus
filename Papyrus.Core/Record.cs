@@ -32,6 +32,7 @@ namespace Papyrus.Core
 		/// </summary>
 		[JsonIgnore]
 		[Category("Internal")]
+		[Browsable(false)]
 		public RecordKey Key { get { return InternalKey; } }
 
 		/// <summary>
@@ -39,7 +40,7 @@ namespace Papyrus.Core
 		/// </summary>
 		[Category("Editor")]
 		[PropertyTools.DataAnnotations.SortIndex(-100)]
-		public string EditorID { get; private set; }
+		public string EditorID { get; set; }
 
 		/// <summary>
 		/// Comparer which only uses the Key field of a record for comparison.
@@ -49,6 +50,10 @@ namespace Papyrus.Core
 			get { return KeyComparerInstance; }
 		}
 
+		/// <summary>
+		/// Return a string representation of this Record object
+		/// </summary>
+		/// <returns></returns>
 		public override string ToString()
 		{
 			return string.Format("{0} ({1}, {2})", EditorID, Key, GetType().Name);

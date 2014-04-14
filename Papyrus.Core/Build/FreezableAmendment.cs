@@ -8,9 +8,18 @@ using Afterthought;
 namespace Papyrus.Core.Build
 {
 
-	static class FreezableAmendMethods<TAmended> where TAmended : Freezable
+	public static class FreezableAmendMethods<TAmended> where TAmended : Freezable
 	{
 
+		/// <summary>
+		/// Property amendment, called before a record property is set. Throws an exception if record is frozen
+		/// </summary>
+		/// <typeparam name="TProperty"></typeparam>
+		/// <param name="instance"></param>
+		/// <param name="propertyName"></param>
+		/// <param name="oldValue"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		public static TProperty BeforePropertySet<TProperty>(TAmended instance, string propertyName, TProperty oldValue,
 			TProperty value)
 		{
@@ -22,6 +31,15 @@ namespace Papyrus.Core.Build
 
 		}
 
+		/// <summary>
+		/// Triggers OnPropertyChanged event when a property is modified
+		/// </summary>
+		/// <typeparam name="TProperty"></typeparam>
+		/// <param name="instance"></param>
+		/// <param name="propertyName"></param>
+		/// <param name="oldValue"></param>
+		/// <param name="value"></param>
+		/// <param name="newValue"></param>
 		public static void AfterPropertySet<TProperty>(TAmended instance, string propertyName, TProperty oldValue,
 			TProperty value, TProperty newValue)
 		{
